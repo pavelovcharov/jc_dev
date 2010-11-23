@@ -1,0 +1,248 @@
+/*
+ * FileTransferHandler.java
+ *
+ * Created on 26 Èþíü 2007 ã., 8:31
+ *
+ */
+package omegaCommander.gui.table.dragdrop;
+
+import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DropTargetContext;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.TransferHandler;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.Position;
+import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.LocalFile;
+import omegaCommander.gui.MainFrame;
+import omegaCommander.gui.dialog.CopyDialog;
+import omegaCommander.gui.dialog.ProgressDialog;
+import omegaCommander.gui.dialog.WarningDialog;
+import omegaCommander.gui.table.FileTable;
+import omegaCommander.gui.table.FileTablePanel;
+import omegaCommander.threads.newThreads.NewMoveThread;
+import omegaCommander.threads.newThreads.ProgressThread;
+import omegaCommander.util.Support;
+import ru.narod.jcommander.Main;
+
+/**
+ *
+ * @author Programmer
+ * @version
+ */
+public class FileTransferHandler extends TransferHandler {
+
+    MainFrame parent;
+    private DataFlavor fileFlavor, stringFlavor;
+    //private TabbedPaneController tpc;
+    private JTextArea source;
+    private boolean shouldRemove;
+    protected String newline = "\n";
+    //Start and end position in the source text.
+    //We need this information when performing a MOVE
+    //in order to remove the dragged text from the source.
+    Position p0 = null, p1 = null;
+
+    public FileTransferHandler(MainFrame pareFrame) {
+        //tpc = t;
+        fileFlavor = DataFlavor.javaFileListFlavor;
+        stringFlavor = DataFlavor.stringFlavor;
+        parent = pareFrame;
+    }
+
+    @Override
+    public boolean canImport(TransferSupport support) {
+        if (!support.isDrop()) {
+            return false;
+        }
+        if (!support.isDataFlavorSupported(fileFlavor)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean importData(TransferSupport support) {
+
+        Component target = support.getComponent();
+
+        if (!canImport(support)) {
+            return false;
+        }
+
+        int action = support.getDropAction();
+
+        AbsoluteFile currentDir = null;
+
+        if (target instanceof FileTable) {
+            JTable.DropLocation dl = (JTable.DropLocation) support.getDropLocation();
+            FileTable table = (FileTable) target;
+
+            AbsoluteFile targetFile = table.getFileAt(dl.getRow());
+
+            currentDir = targetFile.isDirectory() ? targetFile : table.getCurrentDir();
+        }
+        if (target instanceof FileTablePanel) {
+            currentDir = ((FileTablePanel) target).getFileTable().getCurrentDir();
+        }
+        if (currentDir == null) {
+            return false;
+        }
+
+        try {
+            if (hasFileFlavor(support.getDataFlavors())) {
+                String str = null;
+                java.util.List files =
+                        (java.util.List) support.getTransferable().getTransferData(fileFlavor);
+                AbsoluteFile[] f = new AbsoluteFile[files.size()];
+
+                for (int i = 0; i < files.size(); i++) {
+                    File file = (File) files.get(i);
+                    f[i] = new LocalFile(file);
+                }
+                FileTable activeTable = parent.getActiveTable();
+
+                if (null != files) {
+
+                    int res = JOptionPane.showConfirmDialog(parent, "Copy?");
+                    if (res == 0) {
+
+                        NewMoveThread nmt = new NewMoveThread(new LocalFile(), activeTable.getCurrentDir(), f, action == COPY);
+                        ProgressDialog pd = new ProgressDialog(parent, nmt);
+                        ProgressThread pt = new ProgressThread(nmt, pd);
+                        nmt.setFrameParent(pd.getDialog());
+                        nmt.start();
+                        pt.start();
+                        pd.show();
+                    }
+                }
+                return true;
+            }
+        } catch (UnsupportedFlavorException ufe) {
+        } catch (IOException ieo) {
+        }
+        return false;
+    }
+
+
+    protected Transferable createTransferable(JComponent c) {
+        System.out.println("create transferable");
+        Transferable t = (Transferable) DataFlavor.javaFileListFlavor;
+        java.util.List files;
+        try {
+            files = (java.util.List) t.getTransferData(fileFlavor);
+            files.add(new File("c:/1.txt"));
+        } catch (UnsupportedFlavorException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        /*
+        source = (JTextArea)c;
+        int start = source.getSelectionStart();
+        int end = source.getSelectionEnd();
+        Document doc = source.getDocument();
+        if (start == end) {
+        return null;
+        }
+        try {
+        p0 = doc.createPosition(start);
+        p1 = doc.createPosition(end);
+        } catch (BadLocationException e) {
+        System.out.println(
+        "Can't create position - unable to remove text from source.");
+        }
+        shouldRemove = true;
+        String data = source.getSelectedText();
+
+        return new StringSelection(data);
+         */
+        //return null;
+        /*
+        Transferable t = DataFlavor.javaFileListFlavor;
+        java.util.List files =
+        (java.util.List)t.getTransferData(fileFlavor);
+        files.add(new File("c:/1.txt"));
+         */
+        /*
+        Transferable t = new Transferable() {
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException,IOException {
+        DataFlavor.javaFileListFlavor.
+        }
+        public DataFlavor[] getTransferDataFlavors() {
+        }
+        public boolean isDataFlavorSupported(DataFlavor flavor) {
+        }
+        }SeleDataFlavor.javaFileListFlavor
+        return t;
+         */
+
+        return null;
+    }
+
+    @Override
+    public int getSourceActions(JComponent c) {
+        super.getSourceActions(c);
+        return COPY | MOVE | LINK;
+    }
+
+    //Remove the old text if the action is a MOVE.
+    //However, we do not allow dropping on top of the selected text,
+    //so in that case do nothing.
+    @Override
+    protected void exportDone(JComponent c, Transferable data, int action) {
+        if (shouldRemove && (action == MOVE)) {
+            if ((p0 != null) && (p1 != null)
+                    && (p0.getOffset() != p1.getOffset())) {
+                try {
+                    JTextComponent tc = (JTextComponent) c;
+                    tc.getDocument().remove(
+                            p0.getOffset(), p1.getOffset() - p0.getOffset());
+                } catch (BadLocationException e) {
+                    System.out.println("Can't remove text from source.");
+                }
+            }
+        }
+        source = null;
+    }
+
+//    @Override
+//    public boolean canImport(JComponent c, DataFlavor[] flavors) {
+//        if (hasFileFlavor(flavors)) {
+//            return true;
+//        }
+//        if (hasStringFlavor(flavors)) {
+//            return true;
+//        }
+//        return false;
+//    }
+    private boolean hasFileFlavor(DataFlavor[] flavors) {
+        for (int i = 0; i < flavors.length; i++) {
+            if (fileFlavor.equals(flavors[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasStringFlavor(DataFlavor[] flavors) {
+        for (int i = 0; i < flavors.length; i++) {
+            if (stringFlavor.equals(flavors[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
