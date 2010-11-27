@@ -23,7 +23,6 @@
 package omegaCommander.threads.newThreads;
 
 import java.util.ArrayList;
-
 import omegaCommander.fileSystem.AbsoluteFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.net.NetFile;
@@ -43,20 +42,16 @@ public class NewMoveThread extends FileThread {
     private AbsoluteFile sourceDir;
     private AbsoluteFile[] filesToCopy;
     private AbsoluteFile targetDir;
-    private ArrayList list = new ArrayList();
-    private boolean oneFileFlag;
+    private String tartgetPath;
 
     /**
      * —оздает новый экземпл€р класса NewMovingThread
      */
-    public NewMoveThread(AbsoluteFile sourceDir, AbsoluteFile targetDir, AbsoluteFile[] filesToCopy, boolean toCopy) {
+    public NewMoveThread(AbsoluteFile sourceDir, String targetPath, AbsoluteFile[] filesToCopy, boolean toCopy) {
         this.sourceDir = sourceDir;
-        this.targetDir = targetDir;
+        this.tartgetPath = targetPath;
         this.filesToCopy = filesToCopy;
         this.toCopy = toCopy;
-        oneFileFlag = 1 == filesToCopy.length && !filesToCopy[0].isDirectory();
-        if (filesToCopy.length == 1 && filesToCopy[0].isDirectory())
-            this.targetDir = targetDir.getAbsoluteParent();
     }
 
     /**
@@ -69,36 +64,46 @@ public class NewMoveThread extends FileThread {
         } else {
             currentAction = LanguageBundle.getInstance().getString("StrMoving");
         }
-
-//        if(targetDir.hasParent())
-//            targetDir.getAbsoluteParent().mkdirs();
-
         for (int i = 0; i < filesToCopy.length; i++) {
             totalFiles += FileSystemList.getSize(filesToCopy[i]);
         }
+        ArrayList list = new ArrayList();
         for (int i = 0; i < filesToCopy.length; i++) {
             list.addAll(SubDirectoriesList.getList(filesToCopy[i]));
-            sourceDir = filesToCopy[i].getAbsoluteParent();
-            action();
+            if (filesToCopy.length == 1 && filesToCopy[0].isDirectory()) {
+                list.remove(filesToCopy[0]);
+                sourceDir = filesToCopy[i];
+
+            } else {
+                sourceDir = filesToCopy[i].getAbsoluteParent();
+            }
+
+            String target = CopyHelper.GetCopyTarget(filesToCopy, sourceDir, tartgetPath);
+            targetDir = SuperFile.getRealFile(target);
+            doAction(list, sourceDir);
             list.clear();
         }
-//        action();
     }
 
-    private int action() {
+    void doAction(ArrayList files, AbsoluteFile relativeParent) {
         AbsoluteFile newFile;
-        for (int i = 0; i < list.size(); i++) {
-            AbsoluteFile temp = (AbsoluteFile) list.get(i);
-            if (oneFileFlag) {
-//                newFile = targetDir;
-                String relativePath = Support.getStringRelativeTo(temp.getPathWithSlash(), targetDir.getPathWithSlash());
-                newFile = SuperFile.getRealFile(targetDir, relativePath);
+        if (filesToCopy.length == 1 && filesToCopy[0].isDirectory()) {
+            targetDir.mkdirs();
+        }
+        for (int i = 0; i < files.size(); i++) {
+            AbsoluteFile temp = (AbsoluteFile) files.get(i);
+            if (filesToCopy.length == 1 && !filesToCopy[0].isDirectory()) {
+                newFile = targetDir;
+                if (newFile.exists() && newFile.isDirectory()) {
+                    newFile = SuperFile.getRealFile(targetDir, temp.getFilename());
+                }
             } else {
                 String relativePath = Support.getStringRelativeTo(temp.getPathWithSlash(), sourceDir.getPathWithSlash());
                 newFile = SuperFile.getRealFile(targetDir, relativePath);
             }
-            if(newFile.hasParent())
+            if (newFile.hasParent()) {
                 newFile.getAbsoluteParent().mkdirs();
+            }
 
             if (temp.isDirectory()) {
                 newFile.mkdirs();
@@ -113,7 +118,7 @@ public class NewMoveThread extends FileThread {
                                 continue;
                             }
                         } else {//cancel
-                            return 0;
+                            return;
                         }
 
                     } else {
@@ -135,13 +140,13 @@ public class NewMoveThread extends FileThread {
                             }
                             newFile.delete();
                         } else { // cancel operation
-                            return 0;
+                            return;
                         }
                     }
                 }
                 action(temp, newFile);
             } catch (InterruptedException ie) {
-                return 0;
+                return;
             } catch (Exception ex) {
                 if (queryError(LanguageBundle.getInstance().getString("StrFileNotAccessible") + " \n " + newFile.getAbsolutePath())) {
                     if (resultError.equals(ErrorAction.Retry)) { // try again
@@ -149,20 +154,20 @@ public class NewMoveThread extends FileThread {
                         continue;
                     }
                 } else {//cancel
-                    return 0;
+                    return;
                 }
             }
             filesReady += temp.length();
         }
         if (!toCopy) {//удал€ем директории
-            for (int i = list.size() - 1; i >= 0; i--) {
-                AbsoluteFile file = (AbsoluteFile) list.get(i);
+            for (int i = files.size() - 1; i >= 0; i--) {
+                AbsoluteFile file = (AbsoluteFile) files.get(i);
                 if (file.isDirectory()) {
                     file.delete();
                 }
             }
         }
-        return 0;
+
     }
 
     private void jCopy(AbsoluteFile source, AbsoluteFile target) throws Exception {
@@ -220,6 +225,5 @@ public class NewMoveThread extends FileThread {
         } else {
             jMove(temp, newFile);
         }
-
     }
 }

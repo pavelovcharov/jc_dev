@@ -43,9 +43,14 @@ public class ProgressDialog implements PrefKeys, BaseDialog.BaseDialogActionEven
     private JLabel jLabelCurrentAction = new JLabel();
     private BaseDialog bd;
     private BaseThread bt;
-    private  MainFrame parent;
+    private MainFrame parent;
 
     public ProgressDialog(MainFrame parent, BaseThread bt) {
+        this(parent, bt, false);
+
+    }
+
+    public ProgressDialog(MainFrame parent, BaseThread bt, boolean modal) {
 
         this.parent = parent;
         this.bt = bt;
@@ -63,7 +68,7 @@ public class ProgressDialog implements PrefKeys, BaseDialog.BaseDialogActionEven
         Object options[] = new Object[]{lb.getString("StrCancel")};
 
         bd = new BaseDialog(parent, lb.getString("StrJC"), message, options, 0);
-        bd.setModal(false);
+        bd.setModal(modal);
         bd.addActionEventListener(this);
     }
 
@@ -111,6 +116,6 @@ public class ProgressDialog implements PrefKeys, BaseDialog.BaseDialogActionEven
         while (bt.isAlive()) {
         }
         parent.updateMainWindow();
-        parent.requestFocus();
+//        parent.requestFocus();
     }
 }

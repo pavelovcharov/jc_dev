@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package omegaCommander.actions;
 
 import omegaCommander.fileSystem.AbsoluteFile;
@@ -33,66 +32,64 @@ import omegaCommander.gui.table.tableElements.UpperDirectory;
 import omegaCommander.threads.newThreads.NewMoveThread;
 import omegaCommander.threads.newThreads.ProgressThread;
 
-
 /**
  *
  * @author Programmer
  */
 public class ActionMove extends AbstractAction {
 
-	public ActionMove(MainFrame parent) {
-		super(parent);
-	}
+    public ActionMove(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable, passiveTable;
-		activeTable = parent.getActiveTable();
-		passiveTable = parent.getPassiveTable();
-		Name name = (Name) activeTable.getValueAt(activeTable.getCurrentPosition(), FileTable.NAME);
-		AbsoluteFile currentFile;
-		if (null != name) {
-			currentFile = name.getFile();
-		} else {
-			currentFile = null;
-		}
-		if (null == currentFile) {
-			return;
-		}
-		if (!activeTable.hasSelectedFiles()) {
+    public void execute() {
+        FileTable activeTable, passiveTable;
+        activeTable = parent.getActiveTable();
+        passiveTable = parent.getPassiveTable();
+        Name name = (Name) activeTable.getValueAt(activeTable.getCurrentPosition(), FileTable.NAME);
+        AbsoluteFile currentFile;
+        if (null != name) {
+            currentFile = name.getFile();
+        } else {
+            currentFile = null;
+        }
+        if (null == currentFile) {
+            return;
+        }
+        if (!activeTable.hasSelectedFiles()) {
 
-			if (true == (name instanceof UpperDirectory)) {
-				parent.requestFocus();
-				return;
-			}
-			//activeTable.addFileToSelectedList((LocalFile) name.getFile());
-			activeTable.selectFileAt(activeTable.getCurrentPosition());
-			activeTable.repaint();
-			parent.updateActiveStatusLabel();
-		}
+            if (true == (name instanceof UpperDirectory)) {
+                parent.requestFocus();
+                return;
+            }
+            //activeTable.addFileToSelectedList((LocalFile) name.getFile());
+            activeTable.selectFileAt(activeTable.getCurrentPosition());
+            activeTable.repaint();
+            parent.updateActiveStatusLabel();
+        }
 //		int result = CopyDialog.showDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), (ArrayList) activeTable.getSelectedList(), false);
 //		if (ThreadStatus.THREAD_IS_NOT_RUNNING == result) {
 //			parent.requestFocus();
 //			return;
 //		}
 
-		AbsoluteFile[] filesToCopy = activeTable.getActiveFiles();
-		if (null != filesToCopy) {
-			CopyDialog cd = new CopyDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), filesToCopy, false);
-			AbsoluteFile newTarget = cd.getNewTarget();
-			if (null != newTarget) {
-					NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), newTarget, filesToCopy, false);
-					ProgressDialog pd = new ProgressDialog(parent, nmt);
-					ProgressThread pt = new ProgressThread(nmt, pd);
-					nmt.setFrameParent(pd.getDialog());
-					nmt.start();
-					pt.start();
-					pd.show();
-				}
-		}
+        AbsoluteFile[] filesToCopy = activeTable.getActiveFiles();
+        if (null != filesToCopy) {
+            CopyDialog cd = new CopyDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), filesToCopy, false);
+            String targetPath = cd.getNewTargetString();
+            if (null != targetPath && !targetPath.isEmpty()) {
+                NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, false);
+                ProgressDialog pd = new ProgressDialog(parent, nmt);
+                ProgressThread pt = new ProgressThread(nmt, pd);
+                nmt.setFrameParent(pd.getDialog());
+                nmt.start();
+                pt.start();
+                pd.show();
+            }
+        }
 
-		parent.updateMainWindow();
-		parent.requestFocus();
-		return;
-	}
-
+        parent.updateMainWindow();
+        parent.requestFocus();
+        return;
+    }
 }
