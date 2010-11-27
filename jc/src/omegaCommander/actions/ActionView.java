@@ -65,16 +65,22 @@ public class ActionView extends AbstractAction {
             if (null != filesToCopy) {
                 omegaCommander.gui.dialog.CopyDialog cd = new omegaCommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
                 //XXX maybe use any function
-                AbsoluteFile newTarget = cd.getNewTarget();
-                if (null != newTarget) {
-                    NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), newTarget, filesToCopy, true);
-                    ProgressDialog pd = new ProgressDialog(parent, nmt);
+                String targetPath = cd.getNewTargetString();
+                if (null != targetPath && !targetPath.isEmpty()) {
+                    NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, true);
+                    ProgressDialog pd = new ProgressDialog(parent, nmt, true);
                     ProgressThread pt = new ProgressThread(nmt, pd);
                     nmt.setFrameParent(pd.getDialog());
                     nmt.start();
                     pt.start();
                     pd.show();
-                    currentFile = newTarget;
+
+                    AbsoluteFile target = SuperFile.getRealFile(targetPath);
+                    if (target.isDirectory()) {
+                        currentFile = SuperFile.getRealFile(target, currentFile.getFilename());
+                    }
+                    currentFile = target;
+
                 } else {
                     return;
                 }
@@ -84,8 +90,7 @@ public class ActionView extends AbstractAction {
         //String extention = currentFile.getExtention();
         //if (extention.equalsIgnoreCase("bmp") || extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("gif")) {
         if (SuperFile.getFileType(currentFile) == SuperFile.FileType.IMAGE) {
-            if (null == iv)
-            {
+            if (null == iv) {
                 iv = new omegaCommander.editor.ImageViewer(parent);
             }
             iv.openFile(currentFile);

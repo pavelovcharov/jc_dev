@@ -67,9 +67,9 @@ public class ActionCopy extends AbstractAction {
         AbsoluteFile[] filesToCopy = activeTable.getActiveFiles();
         if (null != filesToCopy) {
             omegaCommander.gui.dialog.CopyDialog cd = new omegaCommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), filesToCopy, true);
-            AbsoluteFile newTarget = cd.getNewTarget();
-            if (null != newTarget) {
-                NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), newTarget, filesToCopy, true);
+            String targetPath = cd.getNewTargetString();
+            if (targetPath != null && !targetPath.isEmpty()) {
+                NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, true);
                 ProgressDialog pd = new ProgressDialog(parent, nmt);
                 ProgressThread pt = new ProgressThread(nmt, pd);
                 nmt.setFrameParent(pd.getDialog());

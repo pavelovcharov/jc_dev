@@ -10,31 +10,22 @@ import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DropTargetContext;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.TransferHandler;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import omegaCommander.fileSystem.AbsoluteFile;
 import omegaCommander.fileSystem.LocalFile;
 import omegaCommander.gui.MainFrame;
-import omegaCommander.gui.dialog.CopyDialog;
 import omegaCommander.gui.dialog.ProgressDialog;
-import omegaCommander.gui.dialog.WarningDialog;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.FileTablePanel;
 import omegaCommander.threads.newThreads.NewMoveThread;
 import omegaCommander.threads.newThreads.ProgressThread;
-import omegaCommander.util.Support;
-import ru.narod.jcommander.Main;
+import omegaCommander.util.LanguageBundle;
 
 /**
  *
@@ -45,10 +36,6 @@ public class FileTransferHandler extends TransferHandler {
 
     MainFrame parent;
     private DataFlavor fileFlavor, stringFlavor;
-    //private TabbedPaneController tpc;
-    private JTextArea source;
-    private boolean shouldRemove;
-    protected String newline = "\n";
     //Start and end position in the source text.
     //We need this information when performing a MOVE
     //in order to remove the dragged text from the source.
@@ -115,10 +102,13 @@ public class FileTransferHandler extends TransferHandler {
 
                 if (null != files) {
 
-                    int res = JOptionPane.showConfirmDialog(parent, "Copy?");
+                    int res = JOptionPane.showConfirmDialog(parent, LanguageBundle.getInstance().getString("StrToCopy"));
                     if (res == 0) {
-
-                        NewMoveThread nmt = new NewMoveThread(new LocalFile(), activeTable.getCurrentDir(), f, action == COPY);
+                        String path = activeTable.getCurrentDir().getPathWithSlash();
+                        if (f.length == 1 && f[0].isDirectory()) {
+                            path += f[0].getFilename();
+                        }
+                        NewMoveThread nmt = new NewMoveThread(new LocalFile(), path, f, action == COPY);
                         ProgressDialog pd = new ProgressDialog(parent, nmt);
                         ProgressThread pt = new ProgressThread(nmt, pd);
                         nmt.setFrameParent(pd.getDialog());
@@ -135,7 +125,7 @@ public class FileTransferHandler extends TransferHandler {
         return false;
     }
 
-
+    @Override
     protected Transferable createTransferable(JComponent c) {
         System.out.println("create transferable");
         Transferable t = (Transferable) DataFlavor.javaFileListFlavor;
@@ -203,19 +193,19 @@ public class FileTransferHandler extends TransferHandler {
     //so in that case do nothing.
     @Override
     protected void exportDone(JComponent c, Transferable data, int action) {
-        if (shouldRemove && (action == MOVE)) {
-            if ((p0 != null) && (p1 != null)
-                    && (p0.getOffset() != p1.getOffset())) {
-                try {
-                    JTextComponent tc = (JTextComponent) c;
-                    tc.getDocument().remove(
-                            p0.getOffset(), p1.getOffset() - p0.getOffset());
-                } catch (BadLocationException e) {
-                    System.out.println("Can't remove text from source.");
-                }
-            }
-        }
-        source = null;
+//        if (shouldRemove && (action == MOVE)) {
+//            if ((p0 != null) && (p1 != null)
+//                    && (p0.getOffset() != p1.getOffset())) {
+//                try {
+//                    JTextComponent tc = (JTextComponent) c;
+//                    tc.getDocument().remove(
+//                            p0.getOffset(), p1.getOffset() - p0.getOffset());
+//                } catch (BadLocationException e) {
+//                    System.out.println("Can't remove text from source.");
+//                }
+//            }
+//        }
+//        source = null;
     }
 
 //    @Override

@@ -38,7 +38,7 @@ import omegaCommander.util.LanguageBundle;
 public class CopyDialog implements PrefKeys {
 
     private boolean toCopy;
-    private AbsoluteFile newTarget;
+//    private AbsoluteFile newTarget;
 
     public CopyDialog(MainFrame parent, AbsoluteFile sourceDir, AbsoluteFile targerDir, AbsoluteFile[] filesToCopy, boolean toCopy) {
         //XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
@@ -83,50 +83,18 @@ public class CopyDialog implements PrefKeys {
 //		System.out.println("result = " + bd.getResult());
         if (0 == bd.getResult()) {//OK
         } else {
-            newTarget = null;
+//            newTarget = null;
             return;
         }
         String newPath = jTextFieldPath.getText();
 //		System.out.println(newPath);
 
 //		AbsoluteFile newTarget = targerDir;
-        newTarget = targerDir;
-        if (newPath.startsWith("smb://")) {
-        } else {
-            if (SuperFile.isAbsolutePath(newPath)) {
-                newTarget = SuperFile.getRealFile(newPath);
-            } else {
-                if (!newPath.isEmpty())
-                    newTarget = SuperFile.getRealFile(sourceDir, newPath);
-                else {
-                    if (filesToCopy.length == 1)
-                        newTarget = filesToCopy[0];
-                }
-            }
-        }
-
-//		System.out.println(newTarget.getAbsolutePath());
-
-//		NewMoveThread nmt = new NewMoveThread(sourceDir, newTarget, filesToCopy, toCopy);
-//		ProgressDialog pd = new ProgressDialog(parent, nmt);
-//		ProgressThread pt = new ProgressThread(nmt, pd);
-//		nmt.setFrameParent(pd.getDialog());
-//		nmt.start();
-//		pt.start();
-//		pd.show();
-
-
-//		omegaCommander.threads.MovingThread mt =
-//				new omegaCommander.threads.MovingThread(sourceDir, sourceList, toCopy);
-//		mt.setTargetDirString(targetDir.getAbsolutePath());
-//
-//		okButton.addActionListener(new CopyButtonListener(mt, okButton, parent, this));
-//		okButton.addKeyListener(new ButtonKeyListener(okButton, mt));
-//		jTextFieldPath.addKeyListener(new PathFieldKeyListener(this, okButton));
-//		addWindowListener(new DialogListener(parent, mt));
+        newTargetString = newPath;
     }
 
-    public AbsoluteFile getNewTarget() {
-        return newTarget;
+    private String newTargetString;
+    public  String getNewTargetString() {
+        return  newTargetString;
     }
 }
