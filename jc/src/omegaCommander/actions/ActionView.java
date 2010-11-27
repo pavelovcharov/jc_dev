@@ -27,7 +27,7 @@ import omegaCommander.fileSystem.AbsoluteFile;
 import omegaCommander.fileSystem.archive.MyZipFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.LocalFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.ProgressDialog;
 import omegaCommander.gui.table.FileTable;
@@ -75,9 +75,9 @@ public class ActionView extends AbstractAction {
                     pt.start();
                     pd.show();
 
-                    AbsoluteFile target = SuperFile.getRealFile(targetPath);
+                    AbsoluteFile target = FileHelper.getRealFile(targetPath);
                     if (target.isDirectory()) {
-                        currentFile = SuperFile.getRealFile(target, currentFile.getFilename());
+                        currentFile = FileHelper.getRealFile(target, currentFile.getFilename());
                     }
                     currentFile = target;
 
@@ -89,7 +89,7 @@ public class ActionView extends AbstractAction {
         //XXX image viewer
         //String extention = currentFile.getExtention();
         //if (extention.equalsIgnoreCase("bmp") || extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("gif")) {
-        if (SuperFile.getFileType(currentFile) == SuperFile.FileType.IMAGE) {
+        if (FileHelper.getFileType(currentFile) == FileHelper.FileType.IMAGE) {
             if (null == iv) {
                 iv = new omegaCommander.editor.ImageViewer(parent);
             }

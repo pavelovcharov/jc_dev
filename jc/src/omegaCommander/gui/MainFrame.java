@@ -59,7 +59,7 @@ import omegaCommander.actions.*;
 import omegaCommander.fileSystem.AbsoluteFile;
 import omegaCommander.fileSystem.RootFileSystem;
 import omegaCommander.fileSystem.FileSystemList;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.listeners.*;
 import omegaCommander.fileSystem.LocalFile;
 import omegaCommander.gui.dialog.InputDialog;
@@ -499,9 +499,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jSplitPane1.setDividerLocation(jcPrefs.dividerLocation);
 
         //XXX createMessages tabs
-        AbsoluteFile file = SuperFile.getRealFile(jcPrefs.leftPanelPath);
+        AbsoluteFile file = FileHelper.getRealFile(jcPrefs.leftPanelPath);
         currentLeftTable.setFileList(file);
-        file = SuperFile.getRealFile(jcPrefs.rightPanelPath);
+        file = FileHelper.getRealFile(jcPrefs.rightPanelPath);
         currentRightTable.setFileList(file);
 
         if (0 == jcPrefs.activeTable) {
@@ -1105,7 +1105,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             for (int i = 0; i < size; i++) {
                 String name = ois.readUTF();
                 String tmp = ois.readUTF();
-                AbsoluteFile af = SuperFile.getRealFile(tmp);
+                AbsoluteFile af = FileHelper.getRealFile(tmp);
                 fi = new FavoriteItem(name, af);
                 favoriteFolders.add(fi);
             }
@@ -1310,7 +1310,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
     private void startSearchThread(String findWhat, String findWhere, String findText, boolean matchCase) {
         ((GeneratedListModel) jList1.getModel()).clear();
-        AbsoluteFile file = SuperFile.getRealFile(findWhere);
+        AbsoluteFile file = FileHelper.getRealFile(findWhere);
         searchThread = new NewSearchThread(file, findWhat, findText, matchCase);
         SearchStatusThread sst =
                 new SearchStatusThread(searchThread, jLabelSearchStatus, jList1, jButtonFind);
@@ -2768,7 +2768,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
                     }
                 }
                 if (false == af.isAbsolute()) {
-                    af = (LocalFile) SuperFile.getRealFile(getActiveTable().getCurrentDir(), cmdArguments[1]);
+                    af = (LocalFile) FileHelper.getRealFile(getActiveTable().getCurrentDir(), cmdArguments[1]);
                 }
                 if (false == af.exists()) {
                     return;
@@ -2787,7 +2787,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
                     LocalFile executingFile = new LocalFile(cmdArguments[0]);
                     if (false == executingFile.exists()) {
                         if (false == executingFile.isAbsolute()) {
-                            executingFile = (LocalFile) SuperFile.getRealFile(
+                            executingFile = (LocalFile) FileHelper.getRealFile(
                                     getActiveTable().getCurrentDir(), cmdArguments[0]);
                             if (true == executingFile.exists()) {
                                 cmdArguments[0] = executingFile.getAbsolutePath();
@@ -2821,7 +2821,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             currentRightTable.requestFocus();
             return;
         }
-        AbsoluteFile root = SuperFile.getRealFile(jComboBoxRight.getSelectedItem().toString());
+        AbsoluteFile root = FileHelper.getRealFile(jComboBoxRight.getSelectedItem().toString());
         if (false == root.exists()) {
             if ((false == root.canRead())) {
                 WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
@@ -2852,7 +2852,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             currentLeftTable.requestFocus();
             return;
         }
-        AbsoluteFile root = SuperFile.getRealFile(jComboBoxLeft.getSelectedItem().toString());
+        AbsoluteFile root = FileHelper.getRealFile(jComboBoxLeft.getSelectedItem().toString());
         if (false == root.exists()) {
             if ((false == root.canRead())) {
                 WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
@@ -2922,7 +2922,7 @@ private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRS
 
 private void jButtonEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditorActionPerformed
     JFileChooser fileChooser = new JFileChooser();
-    AbsoluteFile file = SuperFile.getRealFile(jcPrefs.externEditor);
+    AbsoluteFile file = FileHelper.getRealFile(jcPrefs.externEditor);
     if (null != file) {
         fileChooser.setCurrentDirectory((java.io.File) file.getAbsoluteParent());
     }
@@ -3418,7 +3418,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             if (value instanceof AbsoluteFile) {
                 AbsoluteFile file = (AbsoluteFile) value;
                 ImageIcon icon = null;
-                switch (SuperFile.getFileType(file)) {
+                switch (FileHelper.getFileType(file)) {
                     case DIRECTORY:
                         icon = ImageArchive.getImageFolder();
                         break;

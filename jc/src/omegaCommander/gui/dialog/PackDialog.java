@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import omegaCommander.fileSystem.AbsoluteFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.prefs.PrefKeys;
 import omegaCommander.util.LanguageBundle;
@@ -112,11 +112,11 @@ public class PackDialog implements PrefKeys {
 		if (newPath.startsWith("smb://")) {
 		}
 		else {
-			if (SuperFile.isAbsolutePath(newPath)) {
-				newTarget = SuperFile.getRealFile(newPath);
+			if (FileHelper.isAbsolutePath(newPath)) {
+				newTarget = FileHelper.getRealFile(newPath);
 			}
 			else {
-				newTarget = SuperFile.getRealFile(sourceDir, newPath);
+				newTarget = FileHelper.getRealFile(sourceDir, newPath);
 			}
 		}
 

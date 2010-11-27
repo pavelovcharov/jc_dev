@@ -1,7 +1,7 @@
 package omegaCommander.threads.newThreads;
 
 import omegaCommander.fileSystem.AbsoluteFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 
 class CopyHelper {
 
@@ -9,7 +9,7 @@ class CopyHelper {
         boolean oneFile = files.length == 1;
         boolean isDir = files[0].isDirectory();
         String result = path;
-        if (!SuperFile.isAbsolutePath(path)) {
+        if (!FileHelper.isAbsolutePath(path)) {
             result = source.getPathWithSlash() + result;
         }
         if (oneFile) {
