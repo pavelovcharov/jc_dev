@@ -33,7 +33,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.ImageArchive;
 import omegaCommander.util.LanguageBundle;
@@ -78,7 +78,7 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, omeg
 		jButtonForward.setToolTipText(lb.getString("iv_nextfile"));
 	}
 
-	public void openFile(AbsoluteFile file) {
+	public void openFile(BaseFile file) {
 		this.file = file;
 		
 		setupLanguage();
@@ -194,10 +194,10 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, omeg
 	}
 
 	private void nextFile() {
-		AbsoluteFile[] files = file.getAbsoluteParent().getFiles();
+		BaseFile[] files = file.getAbsoluteParent().getFiles();
 		int index = 0;
 		for (int i = 0; i < files.length; i++) {
-			AbsoluteFile absoluteFile = files[i];
+			BaseFile absoluteFile = files[i];
 			if (absoluteFile.equals(file)) {
 				index = i + 1;
 			}
@@ -213,10 +213,10 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, omeg
 	}
 
 	private void prevFile() {
-		AbsoluteFile[] files = file.getAbsoluteParent().getFiles();
+		BaseFile[] files = file.getAbsoluteParent().getFiles();
 		int index = 0;
 		for (int i = 0; i < files.length; i++) {
-			AbsoluteFile absoluteFile = files[i];
+			BaseFile absoluteFile = files[i];
 			if (absoluteFile.equals(file)) {
 				index = i - 1;
 			}
@@ -400,7 +400,7 @@ private void jRadioButtonMenuItemFitActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 	private JFrame parent;
-	private AbsoluteFile file = null;
+	private BaseFile file = null;
 	private Scale scale;
 	private Preferences prefs = Preferences.userNodeForPackage(this.getClass());
 }

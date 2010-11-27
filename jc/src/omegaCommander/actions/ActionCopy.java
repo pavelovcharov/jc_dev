@@ -22,7 +22,7 @@
  */
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.ProgressDialog;
 import omegaCommander.gui.table.FileTable;
@@ -46,7 +46,7 @@ public class ActionCopy extends AbstractAction {
         activeTable = parent.getActiveTable();
         passiveTable = parent.getPassiveTable();
         NameInterface name = activeTable.getElementAtCursor();
-        AbsoluteFile currentFile;
+        BaseFile currentFile;
         if (null != name) {
             currentFile = name.getFile();
         } else {
@@ -64,7 +64,7 @@ public class ActionCopy extends AbstractAction {
             parent.updateActiveStatusLabel();
         }
 
-        AbsoluteFile[] filesToCopy = activeTable.getActiveFiles();
+        BaseFile[] filesToCopy = activeTable.getActiveFiles();
         if (null != filesToCopy) {
             omegaCommander.gui.dialog.CopyDialog cd = new omegaCommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), filesToCopy, true);
             String targetPath = cd.getNewTargetString();

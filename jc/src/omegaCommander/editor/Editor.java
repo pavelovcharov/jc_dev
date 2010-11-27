@@ -39,7 +39,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.text.Document;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.dialog.WarningDialog;
 import omegaCommander.util.LanguageBundle;
 
@@ -88,7 +88,7 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, omegaComm
      * @param file открываемый файл
      * @param isEditable <B>true</B>, если файл открывается для редактирования, иначе - <B>false</B>
      */
-    public void openFile(AbsoluteFile file, boolean isEditable) {
+    public void openFile(BaseFile file, boolean isEditable) {
         jPanel2.setVisible(false);
         jProgressBar1.setMinimum(0);
         jProgressBar1.setMaximum((int) file.length());
@@ -330,13 +330,13 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, omegaComm
     // End of variables declaration//GEN-END:variables
     
     private JFrame parent;
-    private AbsoluteFile file;
+    private BaseFile file;
     private Preferences prefs = Preferences.userNodeForPackage(this.getClass());
     private Charset charset;// = Charset.forName("windows-1251");
     
     class FileLoader extends Thread {
 
-        FileLoader(AbsoluteFile f, Document doc) {
+        FileLoader(BaseFile f, Document doc) {
             setPriority(4);
             this.f = f;
             this.doc = doc;
@@ -385,7 +385,7 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, omegaComm
         }
         
         Document doc;
-        AbsoluteFile f;
+        BaseFile f;
     }
 
 	private void changeLanguage() {

@@ -32,7 +32,7 @@ package omegaCommander.gui.dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JDialog;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.util.LanguageBundle;
 
 /**
@@ -45,7 +45,7 @@ public class RewriteDialog extends javax.swing.JDialog {
 	ReplaceResult dialogResult;
 
 	/** Creates new form RewriteDialog */
-    public RewriteDialog(JDialog parent, AbsoluteFile source, AbsoluteFile target) {
+    public RewriteDialog(JDialog parent, BaseFile source, BaseFile target) {
         super(parent, true);
         initComponents();
 		setLocationRelativeTo(parent);

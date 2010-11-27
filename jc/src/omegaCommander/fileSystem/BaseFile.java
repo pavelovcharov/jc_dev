@@ -17,7 +17,7 @@
  */
 
 /*
- * AbsoluteFile.java
+ * BaseFile.java
  *
  * Created on 24 Ноябрь 2006 г., 19:54
  *
@@ -32,7 +32,7 @@ import java.io.FileFilter;
  * файлов
  * @author Pavel Ovcharov
  */
-public interface AbsoluteFile {
+public interface BaseFile {
     /**
      * Получить имя файла (без расширения)
      * @return имя файла
@@ -48,18 +48,18 @@ public interface AbsoluteFile {
      * Получить список файлов, если данный объект является каталогом.
      * @return список файлов в данном каталоге
      */
-    public AbsoluteFile [] getFiles();
+    public BaseFile [] getFiles();
     
     /**
      * Получить отфильтрованный список файлов, если данный объект является каталогом.
      * @return список файлов в данном каталоге
      */
-    public AbsoluteFile [] getFiles(FileFilter filter);
+    public BaseFile [] getFiles(FileFilter filter);
     /**
      * получить каталог, родительский по отношению к данному файлу
      * @return родительский каталог
      */
-    public AbsoluteFile getAbsoluteParent();
+    public BaseFile getAbsoluteParent();
     /**
      * Определить, является ли данный объект файлом или каталогом
      * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
@@ -94,16 +94,16 @@ public interface AbsoluteFile {
     public boolean exists();
     /**
      * Получить родительский каталог данного файла
-     * @return родительский каталог - объект класса AbsoluteFile; если
+     * @return родительский каталог - объект класса BaseFile; если
      * родительского каталога нет, возвращается <B>null</B>
      */
     public String getAbsolutePath();
     /**
      * Получить файл, соответствующий корню диска ('C:\', 'D:\' и т.д.
      * для Windows, '/' для Linux)
-     * @return объект класса AbsoluteFile - корень диска
+     * @return объект класса BaseFile - корень диска
      */
-    public AbsoluteFile getRoot();
+    public BaseFile getRoot();
     /**
      * Получить поток для чтения из файла
      * @return поток для чтения из файла
@@ -150,7 +150,7 @@ public interface AbsoluteFile {
      * @param targetFile файл-преемник
      * @return <B>true</B>, если файл был переименовн, иначе - <B>false</B>
      */
-    public boolean renameTo(AbsoluteFile targetFile);
+    public boolean renameTo(BaseFile targetFile);
     /**
      * Определить, можно ли прочитать данный файл
      * @return <B>true</B>, если файл доступен для чтения, иначе - <B>false</B>

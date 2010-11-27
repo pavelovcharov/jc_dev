@@ -23,7 +23,7 @@
 package omegaCommander.actions;
 
 import java.awt.Cursor;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.tableElements.Name;
@@ -45,7 +45,7 @@ public class ActionCalcSize extends AbstractAction {
 		
 		FileTable activeTable = parent.getActiveTable();
 		Name name = (Name) activeTable.getElementAtCursor();
-		AbsoluteFile currentFile;
+		BaseFile currentFile;
 		if (null != name) {
 			currentFile = name.getFile();
 		} else {

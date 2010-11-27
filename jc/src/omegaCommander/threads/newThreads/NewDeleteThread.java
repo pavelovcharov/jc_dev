@@ -23,7 +23,7 @@
 package omegaCommander.threads.newThreads;
 
 import java.util.ArrayList;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.SubDirectoriesList;
 import omegaCommander.util.LanguageBundle;
 
@@ -34,9 +34,9 @@ import omegaCommander.util.LanguageBundle;
 public class NewDeleteThread extends FileThread {
 
 	ArrayList list = new ArrayList();
-	AbsoluteFile[] filesToDelete;
+	BaseFile[] filesToDelete;
 
-	public NewDeleteThread(AbsoluteFile[] filesToDelete) {
+	public NewDeleteThread(BaseFile[] filesToDelete) {
 		this.filesToDelete = filesToDelete;
 	}
 
@@ -54,7 +54,7 @@ public class NewDeleteThread extends FileThread {
 
 	private void action() {
 		for (int i = list.size() - 1; i >= 0; i--) {
-			AbsoluteFile file = (AbsoluteFile) list.get(i);
+			BaseFile file = (BaseFile) list.get(i);
 
 			currentAction = LanguageBundle.getInstance().getString("StrDeletion") + " " + file.getFilename();
 			currentProgress = 0;

@@ -24,7 +24,7 @@
 package omegaCommander.gui.dialog;
 
 import javax.swing.JOptionPane;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.prefs.PrefKeys;
 import omegaCommander.util.LanguageBundle;
@@ -37,7 +37,7 @@ public class DeleteDialog implements PrefKeys {
 
 	private static int filesToShowCount = 3;
 
-	//	public DeleteDialog(MainFrame parent, AbsoluteFile[] filesToDelete) {
+	//	public DeleteDialog(MainFrame parent, BaseFile[] filesToDelete) {
 //		String messageText = "<html><P>Выбранные файлы/каталоги будут удалены<br><br>";
 //		if (filesToShowCount < filesToDelete.length) {
 //
@@ -58,7 +58,7 @@ public class DeleteDialog implements PrefKeys {
 //
 //	}
 
-	public static boolean showDeleteDialog(MainFrame parent, AbsoluteFile[] filesToDelete) {
+	public static boolean showDeleteDialog(MainFrame parent, BaseFile[] filesToDelete) {
 		
 		if (null == filesToDelete) return false;
 

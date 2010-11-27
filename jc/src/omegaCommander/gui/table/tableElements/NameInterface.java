@@ -37,5 +37,5 @@ public interface NameInterface {
     public String getFileName();
 	@Override
     public boolean equals(Object obj);    
-    public omegaCommander.fileSystem.AbsoluteFile getFile();
+    public omegaCommander.fileSystem.BaseFile getFile();
 }

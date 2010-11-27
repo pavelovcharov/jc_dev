@@ -31,7 +31,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.LocalFile;
 
 /**
@@ -93,7 +93,7 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
      */
 	
 	@Override
-    public AbsoluteFile[] getFiles() {
+    public BaseFile[] getFiles() {
         try {
             SmbFile [] f = smbFile.listFiles();
             NetFile [] list = new NetFile[f.length];
@@ -110,16 +110,16 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
     }
 	
 	@Override
-    public AbsoluteFile[] getFiles(FileFilter filter){
+    public BaseFile[] getFiles(FileFilter filter){
         return getFiles();
     }
     
     /**
      * Получить родительскую папку для данного файла
-     * @return объект класса AbsoluteFile, представляющий родительскую папку данного файла
+     * @return объект класса BaseFile, представляющий родительскую папку данного файла
      */
 	@Override
-    public AbsoluteFile getAbsoluteParent() {
+    public BaseFile getAbsoluteParent() {
         //return new NetFile(smbFile.getParent());
         return parent;
     }
@@ -310,7 +310,7 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
      * @return <B>true</B>, если файл был переименовн, иначе - <B>false</B>
      */
 	@Override
-    public boolean renameTo(AbsoluteFile dest) {
+    public boolean renameTo(BaseFile dest) {
         try {
             if (dest instanceof NetFile)
                 smbFile.renameTo(((NetFile)dest).smbFile);
@@ -332,10 +332,10 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
     }
     /**
      * Получить файл, соответствующий начальной папке в сети (smb://)
-     * @return объект класса AbsoluteFile - начальная папка в сети
+     * @return объект класса BaseFile - начальная папка в сети
      */
 	@Override
-    public AbsoluteFile getRoot() {
+    public BaseFile getRoot() {
         return new NetFile("smb://");
         /*
         NetFile root = this;

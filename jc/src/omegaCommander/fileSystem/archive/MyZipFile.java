@@ -50,7 +50,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     
     private HashMap archiveMap;
     private LocalFile archive;
-    private AbsoluteFile parent;
+    private BaseFile parent;
     private ZipEntry entry = null;
 
 	//XXX а если архив в сети?
@@ -70,9 +70,9 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     
     /**
      * —оздать объект класса MyZipFile с помощью файла <I>parent</I>
-     * @param parent объект класса AbsoluteFile
+     * @param parent объект класса BaseFile
      */
-    public MyZipFile(AbsoluteFile parent) {
+    public MyZipFile(BaseFile parent) {
         this(new LocalFile(parent));
     }
     
@@ -219,7 +219,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
      * @return массив файлов
      */
 	@Override
-    public AbsoluteFile[] getFiles(FileFilter filter) {
+    public BaseFile[] getFiles(FileFilter filter) {
 		return getFiles();
 //        final String[] names = list();
 //        MyZipFile[] files = null;
@@ -240,7 +240,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
 //        return files;
     }
 	@Override
-    public AbsoluteFile[] getFiles() {
+    public BaseFile[] getFiles() {
         final String[] names = list();
         MyZipFile[] files = null;
         if (names != null) {
@@ -271,10 +271,10 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     
     /**
      * ѕолучить родительскую папку дл€ данного файла
-     * @return объект класса AbsoluteFile, представл€ющий родительскую папку данного файла
+     * @return объект класса BaseFile, представл€ющий родительскую папку данного файла
      */
 	@Override
-    public AbsoluteFile getAbsoluteParent() {
+    public BaseFile getAbsoluteParent() {
         return parent;
         //return getAbstractParent();
     }

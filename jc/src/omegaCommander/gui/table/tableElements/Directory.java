@@ -25,7 +25,7 @@
 package omegaCommander.gui.table.tableElements;
 
 import java.awt.Color;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 
 /**
  * Класс определеяет элемент таблицы FileTable - каталог файловой системы
@@ -33,7 +33,7 @@ import omegaCommander.fileSystem.AbsoluteFile;
  */
 public class Directory extends Name {
  
-    //private AbsoluteFile aFile;
+    //private BaseFile aFile;
     //private String dirName;
 
     private String DIR_CHARACTER_LEFT = "";
@@ -47,7 +47,7 @@ public class Directory extends Name {
      * @param fontColor цвет шрифта
      * @param bgColor цвет фона
      */
-    public Directory(AbsoluteFile aFile, Color fontColor, Color bgColor) {
+    public Directory(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
         //this.dirName = aFile.getAbstractFileName();
         //this.aFile = aFile;
@@ -59,7 +59,7 @@ public class Directory extends Name {
      * <I>bgColor</I>
      * @param aFile каталог файловой системы
      */
-    public Directory(AbsoluteFile aFile) {
+    public Directory(BaseFile aFile) {
         super(aFile);
         //this.dirName = aFile.getAbstractFileName();
         //this.aFile = aFile;

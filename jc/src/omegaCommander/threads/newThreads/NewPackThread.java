@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.SubDirectoriesList;
 import omegaCommander.gui.dialog.WarningDialog;
 import omegaCommander.util.LanguageBundle;
@@ -40,13 +40,13 @@ import omegaCommander.util.Support;
  */
 public class NewPackThread extends BaseThread {
 
-	private AbsoluteFile sourceDir;
-	private AbsoluteFile targetFile;
-	private AbsoluteFile[] filesToPack;
+	private BaseFile sourceDir;
+	private BaseFile targetFile;
+	private BaseFile[] filesToPack;
 	private int packLevel;
 	private ArrayList list = new ArrayList();
 
-	public NewPackThread(AbsoluteFile sourceDir, AbsoluteFile targetFile, AbsoluteFile[] filesToPack, int packLevel) {
+	public NewPackThread(BaseFile sourceDir, BaseFile targetFile, BaseFile[] filesToPack, int packLevel) {
 		this.sourceDir = sourceDir;
 		this.targetFile = targetFile;
 		this.filesToPack = filesToPack;
@@ -85,7 +85,7 @@ public class NewPackThread extends BaseThread {
 
 	private void action() {
 
-		AbsoluteFile targetDir = targetFile.getAbsoluteParent();
+		BaseFile targetDir = targetFile.getAbsoluteParent();
 		targetDir.mkdirs();
 
 		LanguageBundle lb = LanguageBundle.getInstance();
@@ -109,7 +109,7 @@ public class NewPackThread extends BaseThread {
 
 		ZipEntry ze;
 		for (int i = 0; i < list.size(); i++) {
-			AbsoluteFile temp = (AbsoluteFile) list.get(i);
+			BaseFile temp = (BaseFile) list.get(i);
 			try {
 				String relativePath = Support.getStringRelativeTo(temp.getPathWithSlash(), sourceDir.getPathWithSlash());
 				currentAction = lb.getString("StrArchiving") + " " + temp.getFilename();

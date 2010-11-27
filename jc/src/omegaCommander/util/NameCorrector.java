@@ -26,7 +26,7 @@ package omegaCommander.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileHelper;
 
 /**
@@ -64,10 +64,10 @@ public class NameCorrector {
 //        return counter;
 //    }
 
-    public static int renameFiles(AbsoluteFile file) {
+    public static int renameFiles(BaseFile file) {
         int c = 0;
         String name = file.getFilename();
-		AbsoluteFile newFile = file;
+		BaseFile newFile = file;
         name = decodeHex(name);
         if (name != null) {
             newFile = FileHelper.getRealFile(file.getAbsoluteParent(), name);
@@ -79,7 +79,7 @@ public class NameCorrector {
             }
         }
         if (newFile.isDirectory()) {
-            for (AbsoluteFile f : newFile.getFiles()) {
+            for (BaseFile f : newFile.getFiles()) {
                 c += renameFiles(f);
             }
         }

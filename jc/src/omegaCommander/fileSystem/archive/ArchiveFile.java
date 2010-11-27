@@ -29,6 +29,6 @@ import omegaCommander.fileSystem.*;
  *
  * @author Programmer
  */
-public interface ArchiveFile extends AbsoluteFile {
+public interface ArchiveFile extends BaseFile {
     public static final String ARCHIVE_SEPARATOR = "/";
 }

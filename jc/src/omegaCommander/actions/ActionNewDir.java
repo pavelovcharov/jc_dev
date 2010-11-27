@@ -23,7 +23,7 @@
 
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.InputDialog;
@@ -43,7 +43,7 @@ public class ActionNewDir extends AbstractAction {
 	}
 
 	public void execute() {
-		AbsoluteFile activeFile = parent.getActiveTable().getFileAtCursor();
+		BaseFile activeFile = parent.getActiveTable().getFileAtCursor();
 
 		String newDir;
 		if (activeFile.getFilename().equals("")) {
@@ -60,7 +60,7 @@ public class ActionNewDir extends AbstractAction {
 		{
 			return;
 		}
-		AbsoluteFile result = FileHelper.getRealFile(parent.getActiveTable().getCurrentDir(), newDir);
+		BaseFile result = FileHelper.getRealFile(parent.getActiveTable().getCurrentDir(), newDir);
 
 		boolean res = result.mkdirs();
 		parent.updateMainWindow();

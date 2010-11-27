@@ -22,7 +22,7 @@
  */
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.PackDialog;
 import omegaCommander.gui.dialog.ProgressDialog;
@@ -46,7 +46,7 @@ public class ActionPack extends AbstractAction {
 		FileTable activeTable = parent.getActiveTable();
 		FileTable passiveTable = parent.getPassiveTable();
 		NameInterface name = activeTable.getElementAtCursor();
-		AbsoluteFile currentFile;
+		BaseFile currentFile;
 		if (null != name) {
 			currentFile = name.getFile();
 		} else {
@@ -72,7 +72,7 @@ public class ActionPack extends AbstractAction {
 //		}
 
 		PackDialog pd = new PackDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), activeTable.getActiveFiles());
-		AbsoluteFile newTarget = pd.getNewTarget();
+		BaseFile newTarget = pd.getNewTarget();
 		if (null != newTarget) {
 			//XXX create function
 			NewPackThread npt = new NewPackThread(activeTable.getCurrentDir(), pd.getNewTarget(), activeTable.getActiveFiles(), pd.getPackLevel());

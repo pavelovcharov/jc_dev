@@ -37,7 +37,7 @@ public class MyTgzFile extends MyTarFile {
 
 //    protected HashMap archiveMap;
 //    protected LocalFile archive;
-//    protected AbsoluteFile parent;
+//    protected BaseFile parent;
 //    protected TarEntry entry = null;
 
 	//XXX а если архив в сети?
@@ -57,9 +57,9 @@ public class MyTgzFile extends MyTarFile {
 
 	/**
 	 * —оздать объект класса MyTarFile с помощью файла <I>parent</I>
-	 * @param parent объект класса AbsoluteFile
+	 * @param parent объект класса BaseFile
 	 */
-	public MyTgzFile(AbsoluteFile parent) {
+	public MyTgzFile(BaseFile parent) {
 		super(parent);
 //        this(new LocalFile(parent));
 	}
@@ -225,11 +225,11 @@ public class MyTgzFile extends MyTarFile {
 //	 * @return массив файлов
 //	 */
 //	@Override
-//	public AbsoluteFile[] getFiles(FileFilter filter) {
+//	public BaseFile[] getFiles(FileFilter filter) {
 //		return getFiles();
 //	}
 	@Override
-	public AbsoluteFile[] getFiles() {
+	public BaseFile[] getFiles() {
 		final String[] names = list();
 		MyTgzFile[] files = null;
 		if (names != null) {
@@ -259,10 +259,10 @@ public class MyTgzFile extends MyTarFile {
 
 //	/**
 //	 * ѕолучить родительскую папку дл€ данного файла
-//	 * @return объект класса AbsoluteFile, представл€ющий родительскую папку данного файла
+//	 * @return объект класса BaseFile, представл€ющий родительскую папку данного файла
 //	 */
 //	@Override
-//	public AbsoluteFile getAbsoluteParent() {
+//	public BaseFile getAbsoluteParent() {
 //		return parent;
 //	//return getAbstractParent();
 //	}
