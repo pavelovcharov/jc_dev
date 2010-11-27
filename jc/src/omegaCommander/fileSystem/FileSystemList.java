@@ -34,11 +34,11 @@ import omegaCommander.util.LanguageBundle;
  */
 public class FileSystemList {
 
-    private AbsoluteFile currentDir;
+    private BaseFile currentDir;
     private boolean hasParent;
     private ArrayList dirList;
     private ArrayList fileList;
-    private AbsoluteFile[] fsList;
+    private BaseFile[] fsList;
     FileFilter fileFilter = null;
     /**
      * Задает путь к временной папке приложения
@@ -58,7 +58,7 @@ public class FileSystemList {
      * Создает файловую систему с текущим каталогом <b>abstractFile</b>
      * @param file текущий каталог файловой системы
      */
-    public FileSystemList(AbsoluteFile file) {
+    public FileSystemList(BaseFile file) {
         setFileList(file);
     }
 
@@ -67,7 +67,7 @@ public class FileSystemList {
      * @param file задает текущий каталог файловой системы
      */
     //XXX посмотреть как это работает. разобраться с рекурсиями и return'ами
-    public void setFileList(AbsoluteFile file) {
+    public void setFileList(BaseFile file) {
         //XXX запускать загрузку файлов в отдельном потоке
 
         if (file == null) {
@@ -79,7 +79,7 @@ public class FileSystemList {
             return;
         }
         this.currentDir = file;
-        AbsoluteFile[] tempList;
+        BaseFile[] tempList;
         tempList = currentDir.getFiles(fileFilter);
         if (null == tempList) {
 
@@ -125,7 +125,7 @@ public class FileSystemList {
      * Позволяет получить текущий каталог
      * @return текущий каталог файловой системы
      */
-    public AbsoluteFile getCurrentDir() {
+    public BaseFile getCurrentDir() {
         return currentDir;
     }
 
@@ -133,8 +133,8 @@ public class FileSystemList {
      * Для текущего каталога создает список файлов, содержащихся в
      * нем и подкаталогов
      */
-    public void setList(AbsoluteFile[] list) {
-        //AbsoluteFile [] list = currentDir.getFiles();
+    public void setList(BaseFile[] list) {
+        //BaseFile [] list = currentDir.getFiles();
         dirList = new ArrayList();
         fileList = new ArrayList();
         for (int i = 0; i < list.length; i++) {
@@ -171,7 +171,7 @@ public class FileSystemList {
      * @return массив типа File, содержащий упоряоченный список папок
      * и файлов
      */
-    public AbsoluteFile[] getFullList() {
+    public BaseFile[] getFullList() {
         return fsList;
         //return null;
     }
@@ -180,7 +180,7 @@ public class FileSystemList {
      * Определяет каталог, находящийся на уровень выше текущего
      * @return каталог, находящийся на уровень выше текущего
      */
-    public AbsoluteFile getParent() {
+    public BaseFile getParent() {
         return currentDir.getAbsoluteParent();
     }
 
@@ -224,15 +224,15 @@ public class FileSystemList {
             return 0;
         }
         for (Iterator it = list.iterator(); it.hasNext();) {
-            size += ((AbsoluteFile) it.next()).length();
+            size += ((BaseFile) it.next()).length();
         }
         return size;
     }
 
-    public static long getSize(AbsoluteFile file) {
+    public static long getSize(BaseFile file) {
         long size = 0;
         if (file.isDirectory()) {
-            AbsoluteFile[] fileList = file.getFiles();
+            BaseFile[] fileList = file.getFiles();
             for (int i = 0; i < fileList.length; i++) {
                 size += getSize(fileList[i]);
             }
@@ -257,20 +257,20 @@ public class FileSystemList {
         return str.trim();
     }
 
-    public AbsoluteFile[] getFiles() {
+    public BaseFile[] getFiles() {
         //if (0 == fileList.size()) return null;
-        AbsoluteFile[] files = new AbsoluteFile[fileList.size()];
+        BaseFile[] files = new BaseFile[fileList.size()];
         for (int i = 0; i < files.length; i++) {
-            files[i] = (AbsoluteFile) fileList.get(i);
+            files[i] = (BaseFile) fileList.get(i);
         }
         return files;
     }
 
-    public AbsoluteFile[] getFolders() {
+    public BaseFile[] getFolders() {
         //if (0 == dirList.size()) return null;
-        AbsoluteFile[] folders = new AbsoluteFile[dirList.size()];
+        BaseFile[] folders = new BaseFile[dirList.size()];
         for (int i = 0; i < folders.length; i++) {
-            folders[i] = (AbsoluteFile) dirList.get(i);
+            folders[i] = (BaseFile) dirList.get(i);
         }
         return folders;
 

@@ -24,7 +24,7 @@ package omegaCommander.gui.dialog;
 
 import java.awt.Dimension;
 import javax.swing.JTextField;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.LocalFile;
 import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
@@ -38,9 +38,9 @@ import omegaCommander.util.LanguageBundle;
 public class CopyDialog implements PrefKeys {
 
     private boolean toCopy;
-//    private AbsoluteFile newTarget;
+//    private BaseFile newTarget;
 
-    public CopyDialog(MainFrame parent, AbsoluteFile sourceDir, AbsoluteFile targerDir, AbsoluteFile[] filesToCopy, boolean toCopy) {
+    public CopyDialog(MainFrame parent, BaseFile sourceDir, BaseFile targerDir, BaseFile[] filesToCopy, boolean toCopy) {
         //XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
         this.toCopy = toCopy;
 
@@ -89,7 +89,7 @@ public class CopyDialog implements PrefKeys {
         String newPath = jTextFieldPath.getText();
 //		System.out.println(newPath);
 
-//		AbsoluteFile newTarget = targerDir;
+//		BaseFile newTarget = targerDir;
         newTargetString = newPath;
     }
 

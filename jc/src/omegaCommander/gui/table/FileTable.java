@@ -33,7 +33,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.gui.table.tableElements.Directory;
 import omegaCommander.gui.table.tableElements.Element;
@@ -59,7 +59,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     private FileSystemList fsl;
     private int currentPosition;
     private ArrayList selectedFilesList;
-    private AbsoluteFile currentDir;
+    private BaseFile currentDir;
     private FileTableSorter model;
     private final String[] TITLE = TableHeader.TITLE;
     public int[] headerSizes = new int[TITLE.length];
@@ -71,7 +71,7 @@ public class FileTable extends JTable implements ColumnNumbers {
      *  <i>f</i>
      * @param file устанавливает текущий каталог файловой системы
      */
-    public FileTable(AbsoluteFile file) {
+    public FileTable(BaseFile file) {
         super();
         try {
             fsl = new FileSystemList(file);
@@ -163,7 +163,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         refreshTable(fsl);
     }
 
-    public void setFileList(AbsoluteFile file) {
+    public void setFileList(BaseFile file) {
         fsl.setFileList(file);
         refreshTable();
     }
@@ -245,9 +245,9 @@ public class FileTable extends JTable implements ColumnNumbers {
      * Определяет позицию файла в таблице
      * @param aFile файла в таблице
      * @return позиция файла в таблице: -1, если файла в таблице нет
-     * @see AbsoluteFile
+     * @see BaseFile
      */
-    public int getFilePosition(AbsoluteFile aFile) {
+    public int getFilePosition(BaseFile aFile) {
         NameInterface ni;
         if (aFile.isDirectory()) {
             ni = new Directory(aFile);
@@ -268,7 +268,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             return (NameInterface) getValueAt(pos, NAME);
         }
     }
-    public AbsoluteFile getFileAt(int pos) {
+    public BaseFile getFileAt(int pos) {
         return getElementAt(pos).getFile();
     }
 
@@ -338,9 +338,9 @@ public class FileTable extends JTable implements ColumnNumbers {
     /**
      * Добавить файл в список выделенных
      * @param newFile новый файл
-     * @see AbsoluteFile
+     * @see BaseFile
      */
-    public void addFileToSelectedList(AbsoluteFile newFile) {
+    public void addFileToSelectedList(BaseFile newFile) {
         if (selectedFilesList.contains(newFile)) {
             selectedFilesList.remove(newFile);
         } else {
@@ -374,9 +374,9 @@ public class FileTable extends JTable implements ColumnNumbers {
     /**
      * Получить текущий каталог, отображаемый в таблице
      * @return текущий каталог таблицы
-     * @see AbsoluteFile
+     * @see BaseFile
      */
-    public AbsoluteFile getCurrentDir() {
+    public BaseFile getCurrentDir() {
         return currentDir;
     }
 
@@ -421,7 +421,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         selectFileAt(currentPosition);
     }
 
-    public AbsoluteFile getFileAtCursor() {
+    public BaseFile getFileAtCursor() {
         Object obj = getValueAt(currentPosition, NAME);
         if (obj instanceof NameInterface) {
             return ((NameInterface) obj).getFile();
@@ -440,7 +440,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
 
     public void showFileSize() {
-        AbsoluteFile af = getFileAtCursor();
+        BaseFile af = getFileAtCursor();
         if (null != af) {
 //			setCursor(new Cursor(Cursor.WAIT_CURSOR));
             long size = FileSystemList.getSize(af);
@@ -505,20 +505,20 @@ public class FileTable extends JTable implements ColumnNumbers {
         changeSelection(index, NAME, false, false);
     }
 
-    public void moveToFile(AbsoluteFile file) {
+    public void moveToFile(BaseFile file) {
         setCurrentPosition(getFilePosition(file));
     }
 
-    public AbsoluteFile[] getActiveFiles() {
-        AbsoluteFile[] files = null;
+    public BaseFile[] getActiveFiles() {
+        BaseFile[] files = null;
         if (hasSelectedFiles()) {
-            files = new AbsoluteFile[selectedFilesList.size()];
+            files = new BaseFile[selectedFilesList.size()];
             for (int i = 0; i < files.length; i++) {
-                files[i] = (AbsoluteFile) selectedFilesList.get(i);
+                files[i] = (BaseFile) selectedFilesList.get(i);
             }
         } else {
             if (!(getElementAtCursor() instanceof UpperDirectory)) {
-                files = new AbsoluteFile[]{getFileAtCursor()};
+                files = new BaseFile[]{getFileAtCursor()};
             }
         }
         return files;

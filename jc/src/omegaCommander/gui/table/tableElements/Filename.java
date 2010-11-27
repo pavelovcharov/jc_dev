@@ -24,7 +24,7 @@
 package omegaCommander.gui.table.tableElements;
 
 import java.awt.Color;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 
 /**
  *
@@ -33,11 +33,11 @@ import omegaCommander.fileSystem.AbsoluteFile;
 public class Filename extends Name {
 
     /** Creates a new instance of Filename */
-    public Filename(AbsoluteFile aFile, Color fontColor, Color bgColor) {
+    public Filename(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
     }
 
-    public Filename(AbsoluteFile aFile) {
+    public Filename(BaseFile aFile) {
         super(aFile);
     }
 

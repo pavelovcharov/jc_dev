@@ -37,7 +37,7 @@ abstract public class RootFileSystem {
      * ¬озвращает список разделов
      * @return массив класса File, содержащий файлы разделов
      */
-    public static AbsoluteFile[] getRoots() {
+    public static BaseFile[] getRoots() {
         java.io.File[] roots = java.io.File.listRoots();
         ArrayList list = new ArrayList();
 
@@ -47,9 +47,9 @@ abstract public class RootFileSystem {
         NetFile netFile = new NetFile("smb://");
 
         list.add(netFile);
-        AbsoluteFile[] obj = new AbsoluteFile[list.size()];
+        BaseFile[] obj = new BaseFile[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            obj[i] = (AbsoluteFile) list.get(i);
+            obj[i] = (BaseFile) list.get(i);
         }
         return obj;
     }

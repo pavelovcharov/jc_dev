@@ -23,7 +23,7 @@
 
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.tableElements.NameInterface;
@@ -43,7 +43,7 @@ public class ActionSelectNDown extends AbstractAction {
 		FileTable activeTable = parent.getActiveTable();
 		NameInterface name = activeTable.getElementAtCursor();
 		if ((name instanceof UpperDirectory) == false) {
-			AbsoluteFile currentFile = name.getFile();
+			BaseFile currentFile = name.getFile();
 			if (null == currentFile) {
 				return;
 			}

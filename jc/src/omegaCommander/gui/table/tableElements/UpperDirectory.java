@@ -25,7 +25,7 @@
 package omegaCommander.gui.table.tableElements;
 
 import java.awt.Color;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 /**
  *
  * @author Pavel Ovcharov
@@ -35,11 +35,11 @@ public class UpperDirectory extends Name{
     private String UPPER_DIRECTORY_DEFAULT_NAME = "..";
     /** Creates a new instance of UpperDirectory */
 
-    public UpperDirectory(AbsoluteFile aFile, Color fontColor, Color bgColor) {
+    public UpperDirectory(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
     }
     
-    public UpperDirectory(AbsoluteFile aFile) {
+    public UpperDirectory(BaseFile aFile) {
         super(aFile);
     }
     
@@ -64,7 +64,7 @@ public class UpperDirectory extends Name{
         return UPPER_DIRECTORY_DEFAULT_NAME;
     }
 
-    public AbsoluteFile getFile() {
+    public BaseFile getFile() {
         return aFile;
     }
  */

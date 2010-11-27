@@ -23,7 +23,7 @@
 
 package omegaCommander.threads.newThreads;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 //import omegaCommander.gui.dialog.ReplaceDialog;
 import omegaCommander.gui.dialog.RewriteDialog;
 import omegaCommander.gui.dialog.WarningDialog;
@@ -48,7 +48,7 @@ public abstract class FileThread extends BaseThread {
 	/**
 	 * ¬озвращает true если можно продолжать поток
 	 */
-	protected boolean queryReplace(AbsoluteFile source, AbsoluteFile target) {
+	protected boolean queryReplace(BaseFile source, BaseFile target) {
 		
 //		if (applyToAll) {
 //			return true;

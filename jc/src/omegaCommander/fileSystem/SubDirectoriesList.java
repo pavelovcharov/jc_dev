@@ -30,7 +30,7 @@ public abstract class SubDirectoriesList {
 
 	private static ArrayList list;
 
-	private static void getFilesFromSubDirectories(AbsoluteFile[] fileList) {
+	private static void getFilesFromSubDirectories(BaseFile[] fileList) {
 		int i;
 		if (null == fileList) {
 			return;
@@ -38,7 +38,7 @@ public abstract class SubDirectoriesList {
 		for (i = 0; i < fileList.length; i++) {
 			if (fileList[i].isDirectory()) {
 				list.add(fileList[i]);
-				AbsoluteFile[] files = fileList[i].getFiles();
+				BaseFile[] files = fileList[i].getFiles();
 				if (null == files) {
 					return;
 				}
@@ -56,7 +56,7 @@ public abstract class SubDirectoriesList {
 	 * @return Возвращает объект класса ArrayList, содержащий файлы и подкаталои.
 	 * Если исходный список не содержит файлов/папок, возвращается пустой список.
 	 */
-	public static ArrayList getList(AbsoluteFile aFile) {
+	public static ArrayList getList(BaseFile aFile) {
 		if (null == aFile) {
 			return null;
 		}

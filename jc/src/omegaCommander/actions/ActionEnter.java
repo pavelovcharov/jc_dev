@@ -23,7 +23,7 @@
 package omegaCommander.actions;
 
 import java.awt.Cursor;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.archive.ArchiveFile;
 import omegaCommander.fileSystem.archive.MyZipFile;
 import omegaCommander.fileSystem.FileSystemList;
@@ -58,7 +58,7 @@ public class ActionEnter extends AbstractAction {
 
         FileTable activeTable = parent.getActiveTable();
         NameInterface name = activeTable.getElementAtCursor();
-        AbsoluteFile currentFile;
+        BaseFile currentFile;
         if (null == name) {
             return;
         }
@@ -68,7 +68,7 @@ public class ActionEnter extends AbstractAction {
         }
         int index = 0;
         if (true == (name instanceof UpperDirectory)) {
-            AbsoluteFile file = activeTable.getCurrentDir();
+            BaseFile file = activeTable.getCurrentDir();
             activeTable.setFileList(currentFile);
             activeTable.refreshTable();
             index = activeTable.getFilePosition(file);
@@ -112,17 +112,17 @@ public class ActionEnter extends AbstractAction {
         parent.setCursor(c);
     }
 
-    private void enterArchive(AbsoluteFile archive) {
+    private void enterArchive(BaseFile archive) {
     }
 
-    private AbsoluteFile copyToTemp(AbsoluteFile file) {
+    private BaseFile copyToTemp(BaseFile file) {
         LocalFile tempDir = FileSystemList.getTempDir();
         if (null == tempDir) {
             //XXX query error or use another place
             return null;
         }
-        AbsoluteFile newTarget = null;
-        AbsoluteFile[] filesToCopy = new AbsoluteFile[]{file};
+        BaseFile newTarget = null;
+        BaseFile[] filesToCopy = new BaseFile[]{file};
         if (null != filesToCopy) {
             omegaCommander.gui.dialog.CopyDialog cd = new omegaCommander.gui.dialog.CopyDialog(parent, file.getAbsoluteParent(), tempDir, filesToCopy, true);
             String targetPath = cd.getNewTargetString();
@@ -144,7 +144,7 @@ public class ActionEnter extends AbstractAction {
         return newTarget;
     }
 
-    private void executeFile(AbsoluteFile file) {
+    private void executeFile(BaseFile file) {
         String command = MainFrame.DEFAULT_HANDLER_TEXT + " " + file;
         try {
             if (true == file.exists()) {

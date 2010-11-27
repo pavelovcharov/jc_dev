@@ -23,7 +23,7 @@
 package omegaCommander.actions;
 
 import javax.swing.JTextField;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.table.tableElements.NameInterface;
 
@@ -39,7 +39,7 @@ public class ActionCopyName extends AbstractAction {
 
 	public void execute() {
 		NameInterface name = parent.getActiveTable().getElementAtCursor();
-		AbsoluteFile currentFile;
+		BaseFile currentFile;
 		if (null == name) {
 			return;
 		} else {

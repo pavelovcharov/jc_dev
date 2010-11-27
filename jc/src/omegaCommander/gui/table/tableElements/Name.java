@@ -27,7 +27,7 @@ package omegaCommander.gui.table.tableElements;
 
 import java.awt.Color;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 
 /**
  *
@@ -36,7 +36,7 @@ import omegaCommander.fileSystem.AbsoluteFile;
  */
 abstract public class Name extends Element implements NameInterface{
     
-    protected AbsoluteFile aFile;
+    protected BaseFile aFile;
     /**
      * Имя файла (без расширения)
      */
@@ -48,7 +48,7 @@ abstract public class Name extends Element implements NameInterface{
     protected String extention;
             
     /** Creates a new instance of Name */
-    public Name(AbsoluteFile aFile, Color fontColor, Color bgColor) {
+    public Name(BaseFile aFile, Color fontColor, Color bgColor) {
         super(fontColor, bgColor);
         this.aFile = aFile;
         name = aFile.getAbstractFileName();
@@ -56,7 +56,7 @@ abstract public class Name extends Element implements NameInterface{
         extention = aFile.getExtention();
     }
     
-    public Name(AbsoluteFile aFile) {
+    public Name(BaseFile aFile) {
         this(aFile, null, null);
     }
     
@@ -64,7 +64,7 @@ abstract public class Name extends Element implements NameInterface{
      * Получить файл, связанный с данным объектом
      * @return файл связанный с данным объектом
      */
-    public AbsoluteFile getFile() {
+    public BaseFile getFile() {
         return aFile;
     }
 

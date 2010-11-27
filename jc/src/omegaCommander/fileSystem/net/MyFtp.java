@@ -9,13 +9,13 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 
 /**
  *
  * @author master
  */
-public class MyFtp implements AbsoluteFile {
+public class MyFtp implements BaseFile {
 
     public MyFtp() {
         
@@ -29,15 +29,15 @@ public class MyFtp implements AbsoluteFile {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public AbsoluteFile[] getFiles() {
+    public BaseFile[] getFiles() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public AbsoluteFile[] getFiles(FileFilter filter) {
+    public BaseFile[] getFiles(FileFilter filter) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public AbsoluteFile getAbsoluteParent() {
+    public BaseFile getAbsoluteParent() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -69,7 +69,7 @@ public class MyFtp implements AbsoluteFile {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public AbsoluteFile getRoot() {
+    public BaseFile getRoot() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -97,7 +97,7 @@ public class MyFtp implements AbsoluteFile {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public boolean renameTo(AbsoluteFile targetFile) {
+    public boolean renameTo(BaseFile targetFile) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

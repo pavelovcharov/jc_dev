@@ -31,7 +31,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.ImageArchive;
@@ -86,8 +86,8 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
             //rows.add(r);
         }
 
-        AbsoluteFile[] files = fsl.getFiles();
-        AbsoluteFile[] folders = fsl.getFolders();
+        BaseFile[] files = fsl.getFiles();
+        BaseFile[] folders = fsl.getFolders();
 
         if (null != folders) {
             Arrays.sort(folders);
@@ -229,7 +229,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
         public Row() {
         }
 
-        public void createParentRow(AbsoluteFile file) {
+        public void createParentRow(BaseFile file) {
             //Row newRow = new Row();
             data.add(ICON, imageUp);
             data.add(NAME, new UpperDirectory(file));
@@ -239,7 +239,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
             data.add(ATR, new Attribute());
         }
 
-        public Row(AbsoluteFile file/*, boolean parent*/) {
+        public Row(BaseFile file/*, boolean parent*/) {
             createRow(file);
 //            if (file.isDirectory()) {
 //                data.add(ICON, imageFolder);
@@ -256,7 +256,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
 //            data.add(ATR, new Attribute(file.getAtributeString()));            
         }
 
-        public void createRow(AbsoluteFile file) {
+        public void createRow(BaseFile file) {
             if (file.isDirectory()) {
                 data.add(ICON, imageFolder);
                 data.add(NAME, new Directory(file));

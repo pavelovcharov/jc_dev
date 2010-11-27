@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
  * Класс задает файл или каталог файловой системы
  * @author Pavel Ovcharov
  */
-public class LocalFile extends File implements AbsoluteFile {
+public class LocalFile extends File implements BaseFile {
     
     static protected String DEFAULT_DATE_FORMAT = "dd.MM.yyyy HH:mm";
     static protected String DEFAULT_DIR_SIZE = "<DIR>";
@@ -97,9 +97,9 @@ public class LocalFile extends File implements AbsoluteFile {
     /**
      * Создать экземпляр класса LocalFile как копию файла aFile
      * 
-     * @param aFile объект класса AbsoluteFile
+     * @param aFile объект класса BaseFile
      */
-    public LocalFile(AbsoluteFile aFile) {
+    public LocalFile(BaseFile aFile) {
         super(aFile.getAbsolutePath());
     }
     /**
@@ -277,9 +277,9 @@ public class LocalFile extends File implements AbsoluteFile {
     /**
      * Получить файл, соответсвущий корню диска ('C:\', 'D:\' и т.д.
      * для Windows, '/' для Linux)
-     * @return объект класса AbsoluteFile - корень диска
+     * @return объект класса BaseFile - корень диска
      */
-    public AbsoluteFile getRoot() {
+    public BaseFile getRoot() {
         LocalFile root = this;
         while(root.hasParent()) {
             root = root.getAbstractParent();
@@ -289,10 +289,10 @@ public class LocalFile extends File implements AbsoluteFile {
     
     /**
      * Получить родительский каталог данного файла
-     * @return родительский каталог - объект класса AbsoluteFile; если
+     * @return родительский каталог - объект класса BaseFile; если
      * родительского каталога нет, возвращается <B>null</B>
      */
-     public AbsoluteFile getAbsoluteParent() {
+     public BaseFile getAbsoluteParent() {
          return getAbstractParent();
      }
      
@@ -329,7 +329,7 @@ public class LocalFile extends File implements AbsoluteFile {
      * @param targetFile задает путь к новому файлу
      * @return <B>true</B>,если переименование прошло успешно; иначе - <B>false</B>
      */
-    public boolean renameTo(AbsoluteFile targetFile) {
+    public boolean renameTo(BaseFile targetFile) {
         return super.renameTo((File)targetFile);
     }
 
@@ -341,7 +341,7 @@ public class LocalFile extends File implements AbsoluteFile {
      * Получить список файлов в данном каталоге
      * @return массив файлов в данном каталоге
      */
-    public AbsoluteFile[] getFiles(FileFilter filter) {
+    public BaseFile[] getFiles(FileFilter filter) {
          File [] list = super.listFiles(filter);
          if (null == list) return null;//throw new NullPointerException("File "+this+" has no children");
          LocalFile [] af = new LocalFile[list.length];
@@ -355,7 +355,7 @@ public class LocalFile extends File implements AbsoluteFile {
      * Получить список файлов в данном каталоге
      * @return массив файлов в данном каталоге
      */
-     public AbsoluteFile [] getFiles() {
+     public BaseFile [] getFiles() {
          File [] list = super.listFiles();
          if (null == list) return null;//throw new NullPointerException("File "+this+" has no children");
          LocalFile [] af = new LocalFile[list.length];

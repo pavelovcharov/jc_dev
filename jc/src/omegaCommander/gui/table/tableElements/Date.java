@@ -26,7 +26,7 @@
 package omegaCommander.gui.table.tableElements;
 
 import java.text.SimpleDateFormat;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 
 /**
  *
@@ -41,7 +41,7 @@ public class Date extends Element{
     static private SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
     
     /** Creates a new instance of Date */
-    public Date(AbsoluteFile aFile) {
+    public Date(BaseFile aFile) {
         java.util.Date date = new java.util.Date();
         time = aFile.getLastModifiedTime();
         date.setTime(time);        

@@ -56,7 +56,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import omegaCommander.actions.*;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.RootFileSystem;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.FileHelper;
@@ -160,7 +160,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         this.setTitle(mainTitle + " " + mainVersion);
 
-        AbsoluteFile root = RootFileSystem.getReadableRoot();
+        BaseFile root = RootFileSystem.getReadableRoot();
         if (null == root) {
             System.out.println("Can't find any root. Application halted...");
             System.exit(0xa);
@@ -372,7 +372,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         }
     }
 
-    private void moveToFile(AbsoluteFile af) {
+    private void moveToFile(BaseFile af) {
         if (af == null) {
             return;
         }
@@ -499,7 +499,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jSplitPane1.setDividerLocation(jcPrefs.dividerLocation);
 
         //XXX createMessages tabs
-        AbsoluteFile file = FileHelper.getRealFile(jcPrefs.leftPanelPath);
+        BaseFile file = FileHelper.getRealFile(jcPrefs.leftPanelPath);
         currentLeftTable.setFileList(file);
         file = FileHelper.getRealFile(jcPrefs.rightPanelPath);
         currentRightTable.setFileList(file);
@@ -830,7 +830,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
      * @param cb выпадающий список, куда заносятся разделы
      * @param roots список доступных разделов
      */
-    protected void setDriveComboBox(final JComboBox cb, AbsoluteFile[] roots) {
+    protected void setDriveComboBox(final JComboBox cb, BaseFile[] roots) {
         for (int i = 0; i < roots.length; i++) {
             cb.addItem(roots[i]);
         }
@@ -1105,7 +1105,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             for (int i = 0; i < size; i++) {
                 String name = ois.readUTF();
                 String tmp = ois.readUTF();
-                AbsoluteFile af = FileHelper.getRealFile(tmp);
+                BaseFile af = FileHelper.getRealFile(tmp);
                 fi = new FavoriteItem(name, af);
                 favoriteFolders.add(fi);
             }
@@ -1156,7 +1156,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         FileTablePanel fileTablePanel = getFileTablePanel(left);
         FileTable table = getTable(left);
 
-        AbsoluteFile currentDir = table.getCurrentDir();
+        BaseFile currentDir = table.getCurrentDir();
         FileTablePanel ftp = new FileTablePanel(currentDir);
         ArrayList list = table.getSortingColumns();
 
@@ -1310,7 +1310,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
     private void startSearchThread(String findWhat, String findWhere, String findText, boolean matchCase) {
         ((GeneratedListModel) jList1.getModel()).clear();
-        AbsoluteFile file = FileHelper.getRealFile(findWhere);
+        BaseFile file = FileHelper.getRealFile(findWhere);
         searchThread = new NewSearchThread(file, findWhat, findText, matchCase);
         SearchStatusThread sst =
                 new SearchStatusThread(searchThread, jLabelSearchStatus, jList1, jButtonFind);
@@ -1326,7 +1326,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         }
     }
 
-    public void viewFile(AbsoluteFile file) {
+    public void viewFile(BaseFile file) {
         if (file == null || file.isDirectory()) {
             return;
         }
@@ -1334,7 +1334,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         editor.openFile(file, false);
     }
 
-    public void runFileInEditor(AbsoluteFile file) {
+    public void runFileInEditor(BaseFile file) {
         if (getExternEditor()) {
             String externEditorString = getExternEditorString();
             if (!externEditorString.trim().equals("")) {
@@ -2527,7 +2527,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         if (2 == evt.getClickCount()) {
-            AbsoluteFile af = (AbsoluteFile) jList1.getSelectedValue();
+            BaseFile af = (BaseFile) jList1.getSelectedValue();
             if (af != null) {
                 closeFindDialog();
                 moveToFile(af);
@@ -2553,7 +2553,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             return;
         }
         Message msg = findMessage(evt);
-        AbsoluteFile af = (AbsoluteFile) jList1.getSelectedValue();
+        BaseFile af = (BaseFile) jList1.getSelectedValue();
         if (msg != null && af != null) {
             if (msg.getMessageID() == MessageList.MSG_ENTER) {
                 closeFindDialog();
@@ -2629,7 +2629,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     }//GEN-LAST:event_jButtonPackActionPerformed
 
     private void jComboBoxRightPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeVisible
-        AbsoluteFile[] roots = RootFileSystem.getRoots();
+        BaseFile[] roots = RootFileSystem.getRoots();
         rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
         Object obj = jComboBoxRight.getSelectedItem();
         jComboBoxRight.removeAllItems();
@@ -2807,7 +2807,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     }//GEN-LAST:event_jTextField3KeyPressed
 
     private void jComboBoxLeftPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuWillBecomeVisible
-        AbsoluteFile[] roots = RootFileSystem.getRoots();
+        BaseFile[] roots = RootFileSystem.getRoots();
         leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
         Object obj = jComboBoxLeft.getSelectedItem();
         jComboBoxLeft.removeAllItems();
@@ -2821,7 +2821,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             currentRightTable.requestFocus();
             return;
         }
-        AbsoluteFile root = FileHelper.getRealFile(jComboBoxRight.getSelectedItem().toString());
+        BaseFile root = FileHelper.getRealFile(jComboBoxRight.getSelectedItem().toString());
         if (false == root.exists()) {
             if ((false == root.canRead())) {
                 WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
@@ -2852,7 +2852,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             currentLeftTable.requestFocus();
             return;
         }
-        AbsoluteFile root = FileHelper.getRealFile(jComboBoxLeft.getSelectedItem().toString());
+        BaseFile root = FileHelper.getRealFile(jComboBoxLeft.getSelectedItem().toString());
         if (false == root.exists()) {
             if ((false == root.canRead())) {
                 WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
@@ -2922,7 +2922,7 @@ private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRS
 
 private void jButtonEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditorActionPerformed
     JFileChooser fileChooser = new JFileChooser();
-    AbsoluteFile file = FileHelper.getRealFile(jcPrefs.externEditor);
+    BaseFile file = FileHelper.getRealFile(jcPrefs.externEditor);
     if (null != file) {
         fileChooser.setCurrentDirectory((java.io.File) file.getAbsoluteParent());
     }
@@ -3284,14 +3284,14 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private class FavoriteItem {
 
         private String itemName;
-        private AbsoluteFile file;
+        private BaseFile file;
 
-        public FavoriteItem(String itemName, AbsoluteFile file) {
+        public FavoriteItem(String itemName, BaseFile file) {
             this.itemName = itemName;
             this.file = file;
         }
 
-        public AbsoluteFile getFile() {
+        public BaseFile getFile() {
             return file;
         }
 
@@ -3360,7 +3360,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            AbsoluteFile af = getActiveTable().getCurrentDir();
+            BaseFile af = getActiveTable().getCurrentDir();
             String result = InputDialog.showInputDialog(parent, lb.getString("StrAddBookmark"), af.toString());
             if ((null == result) || (result.trim().equals(""))) {
                 return;
@@ -3381,9 +3381,9 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     private class SelectFavoritesListener implements ActionListener {
 
-        private AbsoluteFile af;
+        private BaseFile af;
 
-        public SelectFavoritesListener(AbsoluteFile af) {
+        public SelectFavoritesListener(BaseFile af) {
             this.af = af;
         }
 
@@ -3415,8 +3415,8 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 boolean cellHasFocus) {
             Component retValue = super.getListCellRendererComponent(
                     list, value, index, isSelected, cellHasFocus);
-            if (value instanceof AbsoluteFile) {
-                AbsoluteFile file = (AbsoluteFile) value;
+            if (value instanceof BaseFile) {
+                BaseFile file = (BaseFile) value;
                 ImageIcon icon = null;
                 switch (FileHelper.getFileType(file)) {
                     case DIRECTORY:

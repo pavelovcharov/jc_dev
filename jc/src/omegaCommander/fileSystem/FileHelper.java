@@ -44,7 +44,7 @@ public abstract class FileHelper {
      * @return искомый файл
      */
     //XXX если файл в архиве?
-    public static AbsoluteFile getRealFile(AbsoluteFile parent, String child) {
+    public static BaseFile getRealFile(BaseFile parent, String child) {
         if (parent instanceof NetFile) {
             return new NetFile(((NetFile) parent).getPathWithSlash() + child);
         }
@@ -64,7 +64,7 @@ public abstract class FileHelper {
      * @param path путь к файлу
      * @return искомый файл
      */
-    public static AbsoluteFile getRealFile(String path) {
+    public static BaseFile getRealFile(String path) {
         if (path.toLowerCase().startsWith("smb://")) {
             NetFile nf = new NetFile(path);
             //XXX do something with smb
@@ -109,7 +109,7 @@ public abstract class FileHelper {
         DIRECTORY, UNKNOWN_FILE, ARCHIVE, IMAGE,
     };
 
-    static public FileType getFileType(AbsoluteFile file) {
+    static public FileType getFileType(BaseFile file) {
         if (file.isDirectory()) {
             return FileType.DIRECTORY;
         }

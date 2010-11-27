@@ -28,7 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.prefs.PrefKeys;
@@ -40,12 +40,12 @@ import omegaCommander.util.LanguageBundle;
  */
 public class PackDialog implements PrefKeys {
 
-	private AbsoluteFile newTarget;
+	private BaseFile newTarget;
 	private int packLevel;
 	public static String DEFAULT_EXTENTION = "zip";
 	public static String DEFAULT_ARCHIVE_NAME = "archive";
 
-	public PackDialog(MainFrame parent, AbsoluteFile sourceDir, AbsoluteFile targerDir, AbsoluteFile[] filesToPack) {
+	public PackDialog(MainFrame parent, BaseFile sourceDir, BaseFile targerDir, BaseFile[] filesToPack) {
 		//XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
 
 		LanguageBundle lb = LanguageBundle.getInstance();
@@ -141,7 +141,7 @@ public class PackDialog implements PrefKeys {
 //		addWindowListener(new DialogListener(parent, mt));
 	}
 
-	public AbsoluteFile getNewTarget() {
+	public BaseFile getNewTarget() {
 		return newTarget;
 	}
 

@@ -29,7 +29,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 
 /**
  *
@@ -40,7 +40,7 @@ public class FileTablePanel extends javax.swing.JPanel {
     private FileTable fileTable;
     
     /** Creates new form FileTablePanel */
-    public FileTablePanel(AbsoluteFile file) {
+    public FileTablePanel(BaseFile file) {
         this(new FileTable(file));
     }
     

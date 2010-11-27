@@ -23,7 +23,7 @@
 package omegaCommander.threads.newThreads;
 
 import java.util.ArrayList;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.net.NetFile;
 import omegaCommander.fileSystem.SubDirectoriesList;
@@ -39,15 +39,15 @@ import omegaCommander.util.Support;
 public class NewMoveThread extends FileThread {
 
     private boolean toCopy;
-    private AbsoluteFile sourceDir;
-    private AbsoluteFile[] filesToCopy;
-    private AbsoluteFile targetDir;
+    private BaseFile sourceDir;
+    private BaseFile[] filesToCopy;
+    private BaseFile targetDir;
     private String tartgetPath;
 
     /**
      * —оздает новый экземпл€р класса NewMovingThread
      */
-    public NewMoveThread(AbsoluteFile sourceDir, String targetPath, AbsoluteFile[] filesToCopy, boolean toCopy) {
+    public NewMoveThread(BaseFile sourceDir, String targetPath, BaseFile[] filesToCopy, boolean toCopy) {
         this.sourceDir = sourceDir;
         this.tartgetPath = targetPath;
         this.filesToCopy = filesToCopy;
@@ -85,13 +85,13 @@ public class NewMoveThread extends FileThread {
         }
     }
 
-    void doAction(ArrayList files, AbsoluteFile relativeParent) {
-        AbsoluteFile newFile;
+    void doAction(ArrayList files, BaseFile relativeParent) {
+        BaseFile newFile;
         if (filesToCopy.length == 1 && filesToCopy[0].isDirectory()) {
             targetDir.mkdirs();
         }
         for (int i = 0; i < files.size(); i++) {
-            AbsoluteFile temp = (AbsoluteFile) files.get(i);
+            BaseFile temp = (BaseFile) files.get(i);
             if (filesToCopy.length == 1 && !filesToCopy[0].isDirectory()) {
                 newFile = targetDir;
                 if (newFile.exists() && newFile.isDirectory()) {
@@ -161,7 +161,7 @@ public class NewMoveThread extends FileThread {
         }
         if (!toCopy) {//удал€ем директории
             for (int i = files.size() - 1; i >= 0; i--) {
-                AbsoluteFile file = (AbsoluteFile) files.get(i);
+                BaseFile file = (BaseFile) files.get(i);
                 if (file.isDirectory()) {
                     file.delete();
                 }
@@ -170,7 +170,7 @@ public class NewMoveThread extends FileThread {
 
     }
 
-    private void jCopy(AbsoluteFile source, AbsoluteFile target) throws Exception {
+    private void jCopy(BaseFile source, BaseFile target) throws Exception {
         currentProgress = 0;
         currentFileSize = source.length();
 
@@ -198,7 +198,7 @@ public class NewMoveThread extends FileThread {
         target.setLastModified(source.getLastModifiedTime());
     }
 
-    private void jMove(AbsoluteFile source, AbsoluteFile target) throws Exception {
+    private void jMove(BaseFile source, BaseFile target) throws Exception {
         currentAction = LanguageBundle.getInstance().getString("StrMoving") + " " + source.getFilename();
 
         currentProgress = 0;
@@ -219,7 +219,7 @@ public class NewMoveThread extends FileThread {
         currentProgress = currentFileSize;
     }
 
-    private void action(AbsoluteFile temp, AbsoluteFile newFile) throws Exception {
+    private void action(BaseFile temp, BaseFile newFile) throws Exception {
         if (toCopy) {
             jCopy(temp, newFile);
         } else {

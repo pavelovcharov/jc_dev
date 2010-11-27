@@ -22,7 +22,7 @@
  */
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.table.FileTable;
 
@@ -41,8 +41,8 @@ public class ActionSwap extends AbstractAction {
         FileTable leftTable = parent.getTable(true);
         FileTable rightTable = parent.getTable(false);
 
-        AbsoluteFile left = leftTable.getCurrentDir();
-        AbsoluteFile right = rightTable.getCurrentDir();
+        BaseFile left = leftTable.getCurrentDir();
+        BaseFile right = rightTable.getCurrentDir();
 
         int leftPos = leftTable.getCurrentPosition();
         int rightPos = rightTable.getCurrentPosition();

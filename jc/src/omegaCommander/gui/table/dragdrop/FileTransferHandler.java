@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
 import javax.swing.text.Position;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.LocalFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.ProgressDialog;
@@ -70,13 +70,13 @@ public class FileTransferHandler extends TransferHandler {
 
         int action = support.getDropAction();
 
-        AbsoluteFile currentDir = null;
+        BaseFile currentDir = null;
 
         if (target instanceof FileTable) {
             JTable.DropLocation dl = (JTable.DropLocation) support.getDropLocation();
             FileTable table = (FileTable) target;
 
-            AbsoluteFile targetFile = table.getFileAt(dl.getRow());
+            BaseFile targetFile = table.getFileAt(dl.getRow());
 
             currentDir = targetFile.isDirectory() ? targetFile : table.getCurrentDir();
         }
@@ -92,7 +92,7 @@ public class FileTransferHandler extends TransferHandler {
                 String str = null;
                 java.util.List files =
                         (java.util.List) support.getTransferable().getTransferData(fileFlavor);
-                AbsoluteFile[] f = new AbsoluteFile[files.size()];
+                BaseFile[] f = new BaseFile[files.size()];
 
                 for (int i = 0; i < files.size(); i++) {
                     File file = (File) files.get(i);

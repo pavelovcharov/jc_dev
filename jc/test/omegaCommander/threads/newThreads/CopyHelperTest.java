@@ -5,7 +5,7 @@
 package omegaCommander.threads.newThreads;
 
 import junit.framework.TestCase;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.LocalFile;
 
 /**
@@ -44,8 +44,8 @@ public class CopyHelperTest extends TestCase {
      */
     public void testGetCopyTarget1() {
         System.out.println("GetCopyTarget");
-        AbsoluteFile[] files = new AbsoluteFile[]{new LocalFile(), new LocalFile()};
-        AbsoluteFile source = null;
+        BaseFile[] files = new BaseFile[]{new LocalFile(), new LocalFile()};
+        BaseFile source = null;
         String path = "c:\\tmp";
         String expResult = "c:\\tmp";
         String result = CopyHelper.GetCopyTarget(files, source, path);
@@ -53,8 +53,8 @@ public class CopyHelperTest extends TestCase {
     }
     public void testGetCopyTarget2() {
         System.out.println("GetCopyTarget");
-        AbsoluteFile[] files = new AbsoluteFile[]{new TestDirectory()};
-        AbsoluteFile source = null;
+        BaseFile[] files = new BaseFile[]{new TestDirectory()};
+        BaseFile source = null;
         String path = "c:\\tmp";
         String expResult = "c:\\tmp";
         String result = CopyHelper.GetCopyTarget(files, source, path);
@@ -62,8 +62,8 @@ public class CopyHelperTest extends TestCase {
     }
     public void testGetCopyTarget3() {
         System.out.println("GetCopyTarget");
-        AbsoluteFile[] files = new AbsoluteFile[]{new TestFile()};
-        AbsoluteFile source = null;
+        BaseFile[] files = new BaseFile[]{new TestFile()};
+        BaseFile source = null;
         String path = "c:\\tmp";
         String expResult = "c:\\tmp";
         String result = CopyHelper.GetCopyTarget(files, source, path);
@@ -71,8 +71,8 @@ public class CopyHelperTest extends TestCase {
     }
     public void testGetCopyTarget4() {
         System.out.println("GetCopyTarget");
-        AbsoluteFile[] files = new AbsoluteFile[]{new TestFile()};
-        AbsoluteFile source = new LocalFile("c:\\tmp");
+        BaseFile[] files = new BaseFile[]{new TestFile()};
+        BaseFile source = new LocalFile("c:\\tmp");
         String path = "\\test";
         String expResult = "c:\\tmp\\test";
         String result = CopyHelper.GetCopyTarget(files, source, path);

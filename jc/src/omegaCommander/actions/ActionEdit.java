@@ -23,7 +23,7 @@
 
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 
 /**
@@ -37,7 +37,7 @@ public class ActionEdit extends AbstractAction {
 	}
 
 	public void execute() {
-		AbsoluteFile currentFile = parent.getActiveTable().getFileAtCursor();
+		BaseFile currentFile = parent.getActiveTable().getFileAtCursor();
 		if (currentFile.isDirectory()) {
 			return;
 		}

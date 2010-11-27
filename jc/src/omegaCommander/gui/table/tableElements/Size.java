@@ -25,7 +25,7 @@
 
 package omegaCommander.gui.table.tableElements;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileSystemList;
 
 /**
@@ -40,7 +40,7 @@ public class Size extends Element{
     static protected String DEFAULT_DIR_SIZE = "<DIR>";
     
     /** Creates a new instance of Size */
-    public Size(AbsoluteFile aFile) {
+    public Size(BaseFile aFile) {
         if (aFile.isDirectory())
             sizeStr = DEFAULT_DIR_SIZE;
         else {

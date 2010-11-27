@@ -23,7 +23,7 @@
 
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 //import omegaCommander.gui.actions.DeleteDialog;
 import omegaCommander.gui.dialog.DeleteDialog;
@@ -50,7 +50,7 @@ public class ActionDelete extends AbstractAction {
 		FileTable activeTable = parent.getActiveTable();
 //		FileTable passiveTable = parent.getPassiveTable();
 		NameInterface name = activeTable.getElementAtCursor();
-		AbsoluteFile currentFile;
+		BaseFile currentFile;
 		if (null != name) {
 			currentFile = name.getFile();
 		} else {
@@ -70,7 +70,7 @@ public class ActionDelete extends AbstractAction {
 		}
 
 //		DeleteDialog dd = new DeleteDialog(parent, activeTable.getActiveFiles());
-		AbsoluteFile[] filesToDelete = activeTable.getActiveFiles();
+		BaseFile[] filesToDelete = activeTable.getActiveFiles();
 		if (DeleteDialog.showDeleteDialog(parent, filesToDelete)) {
 			NewDeleteThread ndt = new NewDeleteThread(filesToDelete);
 			ProgressDialog pd = new ProgressDialog(parent, ndt);

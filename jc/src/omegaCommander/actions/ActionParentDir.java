@@ -23,7 +23,7 @@
 
 package omegaCommander.actions;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.table.FileTable;
 
@@ -39,7 +39,7 @@ public class ActionParentDir extends AbstractAction {
 
 	public void execute() {
 		FileTable activeTable = parent.getActiveTable();
-		AbsoluteFile file = activeTable.getCurrentDir();
+		BaseFile file = activeTable.getCurrentDir();
 		if (file.hasParent()) {
 			activeTable.setFileList(file.getAbsoluteParent());
 			activeTable.refreshTable();

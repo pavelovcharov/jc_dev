@@ -23,7 +23,7 @@
 package omegaCommander.actions;
 
 import java.util.ArrayList;
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.archive.MyZipFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.LocalFile;
@@ -47,7 +47,7 @@ public class ActionView extends AbstractAction {
     @Override
     public void execute() {
         FileTable activeTable = parent.getActiveTable();
-        AbsoluteFile currentFile = activeTable.getFileAtCursor();
+        BaseFile currentFile = activeTable.getFileAtCursor();
         if (currentFile.isDirectory()) {
             return;
         }
@@ -61,7 +61,7 @@ public class ActionView extends AbstractAction {
             }
 //			if (CopyDialog.STATUS_OK != CopyDialog.showDialog(parent, activeTable.getCurrentDir(), tempDir, list, true))
 //				return;
-            AbsoluteFile[] filesToCopy = new AbsoluteFile[]{currentFile};
+            BaseFile[] filesToCopy = new BaseFile[]{currentFile};
             if (null != filesToCopy) {
                 omegaCommander.gui.dialog.CopyDialog cd = new omegaCommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
                 //XXX maybe use any function
@@ -75,7 +75,7 @@ public class ActionView extends AbstractAction {
                     pt.start();
                     pd.show();
 
-                    AbsoluteFile target = FileHelper.getRealFile(targetPath);
+                    BaseFile target = FileHelper.getRealFile(targetPath);
                     if (target.isDirectory()) {
                         currentFile = FileHelper.getRealFile(target, currentFile.getFilename());
                     }

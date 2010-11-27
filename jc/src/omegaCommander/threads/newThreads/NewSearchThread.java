@@ -27,7 +27,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.Vector;
 
-import omegaCommander.fileSystem.AbsoluteFile;
+import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.WildcardFilenameFilter;
 import omegaCommander.fileSystem.archive.ArchiveFile;
 import org.apache.commons.io.IOCase;
@@ -39,13 +39,13 @@ import org.apache.commons.io.IOCase;
 public class NewSearchThread extends BaseThread {
 
     private final Vector resultList;
-    private AbsoluteFile file;
+    private BaseFile file;
     private String namePart;
     private String searchText;
     private boolean matchCase = false;
     private WildcardFilenameFilter w;
 
-    public NewSearchThread(AbsoluteFile file, String namePart, String searchText, boolean matchCase) {
+    public NewSearchThread(BaseFile file, String namePart, String searchText, boolean matchCase) {
         resultList = new Vector();
         this.file = file;
         this.namePart = namePart.trim().toLowerCase();
@@ -61,12 +61,12 @@ public class NewSearchThread extends BaseThread {
         w = new WildcardFilenameFilter(this.namePart, IOCase.INSENSITIVE);
     }
 
-    private void action(AbsoluteFile file) {
+    private void action(BaseFile file) {
         if (interrupt) {
             return;
         }
         if (file.isDirectory() || file instanceof ArchiveFile) {
-            AbsoluteFile[] files = file.getFiles();
+            BaseFile[] files = file.getFiles();
 
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
