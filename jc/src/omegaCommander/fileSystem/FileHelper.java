@@ -17,7 +17,7 @@
  */
 
 /*
- * SuperFile.java
+ * FileHelper.java
  *
  * Created on 24 Ноябрь 2006 г., 20:41
  *
@@ -34,7 +34,7 @@ import omegaCommander.fileSystem.net.NetFile;
  * необходимые всем типам файлов
  * @author Strateg
  */
-public abstract class SuperFile {
+public abstract class FileHelper {
 
     /**
      * Получить файл (локальный, файл в архиве, сети) по папке <I>parent</I>  и имени
@@ -100,7 +100,7 @@ public abstract class SuperFile {
         if (path.startsWith("smb://")) {
             return true;
         }
-        LocalFile f = (LocalFile) SuperFile.getRealFile(path);
+        LocalFile f = (LocalFile) FileHelper.getRealFile(path);
         return f.isAbsolute();
     }
 

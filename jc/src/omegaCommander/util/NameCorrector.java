@@ -27,7 +27,7 @@ package omegaCommander.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import omegaCommander.fileSystem.AbsoluteFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 
 /**
  *
@@ -70,7 +70,7 @@ public class NameCorrector {
 		AbsoluteFile newFile = file;
         name = decodeHex(name);
         if (name != null) {
-            newFile = SuperFile.getRealFile(file.getAbsoluteParent(), name);
+            newFile = FileHelper.getRealFile(file.getAbsoluteParent(), name);
             if (file.renameTo(newFile)) {
                 c++;
                 System.out.println(file.getFilename() + " to " + newFile.getFilename());

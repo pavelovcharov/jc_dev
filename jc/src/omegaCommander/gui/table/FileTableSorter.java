@@ -33,7 +33,7 @@ import javax.swing.table.AbstractTableModel;
 
 import omegaCommander.fileSystem.AbsoluteFile;
 import omegaCommander.fileSystem.FileSystemList;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.ImageArchive;
 import omegaCommander.gui.table.tableElements.Attribute;
 import omegaCommander.gui.table.tableElements.Date;
@@ -262,7 +262,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
                 data.add(NAME, new Directory(file));
 
             } else {
-                switch (SuperFile.getFileType(file)) {
+                switch (FileHelper.getFileType(file)) {
                     case ARCHIVE:
                         data.add(ICON, imageArchive);
                         break;

@@ -27,7 +27,7 @@ import omegaCommander.fileSystem.AbsoluteFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.net.NetFile;
 import omegaCommander.fileSystem.SubDirectoriesList;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.util.LanguageBundle;
 import omegaCommander.util.Support;
 
@@ -79,7 +79,7 @@ public class NewMoveThread extends FileThread {
             }
 
             String target = CopyHelper.GetCopyTarget(filesToCopy, sourceDir, tartgetPath);
-            targetDir = SuperFile.getRealFile(target);
+            targetDir = FileHelper.getRealFile(target);
             doAction(list, sourceDir);
             list.clear();
         }
@@ -95,11 +95,11 @@ public class NewMoveThread extends FileThread {
             if (filesToCopy.length == 1 && !filesToCopy[0].isDirectory()) {
                 newFile = targetDir;
                 if (newFile.exists() && newFile.isDirectory()) {
-                    newFile = SuperFile.getRealFile(targetDir, temp.getFilename());
+                    newFile = FileHelper.getRealFile(targetDir, temp.getFilename());
                 }
             } else {
                 String relativePath = Support.getStringRelativeTo(temp.getPathWithSlash(), sourceDir.getPathWithSlash());
-                newFile = SuperFile.getRealFile(targetDir, relativePath);
+                newFile = FileHelper.getRealFile(targetDir, relativePath);
             }
             if (newFile.hasParent()) {
                 newFile.getAbsoluteParent().mkdirs();

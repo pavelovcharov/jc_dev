@@ -28,7 +28,7 @@ import omegaCommander.fileSystem.archive.ArchiveFile;
 import omegaCommander.fileSystem.archive.MyZipFile;
 import omegaCommander.fileSystem.FileSystemList;
 import omegaCommander.fileSystem.LocalFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.fileSystem.archive.MyTarFile;
 import omegaCommander.fileSystem.archive.MyTgzFile;
 import omegaCommander.gui.MainFrame;
@@ -76,10 +76,10 @@ public class ActionEnter extends AbstractAction {
             if (true == (name instanceof Directory)) {
                 activeTable.setFileList(currentFile);
             } else {
-                if (SuperFile.FileType.ARCHIVE == SuperFile.getFileType(currentFile)) {
+                if (FileHelper.FileType.ARCHIVE == FileHelper.getFileType(currentFile)) {
                     if (currentFile instanceof ArchiveFile) {
                         currentFile = copyToTemp(currentFile);
-                        currentFile = SuperFile.getRealFile((ArchiveFile) activeTable.getCurrentDir(),
+                        currentFile = FileHelper.getRealFile((ArchiveFile) activeTable.getCurrentDir(),
                                 new LocalFile((LocalFile) currentFile.getAbsoluteParent(), ((LocalFile) currentFile).getFilename()));
                         activeTable.setFileList(currentFile);
                     } else {
@@ -135,9 +135,9 @@ public class ActionEnter extends AbstractAction {
                 pt.start();
                 pd.show();
 
-                newTarget = SuperFile.getRealFile(targetPath);
+                newTarget = FileHelper.getRealFile(targetPath);
                 if (newTarget.isDirectory()) {
-                    newTarget = SuperFile.getRealFile(newTarget, file.getFilename());
+                    newTarget = FileHelper.getRealFile(newTarget, file.getFilename());
                 }
             }
         }

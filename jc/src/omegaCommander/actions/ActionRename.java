@@ -23,7 +23,7 @@
 package omegaCommander.actions;
 
 import omegaCommander.fileSystem.AbsoluteFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 //import omegaCommander.gui.actions.NewDialog;
 import omegaCommander.gui.dialog.InputDialog;
@@ -67,7 +67,7 @@ public class ActionRename extends AbstractAction {
 		{
 			return;
 		}
-		AbsoluteFile result = SuperFile.getRealFile(activeTable.getCurrentDir(), newName);
+		AbsoluteFile result = FileHelper.getRealFile(activeTable.getCurrentDir(), newName);
 		if (!currentFile.renameTo(result)) {
 			WarningDialog.showMessage(parent, lb.getString("StrRenameError") + " " + result,
 					lb.getString("StrError"), new Object[] {lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);

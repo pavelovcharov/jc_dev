@@ -24,7 +24,7 @@
 package omegaCommander.actions;
 
 import omegaCommander.fileSystem.AbsoluteFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.InputDialog;
 import omegaCommander.gui.dialog.WarningDialog;
@@ -60,7 +60,7 @@ public class ActionNewDir extends AbstractAction {
 		{
 			return;
 		}
-		AbsoluteFile result = SuperFile.getRealFile(parent.getActiveTable().getCurrentDir(), newDir);
+		AbsoluteFile result = FileHelper.getRealFile(parent.getActiveTable().getCurrentDir(), newDir);
 
 		boolean res = result.mkdirs();
 		parent.updateMainWindow();

@@ -34,7 +34,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import omegaCommander.fileSystem.AbsoluteFile;
-import omegaCommander.fileSystem.SuperFile;
+import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.ImageArchive;
 import omegaCommander.util.LanguageBundle;
 
@@ -203,7 +203,7 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, omeg
 			}
 		}
 		while (index < files.length) {
-			if (SuperFile.getFileType(files[index]) == SuperFile.FileType.IMAGE) {
+			if (FileHelper.getFileType(files[index]) == FileHelper.FileType.IMAGE) {
 				file = files[index];
 				openFile(files[index]);
 				break;
@@ -222,7 +222,7 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, omeg
 			}
 		}
 		while (index >= 0) {
-			if (SuperFile.getFileType(files[index]) == SuperFile.FileType.IMAGE) {
+			if (FileHelper.getFileType(files[index]) == FileHelper.FileType.IMAGE) {
 				file = files[index];
 				openFile(files[index]);
 				break;
