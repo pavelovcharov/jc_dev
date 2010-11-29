@@ -36,6 +36,7 @@ public class WarningDialog {
 
 	public static final int MESSAGE_ERROR = JOptionPane.ERROR_MESSAGE;
 	public static final int MESSAGE_WARNING = JOptionPane.WARNING_MESSAGE;
+        public static  final int MESSAGE_QUESTION = JOptionPane.QUESTION_MESSAGE;
 
 	public static  int showMessage(JFrame parent, Object message, String title, int messageType) {
 		return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null,

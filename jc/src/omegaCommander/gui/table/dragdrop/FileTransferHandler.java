@@ -13,14 +13,13 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
-import javax.swing.text.Position;
 import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.LocalFile;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.gui.dialog.ProgressDialog;
+import omegaCommander.gui.dialog.WarningDialog;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.FileTablePanel;
 import omegaCommander.threads.newThreads.NewMoveThread;
@@ -36,13 +35,8 @@ public class FileTransferHandler extends TransferHandler {
 
     MainFrame parent;
     private DataFlavor fileFlavor, stringFlavor;
-    //Start and end position in the source text.
-    //We need this information when performing a MOVE
-    //in order to remove the dragged text from the source.
-    Position p0 = null, p1 = null;
 
     public FileTransferHandler(MainFrame pareFrame) {
-        //tpc = t;
         fileFlavor = DataFlavor.javaFileListFlavor;
         stringFlavor = DataFlavor.stringFlavor;
         parent = pareFrame;
@@ -79,6 +73,8 @@ public class FileTransferHandler extends TransferHandler {
             BaseFile targetFile = table.getFileAt(dl.getRow());
 
             currentDir = targetFile.isDirectory() ? targetFile : table.getCurrentDir();
+
+            table.setCurrentPosition(dl.getRow());
         }
         if (target instanceof FileTablePanel) {
             currentDir = ((FileTablePanel) target).getFileTable().getCurrentDir();
@@ -89,7 +85,6 @@ public class FileTransferHandler extends TransferHandler {
 
         try {
             if (hasFileFlavor(support.getDataFlavors())) {
-                String str = null;
                 java.util.List files =
                         (java.util.List) support.getTransferable().getTransferData(fileFlavor);
                 BaseFile[] f = new BaseFile[files.size()];
@@ -98,18 +93,24 @@ public class FileTransferHandler extends TransferHandler {
                     File file = (File) files.get(i);
                     f[i] = new LocalFile(file);
                 }
-                FileTable activeTable = parent.getActiveTable();
 
                 if (null != files) {
+                    LanguageBundle lb = LanguageBundle.getInstance();
 
-                    int res = JOptionPane.showConfirmDialog(parent, LanguageBundle.getInstance().getString("StrToCopy"));
+                    String messageText = action == COPY ? LanguageBundle.getInstance().getString("StrCopyFilesTo")
+                            : LanguageBundle.getInstance().getString("StrMoveFilesTo");
+                    messageText = String.format(messageText, f.length, currentDir.getAbsolutePath());
+
+                    String[] options = {lb.getString("StrOk"), lb.getString("StrCancel")};
+                    int res = WarningDialog.showMessage(parent, messageText, lb.getString("StrJC"), options,
+                            WarningDialog.MESSAGE_QUESTION, 0);
                     if (res == 0) {
-                        String path = activeTable.getCurrentDir().getPathWithSlash();
+                        String path = currentDir.getPathWithSlash();
                         if (f.length == 1 && f[0].isDirectory()) {
                             path += f[0].getFilename();
                         }
                         NewMoveThread nmt = new NewMoveThread(new LocalFile(), path, f, action == COPY);
-                        ProgressDialog pd = new ProgressDialog(parent, nmt);
+                        ProgressDialog pd = new ProgressDialog(parent, nmt, true);
                         ProgressThread pt = new ProgressThread(nmt, pd);
                         nmt.setFrameParent(pd.getDialog());
                         nmt.start();

@@ -220,6 +220,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         leftFilePanel.setTransferHandler(new FileTransferHandler(this));
         currentLeftTable.setTransferHandler(new FileTransferHandler(this));
+        rightFilePanel.setTransferHandler(new FileTransferHandler(this));
+        currentRightTable.setTransferHandler(new FileTransferHandler(this));
     }
 
     public void setupComponents() {
@@ -1170,6 +1172,10 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() - 1);
 
         setTable(left, newTable);
+
+        newTable.setTransferHandler(new FileTransferHandler(this));
+        ftp.setTransferHandler(new FileTransferHandler(this));
+
         jTabbedPane.setIconAt(jTabbedPane.getTabCount() - 1, ImageArchive.getImageFolder());
 
         if (false == jTabbedPane.isVisible()) {
