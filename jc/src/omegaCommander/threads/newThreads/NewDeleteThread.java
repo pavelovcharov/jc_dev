@@ -33,47 +33,48 @@ import omegaCommander.util.LanguageBundle;
  */
 public class NewDeleteThread extends FileThread {
 
-	ArrayList list = new ArrayList();
-	BaseFile[] filesToDelete;
+    ArrayList list = new ArrayList();
+    BaseFile[] filesToDelete;
 
-	public NewDeleteThread(BaseFile[] filesToDelete) {
-		this.filesToDelete = filesToDelete;
-	}
+    public NewDeleteThread(BaseFile[] filesToDelete) {
+        this.filesToDelete = filesToDelete;
+    }
 
-	/**
-	 * Основной метод потока. Запускается при вызове метода <B>start()</B>
-	 */
-	@Override
-	public void run() {
-		for (int i = 0; i < filesToDelete.length; i++) {
-			list.addAll(SubDirectoriesList.getList(filesToDelete[i]));
-		}
-		totalFiles = list.size();
-		action();
-	}
+    /**
+     * Основной метод потока. Запускается при вызове метода <B>start()</B>
+     */
+    @Override
+    public void run() {
+        for (int i = 0; i < filesToDelete.length; i++) {
+            list.addAll(SubDirectoriesList.getList(filesToDelete[i]));
+        }
+        totalFiles = list.size();
+        action();
+    }
 
-	private void action() {
-		for (int i = list.size() - 1; i >= 0; i--) {
-			BaseFile file = (BaseFile) list.get(i);
+    private void action() {
+        for (int i = list.size() - 1; i >= 0; i--) {
+            BaseFile file = (BaseFile) list.get(i);
 
-			currentAction = LanguageBundle.getInstance().getString("StrDeletion") + " " + file.getFilename();
-			currentProgress = 0;
-			currentFileSize = file.length();
+            currentAction = LanguageBundle.getInstance().getString("StrDeletion") + " " + file.getFilename();
+            currentProgress = 0;
+            currentFileSize = file.length();
 
-			if (false == file.delete()) {
-				queryError(LanguageBundle.getInstance().getString("StrFileNotAccessible") + " \n " + file.getAbsolutePath());
-				if (resultError.equals(ErrorAction.Retry)) { // try again
-					i++;
-					continue;
-				} else {
-					break; //cancel
-				}
-			}
-			if (interrupt) {
-				break;
-			}
-			currentProgress = currentFileSize;
-			filesReady++;
-		}
-	}
+            if (false == file.delete()) {
+                if (queryError(LanguageBundle.getInstance().getString("StrFileNotAccessible") + " \n " + file.getAbsolutePath())) {
+                    if (resultError.equals(ErrorAction.Retry)) { // try again
+                        i++;
+                        continue;
+                    }
+                }
+                else //cancel
+                    break;
+            }
+            if (interrupt) {
+                break;
+            }
+            currentProgress = currentFileSize;
+            filesReady++;
+        }
+    }
 }
