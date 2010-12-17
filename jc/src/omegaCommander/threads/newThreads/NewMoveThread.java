@@ -207,11 +207,15 @@ public class NewMoveThread extends FileThread {
         //XXX заменить перемещение копированием в архиве
         //XXX есть метод rename у NetFile
         //XXX как отменить перемещение
+        boolean result = true;
         if ((source instanceof NetFile) || (target instanceof NetFile)) {
             jCopy(source, target);
             source.delete();
         } else {
-            source.renameTo(target);
+            result = source.renameTo(target);
+        }
+        if (!result) {
+            throw new Exception();
         }
         if (interrupt == true) {
             throw new InterruptedException();
