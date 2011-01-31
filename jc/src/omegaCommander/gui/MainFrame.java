@@ -56,6 +56,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import omegaCommander.actions.*;
+import omegaCommander.actions.manager.ActionManager;
 import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.RootFileSystem;
 import omegaCommander.fileSystem.FileSystemList;
@@ -92,6 +93,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     public static final String DEFAULT_HANDLER_TEXT;// = "rundll32 url.dll,FileProtocolHandler";
     private Preferences pref = null;
     // <editor-fold defaultstate="collapsed" desc=" MainFrame Actions ">
+    private ActionManager operationManager = new ActionManager(this);
     public final omegaCommander.actions.Action ACTION_COPY = new ActionCopy(this);
     public final omegaCommander.actions.Action ACTION_TAB = new ActionTab(this);
     public final omegaCommander.actions.Action ACTION_VIEW = new ActionView(this);
@@ -134,6 +136,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     public final omegaCommander.actions.Action ACTION_ENTER = new ActionEnter(this);
     public final omegaCommander.actions.Action ACTION_SWAP = new ActionSwap(this);
     public final omegaCommander.actions.Action ACTION_CHANGE_ARRANGEMENT = new ActionChangeArrangement(this);
+    public final omegaCommander.actions.Action ACTION_COPY_SAME_FOLDER = new ActionCopySameFolder(this);
     public final omegaCommander.actions.Action ACTION_EXPLORER = new ActionExplorer(this);
     // </editor-fold>
 
@@ -618,52 +621,53 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     public void initMessageList() {
         defaultKeyList = new LinkedHashMap();
         userKeyList = new LinkedHashMap();
-        MessageList messageListList = MessageList.ensureMessageList();
+        MessageList messageList = MessageList.ensureMessageList();
 
-        messageListList.MESSAGE_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_TAB));
-        messageListList.MESSAGE_ACTIVE_LEFT.setDefaultKey(new KeyShortcat(KeyEvent.VK_LEFT, true, false, false));
-        messageListList.MESSAGE_ACTIVE_RIGHT.setDefaultKey(new KeyShortcat(KeyEvent.VK_RIGHT, true, false, false));
-        messageListList.MESSAGE_ENTER.setDefaultKey(new KeyShortcat(KeyEvent.VK_ENTER));
-        messageListList.MESSAGE_DIR_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_BACK_SPACE));
-        messageListList.MESSAGE_VIEW.setDefaultKey(new KeyShortcat(KeyEvent.VK_F3));
-        messageListList.MESSAGE_EDIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4));
-        messageListList.MESSAGE_NEW_EDIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4, false, false, true));
-        messageListList.MESSAGE_NEW_DIR.setDefaultKey(new KeyShortcat(KeyEvent.VK_F7));
-        messageListList.MESSAGE_COPY.setDefaultKey(new KeyShortcat(KeyEvent.VK_F5));
-        messageListList.MESSAGE_MOVE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F6));
-        messageListList.MESSAGE_RENAME.setDefaultKey(new KeyShortcat(KeyEvent.VK_F2));
-        messageListList.MESSAGE_DELETE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F8));
-        messageListList.MESSAGE_PACK.setDefaultKey(new KeyShortcat(KeyEvent.VK_F9));
-        messageListList.MESSAGE_EXIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4, true, false, false));
-        messageListList.MESSAGE_SHOW_LEFT_COMBOBOX.setDefaultKey(new KeyShortcat(KeyEvent.VK_F1, true, false, false));
-        messageListList.MESSAGE_SHOW_RIGHT_COMBOBOX.setDefaultKey(new KeyShortcat(KeyEvent.VK_F2, true, false, false));
-        messageListList.MESSAGE_REFRESH.setDefaultKey(new KeyShortcat(KeyEvent.VK_R, false, true, false));
-        messageListList.MESSAGE_SYNC.setDefaultKey(new KeyShortcat(KeyEvent.VK_O, true, false, false));
-        messageListList.MESSAGE_SWAP.setDefaultKey(new KeyShortcat(KeyEvent.VK_U, false, true, false));
-        messageListList.MESSAGE_SELECT_ALL.setDefaultKey(new KeyShortcat(KeyEvent.VK_MULTIPLY));
-        messageListList.MESSAGE_SELECT_N_DOWN.setDefaultKey(new KeyShortcat(KeyEvent.VK_INSERT));
-        messageListList.MESSAGE_SELECT_N_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_UP, false, false, true));
-        messageListList.MESSAGE_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_UP));
-        messageListList.MESSAGE_DOWN.setDefaultKey(new KeyShortcat(KeyEvent.VK_DOWN));
-        messageListList.MESSAGE_PG_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_PAGE_UP));
-        messageListList.MESSAGE_PG_DOWN.setDefaultKey(new KeyShortcat(KeyEvent.VK_PAGE_DOWN));
-        messageListList.MESSAGE_FIRST.setDefaultKey(new KeyShortcat(KeyEvent.VK_HOME));
-        messageListList.MESSAGE_LAST.setDefaultKey(new KeyShortcat(KeyEvent.VK_END));
-        messageListList.MESSAGE_QUICK_SEARCH.setDefaultKey(new KeyShortcat(KeyEvent.VK_S, false, true, false));
-        messageListList.MESSAGE_FIND.setDefaultKey(new KeyShortcat(KeyEvent.VK_F, false, true, false));
-        messageListList.MESSAGE_SHOW_PANELS.setDefaultKey(new KeyShortcat(KeyEvent.VK_O, false, true, false));
-        messageListList.MESSAGE_SPACE.setDefaultKey(new KeyShortcat(KeyEvent.VK_SPACE));
-        messageListList.MESSAGE_ADD_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_T, false, true, false));
-        messageListList.MESSAGE_REMOVE_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_D, false, true, false));
-        messageListList.MESSAGE_NEXT_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_N, false, true, false));
-        messageListList.MESSAGE_PREV_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_B, false, true, false));
-        messageListList.MESSAGE_COPY_PATH.setDefaultKey(new KeyShortcat(KeyEvent.VK_ENTER, false, true, true));
-        messageListList.MESSAGE_COPY_NAME.setDefaultKey(new KeyShortcat(KeyEvent.VK_ENTER, true, false, false));
-        messageListList.MESSAGE_GOTO_CMDLINE.setDefaultKey(new KeyShortcat(KeyEvent.VK_G, false, true, false));
-        messageListList.MESSAGE_DECODE_HEX.setDefaultKey(new KeyShortcat(KeyEvent.VK_H, false, true, false));
+        messageList.MESSAGE_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_TAB));
+        messageList.MESSAGE_ACTIVE_LEFT.setDefaultKey(new KeyShortcat(KeyEvent.VK_LEFT, true, false, false));
+        messageList.MESSAGE_ACTIVE_RIGHT.setDefaultKey(new KeyShortcat(KeyEvent.VK_RIGHT, true, false, false));
+        messageList.MESSAGE_ENTER.setDefaultKey(new KeyShortcat(KeyEvent.VK_ENTER));
+        messageList.MESSAGE_DIR_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_BACK_SPACE));
+        messageList.MESSAGE_VIEW.setDefaultKey(new KeyShortcat(KeyEvent.VK_F3));
+        messageList.MESSAGE_EDIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4));
+        messageList.MESSAGE_NEW_EDIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4, false, false, true));
+        messageList.MESSAGE_NEW_DIR.setDefaultKey(new KeyShortcat(KeyEvent.VK_F7));
+        messageList.MESSAGE_COPY.setDefaultKey(new KeyShortcat(KeyEvent.VK_F5));
+        messageList.MESSAGE_COPY_SAME_FOLDER.setDefaultKey(new KeyShortcat(KeyEvent.VK_F5, false, false, true));
+        messageList.MESSAGE_MOVE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F6));
+        messageList.MESSAGE_RENAME.setDefaultKey(new KeyShortcat(KeyEvent.VK_F2));
+        messageList.MESSAGE_DELETE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F8));
+        messageList.MESSAGE_PACK.setDefaultKey(new KeyShortcat(KeyEvent.VK_F9));
+        messageList.MESSAGE_EXIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4, true, false, false));
+        messageList.MESSAGE_SHOW_LEFT_COMBOBOX.setDefaultKey(new KeyShortcat(KeyEvent.VK_F1, true, false, false));
+        messageList.MESSAGE_SHOW_RIGHT_COMBOBOX.setDefaultKey(new KeyShortcat(KeyEvent.VK_F2, true, false, false));
+        messageList.MESSAGE_REFRESH.setDefaultKey(new KeyShortcat(KeyEvent.VK_R, false, true, false));
+        messageList.MESSAGE_SYNC.setDefaultKey(new KeyShortcat(KeyEvent.VK_O, true, false, false));
+        messageList.MESSAGE_SWAP.setDefaultKey(new KeyShortcat(KeyEvent.VK_U, false, true, false));
+        messageList.MESSAGE_SELECT_ALL.setDefaultKey(new KeyShortcat(KeyEvent.VK_MULTIPLY));
+        messageList.MESSAGE_SELECT_N_DOWN.setDefaultKey(new KeyShortcat(KeyEvent.VK_INSERT));
+        messageList.MESSAGE_SELECT_N_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_UP, false, false, true));
+        messageList.MESSAGE_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_UP));
+        messageList.MESSAGE_DOWN.setDefaultKey(new KeyShortcat(KeyEvent.VK_DOWN));
+        messageList.MESSAGE_PG_UP.setDefaultKey(new KeyShortcat(KeyEvent.VK_PAGE_UP));
+        messageList.MESSAGE_PG_DOWN.setDefaultKey(new KeyShortcat(KeyEvent.VK_PAGE_DOWN));
+        messageList.MESSAGE_FIRST.setDefaultKey(new KeyShortcat(KeyEvent.VK_HOME));
+        messageList.MESSAGE_LAST.setDefaultKey(new KeyShortcat(KeyEvent.VK_END));
+        messageList.MESSAGE_QUICK_SEARCH.setDefaultKey(new KeyShortcat(KeyEvent.VK_S, false, true, false));
+        messageList.MESSAGE_FIND.setDefaultKey(new KeyShortcat(KeyEvent.VK_F, false, true, false));
+        messageList.MESSAGE_SHOW_PANELS.setDefaultKey(new KeyShortcat(KeyEvent.VK_O, false, true, false));
+        messageList.MESSAGE_SPACE.setDefaultKey(new KeyShortcat(KeyEvent.VK_SPACE));
+        messageList.MESSAGE_ADD_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_T, false, true, false));
+        messageList.MESSAGE_REMOVE_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_D, false, true, false));
+        messageList.MESSAGE_NEXT_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_N, false, true, false));
+        messageList.MESSAGE_PREV_TAB.setDefaultKey(new KeyShortcat(KeyEvent.VK_B, false, true, false));
+        messageList.MESSAGE_COPY_PATH.setDefaultKey(new KeyShortcat(KeyEvent.VK_ENTER, false, true, true));
+        messageList.MESSAGE_COPY_NAME.setDefaultKey(new KeyShortcat(KeyEvent.VK_ENTER, true, false, false));
+        messageList.MESSAGE_GOTO_CMDLINE.setDefaultKey(new KeyShortcat(KeyEvent.VK_G, false, true, false));
+        messageList.MESSAGE_DECODE_HEX.setDefaultKey(new KeyShortcat(KeyEvent.VK_H, false, true, false));
 
 
-        for (Message message : messageListList.getMessages()) {
+        for (Message message : messageList.getMessages()) {
             defaultKeyList.put(message.getDefaultKey(), message);
         }
 
@@ -721,7 +725,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
                 boolean shift = ois.readBoolean();
 
 
-                Message message = messageListList.getMessage(s);
+                Message message = messageList.getMessage(s);
                 KeyShortcat userKey = new KeyShortcat(code, alt, ctrl, shift);
                 message.setUserKey(userKey);
                 userKeyList.put(userKey, message);
@@ -1387,6 +1391,10 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             }
             return WindowState.Normal;
         }
+    }
+
+    public ActionManager getOperationManager() {
+        return operationManager;
     }
 
     /** This method is called from within the constructor to
@@ -3481,25 +3489,42 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             update();
         }
     }
+
     public class HotKeysTableRenderer extends DefaultTableCellRenderer {
 
-    public HotKeysTableRenderer() {
-        super();
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        if (value instanceof Message) {
-            if (!((Message) value).isAction()) {
-                Font f = new Font(getFont().getName(), Font.BOLD, getFont().getSize());
-                setFont(f);
-            } else {
-            }
+        public HotKeysTableRenderer() {
+            super();
         }
-        return c;
-    }
-}
 
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (value instanceof Message) {
+                if (!((Message) value).isAction()) {
+                    Font f = new Font(getFont().getName(), Font.BOLD, getFont().getSize());
+                    setFont(f);
+                } else {
+                }
+            }
+            return c;
+        }
+    }
+    class LocaleWrapper {
+        private Locale locale;
+        private String displayName;
+        public LocaleWrapper(String localeString, String displayName) {
+            locale = new Locale(localeString);
+            this.displayName = displayName;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s [%s]", displayName, locale);
+        }
+
+        public Locale getLocale() {
+            return locale;
+        }
+    }
 // </editor-fold>
 }

@@ -22,6 +22,7 @@
  */
 package omegaCommander.actions;
 
+import omegaCommander.actions.manager.ActionManager;
 import omegaCommander.gui.MainFrame;
 
 /**
@@ -31,8 +32,10 @@ import omegaCommander.gui.MainFrame;
 public abstract class AbstractAction implements Action {
 
     protected MainFrame parent;
+    protected ActionManager actionManager;
 
     public AbstractAction(MainFrame parent) {
         this.parent = parent;
+        actionManager = parent.getOperationManager();
     }
 }
