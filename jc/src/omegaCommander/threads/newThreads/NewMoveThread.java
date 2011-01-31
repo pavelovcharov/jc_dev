@@ -115,8 +115,8 @@ public class NewMoveThread extends FileThread {
                         if (queryError(String.format(LanguageBundle.getInstance().getString("StrCopyToItself"), newFile.getFilename()))) {
                             if (resultError.equals(ErrorAction.Retry)) { // try again
                                 i--;
-                                continue;
                             }
+                            continue;
                         } else {//cancel
                             return;
                         }

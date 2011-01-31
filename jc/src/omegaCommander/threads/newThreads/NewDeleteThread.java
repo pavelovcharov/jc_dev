@@ -64,11 +64,12 @@ public class NewDeleteThread extends FileThread {
                 if (queryError(LanguageBundle.getInstance().getString("StrFileNotAccessible") + " \n " + file.getAbsolutePath())) {
                     if (resultError.equals(ErrorAction.Retry)) { // try again
                         i++;
-                        continue;
                     }
-                }
-                else //cancel
+                    continue;
+                } else //cancel
+                {
                     break;
+                }
             }
             if (interrupt) {
                 break;
