@@ -36,7 +36,8 @@ import omegaCommander.util.Support;
 
 /**
  *
- * @author Programmer
+ * @author Pavel Ovcharov <java.commander@gmail.com>
+ * @author joe20 <http://joe20.users.sourceforge.net/>
  */
 public class NewPackThread extends BaseThread {
 
@@ -50,28 +51,19 @@ public class NewPackThread extends BaseThread {
 		this.sourceDir = sourceDir;
 		this.targetFile = targetFile;
 		this.filesToPack = filesToPack;
+		this.packLevel = chooseCompressionLevel(packLevel);
+	}
 
-		switch (packLevel) {
-			case 0: {
-				this.packLevel = Deflater.NO_COMPRESSION;
-				break;
-			}
-			case 1: {
-				this.packLevel = Deflater.BEST_SPEED;
-				break;
-			}
-			case 2: {
-				this.packLevel = Deflater.DEFAULT_COMPRESSION;
-				break;
-			}
-			case 3: {
-				this.packLevel = Deflater.BEST_COMPRESSION;
-				break;
-			}
-			default:
-				this.packLevel = Deflater.DEFAULT_COMPRESSION;
-				break;
-		}
+	/**
+	 * Returns Deflater's constant correponding to the given packLevel value.
+	 */
+	private static int chooseCompressionLevel(int packLevel) {
+		final int defaultLevel = Deflater.DEFAULT_COMPRESSION;
+		final int[] options = {
+			Deflater.NO_COMPRESSION, Deflater.BEST_SPEED, defaultLevel, Deflater.BEST_COMPRESSION
+		};
+
+		return (packLevel < options.length)? options[packLevel] : defaultLevel;
 	}
 
 	@Override
