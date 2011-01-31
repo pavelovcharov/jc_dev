@@ -29,31 +29,14 @@ import omegaCommander.gui.table.FileTable;
  *
  * @author Programmer
  */
-public class ActionCopy extends AbstractAction {
+public class ActionCopySameFolder extends ActionCopy {
 
-    public ActionCopy(MainFrame parent) {
+    public ActionCopySameFolder(MainFrame parent) {
         super(parent);
     }
 
-    protected void action(FileTable activeTable, FileTable passiveTable) {
-        actionManager.copyAction(activeTable.getCurrentDir(), passiveTable.getCurrentDir(), activeTable.getActiveFiles());
-    }
-
-    public void execute() {
-        FileTable activeTable, passiveTable;
-        activeTable = getSourceTable();
-        passiveTable = getTargetTable();
-        actionManager.selectCurrentFile(activeTable);
-        action(activeTable, passiveTable);
-        actionManager.clearSelection(activeTable);
-        return;
-    }
-
+    @Override
     protected FileTable getTargetTable() {
-        return parent.getPassiveTable();
-    }
-
-    protected FileTable getSourceTable() {
         return parent.getActiveTable();
     }
 }

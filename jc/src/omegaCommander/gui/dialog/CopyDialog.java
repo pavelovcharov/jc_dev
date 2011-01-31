@@ -26,7 +26,6 @@ import java.awt.Dimension;
 import javax.swing.JTextField;
 import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.LocalFile;
-import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.MainFrame;
 import omegaCommander.prefs.PrefKeys;
 import omegaCommander.util.LanguageBundle;

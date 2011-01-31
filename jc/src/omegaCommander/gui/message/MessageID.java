@@ -77,4 +77,5 @@ public interface MessageID {
     static final int MSG_DECODE_HEX = 44;
     static final int MSG_SWAP = 45;
     static final int MSG_EXPLORER = 46;
+    static final int MSG_COPY_SAME_FOLDER = 47;
 }

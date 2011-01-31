@@ -247,6 +247,10 @@ public class TableKeyListener implements KeyListener, MessageID {
                 action = parent.ACTION_EXPLORER;
                 break;
             }
+            case MSG_COPY_SAME_FOLDER: {
+                action = parent.ACTION_COPY_SAME_FOLDER;
+                break;
+            }
             default: {
                 break;
             }

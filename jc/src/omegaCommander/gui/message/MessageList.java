@@ -36,7 +36,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
 
         TitleNavigation, Enter, Tab, DirUp, LeftCombo, RightCombo, ActivateLeft,
         ActiateRight, Up, Down, PgUp, PgDown, First, Last, ShowPanels, GotoCmdLine, SwapPanels, Exit,
-        TitleFiles, Rename, View, Edit, Copy, Move, NewDir, Delete, Refresh, Sync, Pack, EditNew,
+        TitleFiles, Rename, View, Edit, Copy, CopySameFolder, Move, NewDir, Delete, Refresh, Sync, Pack, EditNew,
         QuickSearch, Find,
         TitleSelection, SelectAll, SelectDown, SelectUp, SelectSpace,
         TitleTabs, AddTab, RemoveTab, NextTab, PrevTab,
@@ -70,6 +70,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
         numbers.put(MessageType.View, MSG_VIEW);
         numbers.put(MessageType.Edit, MSG_EDIT);
         numbers.put(MessageType.Copy, MSG_COPY);
+        numbers.put(MessageType.CopySameFolder, MSG_COPY_SAME_FOLDER);
         numbers.put(MessageType.Move, MSG_MOVE);
         numbers.put(MessageType.NewDir, MSG_NEW_DIR);
         numbers.put(MessageType.Delete, MSG_DELETE);
@@ -125,6 +126,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
             descriptors.put(MessageType.View, new MessageDescriptor("MSG_VIEW", lb.getString("KeyView")));
             descriptors.put(MessageType.Edit, new MessageDescriptor("MSG_EDIT", lb.getString("KeyEdit")));
             descriptors.put(MessageType.Copy, new MessageDescriptor("MSG_COPY", lb.getString("KeyCopy")));
+            descriptors.put(MessageType.CopySameFolder, new MessageDescriptor("MSG_COPY_SAME_FOLDER", lb.getString("KeyCopySameFolder")));
             descriptors.put(MessageType.Move, new MessageDescriptor("MSG_MOVE", lb.getString("KeyMove")));
             descriptors.put(MessageType.NewDir, new MessageDescriptor("MSG_NEW_DIR", lb.getString("KeyNewDir")));
             descriptors.put(MessageType.Delete, new MessageDescriptor("MSG_DELETE", lb.getString("KeyDel")));
@@ -219,6 +221,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
     public Message MESSAGE_DECODE_HEX;
     public Message MESSAGE_SWAP;
     public Message MESSAGE_EXPLORER;
+    public Message MESSAGE_COPY_SAME_FOLDER;
 
     private MessageList() {
         createMaps();
@@ -283,6 +286,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
         MESSAGE_COPY_NAME = messages.get(MessageType.CopyName);
         MESSAGE_DECODE_HEX = messages.get(MessageType.DecodeHex);
         MESSAGE_EXPLORER = messages.get(MessageType.Explorer);
+        MESSAGE_COPY_SAME_FOLDER = messages.get(MessageType.CopySameFolder);
     }
 
     public Collection<Message> getMessages() {
