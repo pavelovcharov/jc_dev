@@ -90,7 +90,7 @@ import omegaCommander.util.LanguageBundle;
  */
 public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePrefKeys {
 
-    public static final String DEFAULT_HANDLER_TEXT;// = "rundll32 url.dll,FileProtocolHandler";
+    
     private Preferences pref = null;
     // <editor-fold defaultstate="collapsed" desc=" MainFrame Actions ">
     private ActionManager operationManager = new ActionManager(this);
@@ -140,14 +140,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     public final omegaCommander.actions.Action ACTION_EXPLORER = new ActionExplorer(this);
     // </editor-fold>
 
-    static {
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            DEFAULT_HANDLER_TEXT = "rundll32 url.dll,FileProtocolHandler";
-        } else {
-            DEFAULT_HANDLER_TEXT = "";
-        }
-    }
-
+    
     /**
      * Создает новый объект класса MainFrame
      * @param version версия приложения
@@ -3220,7 +3213,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private Process cmdProcess;
     private static LinkedHashMap defaultKeyList;
     private static LinkedHashMap userKeyList;
-    private static final String JCOM_COPYRIGHT = "2005-2010 (c) kneeMade, Inc";
+    private static final String JCOM_COPYRIGHT = "2005-2011 (c) kneeMade, Inc";
     private static final String JCOM_MAIL = "java.commander@gmail.com";
     private static final String JCOM_PAGE = "http://jcommander.narod.ru";
     private static Charset consoleCharset;
