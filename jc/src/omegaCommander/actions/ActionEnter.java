@@ -41,6 +41,7 @@ import omegaCommander.gui.table.tableElements.UpperDirectory;
 import omegaCommander.threads.newThreads.NewMoveThread;
 import omegaCommander.threads.newThreads.ProgressThread;
 import omegaCommander.util.LanguageBundle;
+import omegaCommander.util.PlatformHelper;
 
 /**
  *
@@ -145,7 +146,7 @@ public class ActionEnter extends AbstractAction {
     }
 
     private void executeFile(BaseFile file) {
-        String command = MainFrame.DEFAULT_HANDLER_TEXT + " " + file;
+        String command = PlatformHelper.DEFAULT_HANDLER_TEXT + " " + file;
         try {
             if (true == file.exists()) {
                 java.io.File workingDir = null;
