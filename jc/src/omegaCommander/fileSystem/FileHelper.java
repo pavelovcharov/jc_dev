@@ -96,7 +96,9 @@ public abstract class FileHelper {
     }
 
     public static boolean isAbsolutePath(String path) {
-        if (path.isEmpty()) return false;
+        if (path.isEmpty()) {
+            return false;
+        }
         if (path.startsWith("smb://")) {
             return true;
         }
@@ -114,6 +116,10 @@ public abstract class FileHelper {
             return FileType.DIRECTORY;
         }
         String filename = file.getFilename().toLowerCase();
+        return  getFileType(filename);
+    }
+
+    static public FileType getFileType(String filename) {
         if (filename.endsWith("zip") || filename.endsWith("tar") || filename.endsWith("tgz") || filename.endsWith("tar.gz") || filename.endsWith("jar")) {
             return FileType.ARCHIVE;
         }

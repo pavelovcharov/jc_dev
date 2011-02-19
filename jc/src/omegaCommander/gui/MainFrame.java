@@ -292,6 +292,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             jCheckBoxPrefShowCmdline.setText(lb.getString("StrShowCommandLine"));
             jCheckBoxPrefShowHidden.setText(lb.getString("StrShowHiddenFiles"));
             jCheckBoxPrefShowTooltips.setText(lb.getString("StrShowTooltips"));
+            jCheckBoxPrefsUseSystemIcons.setText(lb.getString("StrUseSystemIcons"));
 
             jLabelFindWhat.setText(lb.getString("StrFindWhat"));
             jLabelFindWhere.setText(lb.getString("StrFindWhere"));
@@ -431,6 +432,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         pref.putBoolean(PK_SHOW_TOOLTIPS, jcPrefs.showToolTips);
         pref.putBoolean(PK_ARRANGEMENT, jcPrefs.arrangement);
+        pref.putBoolean(PK_USE_SYSTEM_ICONS, jcPrefs.useSystemIcons);
         try {
             pref.exportNode(new FileOutputStream(new java.io.File("jc.xml")));
         } catch (Exception ex) {
@@ -487,6 +489,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jcPrefs.theme = pref.get(PK_THEME, jcPrefs.DEFAULT_THEME);
         jcPrefs.showToolTips = pref.getBoolean(PK_SHOW_TOOLTIPS, jcPrefs.DEFAULT_SHOW_TOOLTIPS);
         jcPrefs.arrangement = pref.getBoolean(PK_ARRANGEMENT, jcPrefs.DEFAULT_ARRANGEMENT);
+        jcPrefs.useSystemIcons = pref.getBoolean(PK_USE_SYSTEM_ICONS, jcPrefs.DEFAULT_USE_SYSTEM_ICONS);
     }
 
     public void applyPrefs() {
@@ -591,6 +594,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jcPrefs.showCommandLine = jCheckBoxPrefShowCmdline.isSelected();
         jcPrefs.showHiddenFiles = jCheckBoxPrefShowHidden.isSelected();
         jcPrefs.showToolTips = jCheckBoxPrefShowTooltips.isSelected();
+        jcPrefs.useSystemIcons = jCheckBoxPrefsUseSystemIcons.isSelected();
 
         Locale l = ((Locale) jComboBoxLang.getSelectedItem());
         if (false == l.equals(currentLocale)) {
@@ -1094,6 +1098,21 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             jMenuFavorites.add(menuItem);
         }
     }
+    JPopupMenu createFilePopupMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        BaseFile[] files = RootFileSystem.getRoots();
+        for(BaseFile file : files ) {
+            JMenuItem item = new JMenuItem(file.getAbstractFileName());
+            menu.add(item);
+        }
+        JMenu favoritesMenu = new JMenu("Favorites");
+        menu.add(favoritesMenu);
+        for (FavoriteItem favoriteItem : favoriteFolders) {
+            JMenuItem item = new JMenuItem(favoriteItem.getItemName());
+            favoritesMenu.add(item);
+        }
+        return menu;
+    }
 
     private void loadFavorites() {
         try {
@@ -1291,7 +1310,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jCheckBoxPrefShowCmdline.setSelected(jcPrefs.showCommandLine);
         jCheckBoxPrefShowHidden.setSelected(jcPrefs.showHiddenFiles);
         jCheckBoxPrefShowTooltips.setSelected(jcPrefs.showToolTips);
-
+        jCheckBoxPrefsUseSystemIcons.setSelected(jcPrefs.useSystemIcons);
     }
 
     public void showButtonsBar(boolean show) {
@@ -1426,8 +1445,10 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jPanel22 = new javax.swing.JPanel();
         jPanel24 = new javax.swing.JPanel();
         jPanelPrefTheme = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabelTheme = new javax.swing.JLabel();
         jComboBoxTheme = new javax.swing.JComboBox();
+        jCheckBoxPrefsUseSystemIcons = new javax.swing.JCheckBox();
         jPanelPrefView = new javax.swing.JPanel();
         jCheckBoxPrefShowButtons = new javax.swing.JCheckBox();
         jCheckBoxPrefShowCmdline = new javax.swing.JCheckBox();
@@ -1685,12 +1706,18 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jPanel24.setLayout(new java.awt.BorderLayout());
 
         jPanelPrefTheme.setBorder(javax.swing.BorderFactory.createTitledBorder("LookAndFeel"));
-        jPanelPrefTheme.setPreferredSize(new java.awt.Dimension(100, 70));
-        jPanelPrefTheme.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jPanelPrefTheme.setLayout(new java.awt.GridLayout(2, 2, 5, 0));
+
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jLabelTheme.setText("jLabel2");
-        jPanelPrefTheme.add(jLabelTheme);
-        jPanelPrefTheme.add(jComboBoxTheme);
+        jPanel3.add(jLabelTheme);
+        jPanel3.add(jComboBoxTheme);
+
+        jPanelPrefTheme.add(jPanel3);
+
+        jCheckBoxPrefsUseSystemIcons.setText("jCheckBox4");
+        jPanelPrefTheme.add(jCheckBoxPrefsUseSystemIcons);
 
         jPanel24.add(jPanelPrefTheme, java.awt.BorderLayout.NORTH);
 
@@ -2041,7 +2068,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
 
         jComboBoxLeft.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -2096,8 +2122,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jPanelStatusLeft.setPreferredSize(new java.awt.Dimension(25, 26));
         jPanelStatusLeft.setLayout(new java.awt.CardLayout());
 
-        jPanelStatusMsgLeft.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         jLabelStatusLeft.setText("left");
         jPanelStatusMsgLeft.add(jLabelStatusLeft);
 
@@ -2138,7 +2162,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel6.setLayout(new javax.swing.BoxLayout(jPanel6, javax.swing.BoxLayout.LINE_AXIS));
 
         jComboBoxRight.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -2185,8 +2208,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         jPanelStatusRight.setPreferredSize(new java.awt.Dimension(210, 26));
         jPanelStatusRight.setLayout(new java.awt.CardLayout());
-
-        jPanelStatusMsgRight.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabelStatusRight.setText("right");
         jPanelStatusMsgRight.add(jLabelStatusRight);
@@ -2280,7 +2301,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         });
         jPanel7.add(jButtonCopy);
 
-        jButtonMove.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
+        jButtonMove.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
         jButtonMove.setFocusable(false);
         jButtonMove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2289,7 +2310,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         });
         jPanel7.add(jButtonMove);
 
-        jButtonCreateDir.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
+        jButtonCreateDir.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
         jButtonCreateDir.setFocusable(false);
         jButtonCreateDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2298,7 +2319,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         });
         jPanel7.add(jButtonCreateDir);
 
-        jButtonDel.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
+        jButtonDel.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
         jButtonDel.setFocusable(false);
         jButtonDel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2333,19 +2354,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jPanelToolBar.add(jToolBar1);
 
         jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
         jPanelToolBar.add(jButton1);
 
         jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
         jPanelToolBar.add(jButton2);
 
         getContentPane().add(jPanelToolBar, java.awt.BorderLayout.NORTH);
@@ -2568,6 +2579,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             }
             if (msg.getMessageID() == MessageList.MSG_VIEW) {
                 viewFile(af);
+            }
+            if (msg.getMessageID() == MessageList.MSG_EDIT) {
+                runFileInEditor(af);
             }
         }
     }//GEN-LAST:event_jList1KeyPressed
@@ -3040,12 +3054,6 @@ private void jCheckBoxFindTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIR
 private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jDialogFindComponentShown
     jTextFieldFindWhat.requestFocus();
 }//GEN-LAST:event_jDialogFindComponentShown
-
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-}//GEN-LAST:event_jButton1ActionPerformed
-
-private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-}//GEN-LAST:event_jButton2ActionPerformed
 // </editor-fold>  
     // <editor-fold defaultstate="collapsed" desc=" Variables declaration ">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3086,6 +3094,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JCheckBox jCheckBoxPrefShowCmdline;
     private javax.swing.JCheckBox jCheckBoxPrefShowHidden;
     private javax.swing.JCheckBox jCheckBoxPrefShowTooltips;
+    private javax.swing.JCheckBox jCheckBoxPrefsUseSystemIcons;
     private javax.swing.JComboBox jComboBoxCharset;
     private javax.swing.JComboBox jComboBoxLang;
     private javax.swing.JComboBox jComboBoxLeft;
@@ -3145,6 +3154,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -3220,9 +3230,8 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private ArrayList commandList = new ArrayList();
     private int commandListPosition;
     private NewSearchThread searchThread;
-    JCPreferenses jcPrefs = new JCPreferenses() {
-    };
-    private ArrayList favoriteFolders = new ArrayList();
+    JCPreferenses jcPrefs = JCPreferenses.getJCPreferenses();
+    private ArrayList<FavoriteItem> favoriteFolders = new ArrayList<FavoriteItem>();
     private Locale currentLocale = null;
     LanguageBundle lb = LanguageBundle.getInstance();
     JPopupMenu splitterPopupMenu;
