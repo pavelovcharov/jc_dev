@@ -33,7 +33,6 @@ import javax.swing.table.AbstractTableModel;
 
 import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileSystemList;
-import omegaCommander.fileSystem.FileHelper;
 import omegaCommander.gui.ImageArchive;
 import omegaCommander.gui.table.tableElements.Attribute;
 import omegaCommander.gui.table.tableElements.Date;
@@ -45,6 +44,7 @@ import omegaCommander.gui.table.tableElements.Size;
 import omegaCommander.gui.table.tableElements.UpperDirectory;
 import omegaCommander.gui.table.tableHeader.ColumnNumbers;
 import omegaCommander.gui.table.tableHeader.TableHeader;
+import omegaCommander.prefs.JCPreferenses;
 
 /**
  *
@@ -69,6 +69,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     private Row[] dirRows;
     private Row parentRow = null;
     public ArrayList sortingColumns;
+    private boolean useSystemIcons;
 
     /**
      * —оздать новый экземпл€р класса FileTableModel на основе <I>fsl</I>
@@ -241,20 +242,8 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
 
         public Row(BaseFile file/*, boolean parent*/) {
             createRow(file);
-//            if (file.isDirectory()) {
-//                data.add(ICON, imageFolder);
-//                data.add(NAME, new Directory(file));
-//
-//            }
-//            else {
-//                data.add(ICON, imageFile);
-//                data.add(NAME, new Filename(file));
-//            }
-//            data.add(EXT, new Extention(file.getExtention()));
-//            data.add(SIZE, new Size(file));
-//            data.add(DATE, new Date(file));
-//            data.add(ATR, new Attribute(file.getAtributeString()));            
         }
+        JCPreferenses jcPrefs = JCPreferenses.getJCPreferenses();
 
         public void createRow(BaseFile file) {
             if (file.isDirectory()) {
@@ -262,17 +251,8 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
                 data.add(NAME, new Directory(file));
 
             } else {
-                switch (FileHelper.getFileType(file)) {
-                    case ARCHIVE:
-                        data.add(ICON, imageArchive);
-                        break;
-                    default:
-                        data.add(ICON, imageFile);
-                        break;
-
-                }
+                data.add(ICON, ImageArchive.getImageFile(file, jcPrefs.useSystemIcons));
                 data.add(NAME, new Filename(file));
-
             }
             data.add(EXT, new Extention(file.getExtention()));
             data.add(SIZE, new Size(file));
