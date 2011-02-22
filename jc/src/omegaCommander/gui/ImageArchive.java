@@ -46,6 +46,8 @@ abstract public class ImageArchive {
     private static ImageIcon archive = null;
     private static ImageIcon arrowBack = null;
     private static ImageIcon arrowForward = null;
+    private static Icon systemFolderIcon = null;
+    private static FileSystemView fileSystemView;
 
     static {
         try {
@@ -58,9 +60,17 @@ abstract public class ImageArchive {
             arrowBack = new ImageIcon(ImageArchive.class.getResource("/omegaCommander/resources/arrowBack.png"));
             arrowForward = new ImageIcon(ImageArchive.class.getResource("/omegaCommander/resources/arrowForward.png"));
 
+            fileSystemView = FileSystemView.getFileSystemView();
+            systemFolderIcon = getSystemFolderIcon();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    static Icon getSystemFolderIcon() {
+        File temp = new File(System.getProperty("java.io.tmpdir"));
+        return fileSystemView.getSystemIcon(temp);
     }
 
     public static ImageIcon getImageFolder() {
@@ -112,12 +122,14 @@ abstract public class ImageArchive {
         return FileHelper.getFileType(file) == FileHelper.FileType.ARCHIVE
                 ? getImageArchive() : getImageFile();
     }
+    public static Icon getImageFolder(boolean system) {
+        return system ? systemFolderIcon : imageFolder;
+    }
 
     private static Icon getSystemIcon(String filename) {
         Icon icon = null;
         try {
             File f = File.createTempFile("tmp", filename);
-            FileSystemView fileSystemView = FileSystemView.getFileSystemView();
             icon = fileSystemView.getSystemIcon(f);
             f.delete();
         } catch (Exception e) {
