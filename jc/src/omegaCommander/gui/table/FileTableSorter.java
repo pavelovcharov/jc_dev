@@ -53,23 +53,20 @@ import omegaCommander.prefs.JCPreferenses;
  */
 public class FileTableSorter extends AbstractTableModel implements ColumnNumbers {
 
-    private static ImageIcon imageFolder = ImageArchive.getImageFolder();
-    private static ImageIcon imageFile = ImageArchive.getImageFile();
+//    private static ImageIcon imageFolder = ImageArchive.getImageFolder();
+//    private static ImageIcon imageFile = ImageArchive.getImageFile();
     private static ImageIcon imageUp = ImageArchive.getImageUp();
-    private static ImageIcon imageArchive = ImageArchive.getImageArchive();
+//    private static ImageIcon imageArchive = ImageArchive.getImageArchive();
     private FileSystemList fsl;
     public static final int DESCENDING = -1;
     public static final int NOSORT = 0;
     public static final int ASCENDING = 1;
     public static Directive NULL_DIRECTIVE = new Directive(-1, NOSORT);
-    //private Vector rowsVector;
-    //private Row[] rows;
     private Vector rows;
     private Row[] fileRows;
     private Row[] dirRows;
     private Row parentRow = null;
     public ArrayList sortingColumns;
-    private boolean useSystemIcons;
 
     /**
      * —оздать новый экземпл€р класса FileTableModel на основе <I>fsl</I>
@@ -78,13 +75,11 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     public FileTableSorter(FileSystemList fsl, ArrayList sortingColumns) {
         this.fsl = fsl;
         this.sortingColumns = sortingColumns;
-        //this.header = header;
         rows = new Vector();
 
         if (fsl.hasParent()) {
             parentRow = new Row();
             parentRow.createParentRow(fsl.getParent());
-            //rows.add(r);
         }
 
         BaseFile[] files = fsl.getFiles();
@@ -168,8 +163,6 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
      */
     @Override
     public Class getColumnClass(int c) {
-//        return (ICON == c) ? getValueAt(0, c).getClass() :
-//            omegaCommander.gui.table.tableElements.Element.class;
         return (ICON == c) ? ImageIcon.class
                 : omegaCommander.gui.table.tableElements.Element.class;
     }
@@ -181,8 +174,6 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
      * @return объект в заданной €чейке
      */
     public Object getValueAt(int aRow, int aColumn) {
-        //Vector row = (Vector)rows.elementAt(aRow);
-        //Row r = (Row)rows.elementAt(aRow);
         if (0 == getRowCount()) {
             return null;
         }
@@ -198,18 +189,13 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
      */
     @Override
     public void setValueAt(Object value, int row, int column) {
-        //Row r = (Row)rows.elementAt(row);
         Row r = (Row) rows.get(row);
-        //Vector dataRow = (Vector)rows.elementAt(row);
-        //dataRow.setElementAt(value, column);
         r.data.setElementAt(value, column);
 
     }
 
     public Vector getValuesAt(int row) {
         return ((Row) (rows.get(row))).data;
-        //return (Vector)rows.elementAt(row);
-        //return rows[row];
     }
 
     public Directive getDirective(int column) {
@@ -223,7 +209,6 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     }
 
     class Row implements Comparable {
-        //private Name nameObject;
 
         private Vector data = new Vector(TableHeader.TITLE.length);
 
@@ -231,7 +216,6 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
         }
 
         public void createParentRow(BaseFile file) {
-            //Row newRow = new Row();
             data.add(ICON, imageUp);
             data.add(NAME, new UpperDirectory(file));
             data.add(EXT, new Extention());
@@ -240,14 +224,14 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
             data.add(ATR, new Attribute());
         }
 
-        public Row(BaseFile file/*, boolean parent*/) {
+        public Row(BaseFile file) {
             createRow(file);
         }
         JCPreferenses jcPrefs = JCPreferenses.getJCPreferenses();
 
         public void createRow(BaseFile file) {
             if (file.isDirectory()) {
-                data.add(ICON, imageFolder);
+                data.add(ICON, ImageArchive.getImageFolder(jcPrefs.useSystemIcons));
                 data.add(NAME, new Directory(file));
 
             } else {
@@ -271,11 +255,6 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
         }
 
         public int compareTo(Object o) {
-            /*
-            int row1 = modelIndex;
-            int row2 = ((Row) o).modelIndex;
-             */
-
             for (Iterator it = sortingColumns.iterator(); it.hasNext();) {
                 Directive directive = (Directive) it.next();
                 int column = directive.getColumn();
@@ -303,9 +282,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
                 if (comparison != 0) {
                     return directive.getDirection() == DESCENDING ? -comparison : comparison;
                 }
-
             }
-
             return 0;
         }
 
