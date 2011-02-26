@@ -90,7 +90,6 @@ import omegaCommander.util.LanguageBundle;
  */
 public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePrefKeys {
 
-    
     private Preferences pref = null;
     // <editor-fold defaultstate="collapsed" desc=" MainFrame Actions ">
     private ActionManager operationManager = new ActionManager(this);
@@ -140,7 +139,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     public final omegaCommander.actions.Action ACTION_EXPLORER = new ActionExplorer(this);
     // </editor-fold>
 
-    
     /**
      * Создает новый объект класса MainFrame
      * @param version версия приложения
@@ -164,8 +162,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         System.out.println("File system root was found. Starting application...");
 
         /**********init comboboxes**********/
-        setDriveComboBox(jComboBoxLeft, RootFileSystem.getRoots());
-        setDriveComboBox(jComboBoxRight, RootFileSystem.getRoots());
+        initDriveComboBox(jComboBoxLeft, RootFileSystem.getRoots());
+        initDriveComboBox(jComboBoxRight, RootFileSystem.getRoots());
         /***********************************/
         currentLeftTable = new FileTable(root);
         currentRightTable = new FileTable(root);
@@ -204,6 +202,10 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
         jComboBoxLeft.addKeyListener(new BaseComboBoxListener(jComboBoxLeft, defaultKeyList, userKeyList));
         jComboBoxRight.addKeyListener(new BaseComboBoxListener(jComboBoxRight, defaultKeyList, userKeyList));
+
+        jComboBoxLeft.setRenderer(new ComboCellRenderer());
+        jComboBoxRight.setRenderer(new ComboCellRenderer());
+
         jTextFieldSearchLeft.addKeyListener(new SearchKeyListener(this));
         jTextFieldSearchRight.addKeyListener(new SearchKeyListener(this));
 
@@ -668,49 +670,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             defaultKeyList.put(message.getDefaultKey(), message);
         }
 
-
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_TAB), newMessageList.MESSAGE_TAB);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_LEFT, true, false, false), newMessageList.MESSAGE_ACTIVE_LEFT);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_RIGHT, true, false, false), newMessageList.MESSAGE_ACTIVE_RIGHT);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_ENTER), newMessageList.MESSAGE_ENTER);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_BACK_SPACE), newMessageList.MESSAGE_DIR_UP);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F3), newMessageList.MESSAGE_VIEW);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F4), newMessageList.MESSAGE_EDIT);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F4, false, false, true), newMessageList.MESSAGE_NEW_EDIT);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F7), newMessageList.MESSAGE_NEW_DIR);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F5), newMessageList.MESSAGE_COPY);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F6), newMessageList.MESSAGE_MOVE);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F2), newMessageList.MESSAGE_RENAME);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F8), newMessageList.MESSAGE_DELETE);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F9), newMessageList.MESSAGE_PACK);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F4, true, false, false), newMessageList.MESSAGE_EXIT);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F1, true, false, false), newMessageList.MESSAGE_SHOW_LEFT_COMBOBOX);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F2, true, false, false), newMessageList.MESSAGE_SHOW_RIGHT_COMBOBOX);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_R, false, true, false), newMessageList.MESSAGE_REFRESH);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_O, true, false, false), newMessageList.MESSAGE_SYNC);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_U, false, true, false), newMessageList.MESSAGE_SWAP);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_MULTIPLY), newMessageList.MESSAGE_SELECT_ALL);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_INSERT), newMessageList.MESSAGE_SELECT_N_DOWN);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_UP, false, false, true), newMessageList.MESSAGE_SELECT_N_UP);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_UP), newMessageList.MESSAGE_UP);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_DOWN), newMessageList.MESSAGE_DOWN);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_PAGE_UP), newMessageList.MESSAGE_PG_UP);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_PAGE_DOWN), newMessageList.MESSAGE_PG_DOWN);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_HOME), newMessageList.MESSAGE_FIRST);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_END), newMessageList.MESSAGE_LAST);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_S, false, true, false), newMessageList.MESSAGE_QUICK_SEARCH);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_F, false, true, false), newMessageList.MESSAGE_FIND);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_O, false, true, false), newMessageList.MESSAGE_SHOW_PANELS);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_SPACE), newMessageList.MESSAGE_SPACE);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_T, false, true, false), newMessageList.MESSAGE_ADD_TAB);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_D, false, true, false), newMessageList.MESSAGE_REMOVE_TAB);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_N, false, true, false), newMessageList.MESSAGE_NEXT_TAB);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_B, false, true, false), newMessageList.MESSAGE_PREV_TAB);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_ENTER, false, true, true), newMessageList.MESSAGE_COPY_PATH);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_ENTER, true, false, false), newMessageList.MESSAGE_COPY_NAME);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_G, false, true, false), newMessageList.MESSAGE_GOTO_CMDLINE);
-//        defaultKeyList.put(new KeyShortcat(KeyEvent.VK_H, false, true, false), newMessageList.MESSAGE_DECODE_HEX);
-
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(userFile));
             int count = ois.readInt();
@@ -833,14 +792,10 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
      * @param cb выпадающий список, куда заносятся разделы
      * @param roots список доступных разделов
      */
-    protected void setDriveComboBox(final JComboBox cb, BaseFile[] roots) {
-        for (int i = 0; i < roots.length; i++) {
-            cb.addItem(roots[i]);
-        }
-        cb.setMaximumRowCount(roots.length);
+    protected void initDriveComboBox(final JComboBox cb, BaseFile[] roots) {
+        setDriveComboBox(cb, roots);
 
         cb.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).setParent(null);
-
         cb.setKeySelectionManager(new JComboBox.KeySelectionManager() {
 
             @Override
@@ -881,6 +836,14 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jLabelPage.setText(JCOM_PAGE);
     }
 
+    private void setDriveComboBox(JComboBox comboBox, BaseFile[] roots) {
+        comboBox.removeAllItems();
+        for (int i = 0; i < roots.length; i++) {
+            comboBox.addItem(roots[i]);
+        }
+        comboBox.setMaximumRowCount(roots.length);
+    }
+
     private void setHotKeysDialog() {
         jDialogHotKeys.setSize(500, 400);
         JTable tb = createHotKeysTable();
@@ -890,7 +853,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
     private void setSearchDialog() {
         jDialogFind.setSize(500, 400);
-//        jList1.setCellRenderer(new SearchResultListCellRenderer());
         jList1.setModel(new GeneratedListModel());
     }
 
@@ -960,7 +922,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         savePrefs();
         saveFavorites();
         System.out.println("\n\nClosing...\nThank you for using JCommander.");
-
     }
 
     public static void run(final String title, final String version) {
@@ -1075,10 +1036,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jPopupMenuFavorites.add(menuItem);
         JSeparator js = new JSeparator();
         jPopupMenuFavorites.add(js);
-        for (int i = 0; i < favoriteFolders.size(); i++) {
-            FavoriteItem fi = (FavoriteItem) favoriteFolders.get(i);
-            menuItem = new JMenuItem(fi.getItemName());
-            menuItem.addActionListener(new SelectFavoritesListener(fi.getFile()));
+        for (BookmarkItem bookmarkItem : favoriteFolders) {
+            menuItem = new JMenuItem(bookmarkItem.getItemName());
+            menuItem.addActionListener(new SelectFavoritesListener(bookmarkItem.getFile()));
             jPopupMenuFavorites.add(menuItem);
         }
 
@@ -1091,27 +1051,11 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jMenuFavorites.add(menuItem);
         js = new JSeparator();
         jMenuFavorites.add(js);
-        for (int i = 0; i < favoriteFolders.size(); i++) {
-            FavoriteItem fi = (FavoriteItem) favoriteFolders.get(i);
-            menuItem = new JMenuItem(fi.getItemName());
-            menuItem.addActionListener(new SelectFavoritesListener(fi.getFile()));
+        for (BookmarkItem bookmarkItem : favoriteFolders) {
+            menuItem = new JMenuItem(bookmarkItem.getItemName());
+            menuItem.addActionListener(new SelectFavoritesListener(bookmarkItem.getFile()));
             jMenuFavorites.add(menuItem);
         }
-    }
-    JPopupMenu createFilePopupMenu() {
-        JPopupMenu menu = new JPopupMenu();
-        BaseFile[] files = RootFileSystem.getRoots();
-        for(BaseFile file : files ) {
-            JMenuItem item = new JMenuItem(file.getAbstractFileName());
-            menu.add(item);
-        }
-        JMenu favoritesMenu = new JMenu("Favorites");
-        menu.add(favoritesMenu);
-        for (FavoriteItem favoriteItem : favoriteFolders) {
-            JMenuItem item = new JMenuItem(favoriteItem.getItemName());
-            favoritesMenu.add(item);
-        }
-        return menu;
     }
 
     private void loadFavorites() {
@@ -1119,12 +1063,12 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(favoritesFile));
             favoriteFolders = new ArrayList();
             int size = ois.readInt();
-            FavoriteItem fi;
+            BookmarkItem fi;
             for (int i = 0; i < size; i++) {
                 String name = ois.readUTF();
                 String tmp = ois.readUTF();
                 BaseFile af = FileHelper.getRealFile(tmp);
-                fi = new FavoriteItem(name, af);
+                fi = new BookmarkItem(name, af);
                 favoriteFolders.add(fi);
             }
             ois.close();
@@ -1154,9 +1098,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(favoritesFile));
             oos.writeInt(favoriteFolders.size());
-            FavoriteItem fi;
+            BookmarkItem fi;
             for (int i = 0; i < favoriteFolders.size(); i++) {
-                fi = (FavoriteItem) favoriteFolders.get(i);
+                fi = (BookmarkItem) favoriteFolders.get(i);
                 String name = fi.getItemName();
                 oos.writeUTF(name);
                 String path = fi.getFile().getAbsolutePath();
@@ -1546,7 +1490,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jPanelToolBar = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemExit = new javax.swing.JMenuItem();
@@ -2356,9 +2299,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jButton1.setText("jButton1");
         jPanelToolBar.add(jButton1);
 
-        jButton2.setText("jButton2");
-        jPanelToolBar.add(jButton2);
-
         getContentPane().add(jPanelToolBar, java.awt.BorderLayout.NORTH);
 
         jMenuFile.setText("File");
@@ -2530,7 +2470,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         }
         int indices[] = jListFavorites.getSelectedIndices();
         for (int i = 0; i < indices.length; i++) {
-            FavoriteItem fi = (FavoriteItem) jListFavorites.getModel().getElementAt(indices[i]);
+            BookmarkItem fi = (BookmarkItem) jListFavorites.getModel().getElementAt(indices[i]);
             if (favoriteFolders.contains(fi)) {
                 favoriteFolders.remove(fi);
             }
@@ -2648,16 +2588,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     private void jButtonPackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPackActionPerformed
         ACTION_PACK.execute();
     }//GEN-LAST:event_jButtonPackActionPerformed
-
-    private void jComboBoxRightPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeVisible
-        BaseFile[] roots = RootFileSystem.getRoots();
-        rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
-        Object obj = jComboBoxRight.getSelectedItem();
-        jComboBoxRight.removeAllItems();
-        setDriveComboBox(jComboBoxRight, roots);
-        jComboBoxRight.setSelectedItem(obj);
-        jComboBoxRight.setMaximumRowCount(roots.length);
-    }//GEN-LAST:event_jComboBoxRightPopupMenuWillBecomeVisible
 
     private void jDialogAboutKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialogAboutKeyPressed
         if (KeyEvent.VK_ESCAPE == evt.getKeyCode()) {
@@ -2827,77 +2757,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         }
     }//GEN-LAST:event_jTextField3KeyPressed
 
-    private void jComboBoxLeftPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuWillBecomeVisible
-        BaseFile[] roots = RootFileSystem.getRoots();
-        leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
-        Object obj = jComboBoxLeft.getSelectedItem();
-        jComboBoxLeft.removeAllItems();
-        setDriveComboBox(jComboBoxLeft, roots);
-        jComboBoxLeft.setSelectedItem(obj);
-        jComboBoxLeft.setMaximumRowCount(roots.length);
-    }//GEN-LAST:event_jComboBoxLeftPopupMenuWillBecomeVisible
-
-    private void jComboBoxRightPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeInvisible
-        if (rightComboBoxIndex == jComboBoxRight.getSelectedIndex()) {
-            currentRightTable.requestFocus();
-            return;
-        }
-        BaseFile root = FileHelper.getRealFile(jComboBoxRight.getSelectedItem().toString());
-        if (false == root.exists()) {
-            if ((false == root.canRead())) {
-                WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
-                updatePanel(false);
-                requestFocus();
-                return;
-            }
-        }
-
-        rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
-        currentRightTable.setFileList(new FileSystemList(root));
-        currentRightTable.setCurrentPosition(0);
-        updatePanel(false);
-        currentRightTable.setActive(true);
-        currentLeftTable.setActive(false);
-        currentRightTable.requestFocus();
-        currentRightTable.clearSelectedList();
-
-    }//GEN-LAST:event_jComboBoxRightPopupMenuWillBecomeInvisible
-
-    private void jComboBoxRightPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuCanceled
-        jComboBoxRight.setSelectedIndex(rightComboBoxIndex);
-        getActiveTable().requestFocus();
-    }//GEN-LAST:event_jComboBoxRightPopupMenuCanceled
-
-    private void jComboBoxLeftPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuWillBecomeInvisible
-        if (leftComboBoxIndex == jComboBoxLeft.getSelectedIndex()) {
-            currentLeftTable.requestFocus();
-            return;
-        }
-        BaseFile root = FileHelper.getRealFile(jComboBoxLeft.getSelectedItem().toString());
-        if (false == root.exists()) {
-            if ((false == root.canRead())) {
-                WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
-                updatePanel(true);
-                requestFocus();
-                return;
-            }
-        }
-
-        leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
-        currentLeftTable.setFileList(new FileSystemList(root));
-        currentLeftTable.setCurrentPosition(0);
-        updatePanel(true);
-        currentLeftTable.setActive(true);
-        currentRightTable.setActive(false);
-        currentLeftTable.requestFocus();
-        currentLeftTable.clearSelectedList();
-    }//GEN-LAST:event_jComboBoxLeftPopupMenuWillBecomeInvisible
-
-    private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuCanceled
-        jComboBoxLeft.setSelectedIndex(leftComboBoxIndex);
-        getActiveTable().requestFocus();
-    }//GEN-LAST:event_jComboBoxLeftPopupMenuCanceled
-
     private void jDialogAboutWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogAboutWindowLostFocus
         jDialogAbout.setVisible(false);
     }//GEN-LAST:event_jDialogAboutWindowLostFocus
@@ -3054,11 +2913,89 @@ private void jCheckBoxFindTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIR
 private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jDialogFindComponentShown
     jTextFieldFindWhat.requestFocus();
 }//GEN-LAST:event_jDialogFindComponentShown
+
+private void jComboBoxRightPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeVisible
+    BaseFile[] roots = RootFileSystem.getRoots();
+    rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
+    Object obj = jComboBoxRight.getSelectedItem();
+    setDriveComboBox(jComboBoxRight, roots);
+
+    jComboBoxRight.setSelectedItem(obj);
+
+}//GEN-LAST:event_jComboBoxRightPopupMenuWillBecomeVisible
+
+private void jComboBoxRightPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeInvisible
+    if (rightComboBoxIndex == jComboBoxRight.getSelectedIndex()) {
+        currentRightTable.requestFocus();
+        return;
+    }
+    BaseFile root = FileHelper.getRealFile(jComboBoxRight.getSelectedItem().toString());
+    if (false == root.exists()) {
+        if ((false == root.canRead())) {
+            WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
+            updatePanel(false);
+            requestFocus();
+            return;
+        }
+    }
+
+    rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
+    currentRightTable.setFileList(new FileSystemList(root));
+    currentRightTable.setCurrentPosition(0);
+    updatePanel(false);
+    currentRightTable.setActive(true);
+    currentLeftTable.setActive(false);
+    currentRightTable.requestFocus();
+    currentRightTable.clearSelectedList();
+}//GEN-LAST:event_jComboBoxRightPopupMenuWillBecomeInvisible
+
+private void jComboBoxRightPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuCanceled
+    jComboBoxRight.setSelectedIndex(rightComboBoxIndex);
+    getActiveTable().requestFocus();
+}//GEN-LAST:event_jComboBoxRightPopupMenuCanceled
+
+private void jComboBoxLeftPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuWillBecomeVisible
+    BaseFile[] roots = RootFileSystem.getRoots();
+    leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
+    Object obj = jComboBoxLeft.getSelectedItem();
+    setDriveComboBox(jComboBoxLeft, roots);
+
+    jComboBoxLeft.setSelectedItem(obj);
+}//GEN-LAST:event_jComboBoxLeftPopupMenuWillBecomeVisible
+
+private void jComboBoxLeftPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuWillBecomeInvisible
+    if (leftComboBoxIndex == jComboBoxLeft.getSelectedIndex()) {
+        currentLeftTable.requestFocus();
+        return;
+    }
+    BaseFile root = FileHelper.getRealFile(jComboBoxLeft.getSelectedItem().toString());
+    if (false == root.exists()) {
+        if ((false == root.canRead())) {
+            WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
+            updatePanel(true);
+            requestFocus();
+            return;
+        }
+    }
+
+    leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
+    currentLeftTable.setFileList(new FileSystemList(root));
+    currentLeftTable.setCurrentPosition(0);
+    updatePanel(true);
+    currentLeftTable.setActive(true);
+    currentRightTable.setActive(false);
+    currentLeftTable.requestFocus();
+    currentLeftTable.clearSelectedList();
+}//GEN-LAST:event_jComboBoxLeftPopupMenuWillBecomeInvisible
+
+private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxLeftPopupMenuCanceled
+    jComboBoxLeft.setSelectedIndex(leftComboBoxIndex);
+    getActiveTable().requestFocus();
+}//GEN-LAST:event_jComboBoxLeftPopupMenuCanceled
 // </editor-fold>  
     // <editor-fold defaultstate="collapsed" desc=" Variables declaration ">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -3231,7 +3168,7 @@ private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN
     private int commandListPosition;
     private NewSearchThread searchThread;
     JCPreferenses jcPrefs = JCPreferenses.getJCPreferenses();
-    private ArrayList<FavoriteItem> favoriteFolders = new ArrayList<FavoriteItem>();
+    private ArrayList<BookmarkItem> favoriteFolders = new ArrayList<BookmarkItem>();
     private Locale currentLocale = null;
     LanguageBundle lb = LanguageBundle.getInstance();
     JPopupMenu splitterPopupMenu;
@@ -3297,14 +3234,20 @@ private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN
         }
     }
 
-    private class FavoriteItem {
+    private class BookmarkItem {
 
-        private String itemName;
-        private BaseFile file;
+        protected String itemName;
+        protected BaseFile file;
+        protected Icon icon;
 
-        public FavoriteItem(String itemName, BaseFile file) {
+        public BookmarkItem(BaseFile file) {
+            this(file.toString(), file);
+        }
+
+        public BookmarkItem(String itemName, BaseFile file) {
             this.itemName = itemName;
             this.file = file;
+            this.icon = ImageArchive.getImageFolder(file, jcPrefs.useSystemIcons);
         }
 
         public BaseFile getFile() {
@@ -3315,9 +3258,20 @@ private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN
             return itemName;
         }
 
+        public Icon getIcon() {
+            return icon;
+        }
+
         @Override
         public String toString() {
             return itemName;// + " ==> " + file.getAbsolutePath();
+        }
+    }
+
+    private class SystemBookmarkItem extends BookmarkItem {
+
+        public SystemBookmarkItem(BaseFile file) {
+            super(file);
         }
     }
 
@@ -3381,7 +3335,7 @@ private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN
             if ((null == result) || (result.trim().equals(""))) {
                 return;
             }
-            FavoriteItem fi = new FavoriteItem(result, af);
+            BookmarkItem fi = new BookmarkItem(result, af);
             if (favoriteFolders.contains(fi)) {
             } else {
                 favoriteFolders.add(fi);
@@ -3511,9 +3465,12 @@ private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN
             return c;
         }
     }
+
     class LocaleWrapper {
+
         private Locale locale;
         private String displayName;
+
         public LocaleWrapper(String localeString, String displayName) {
             locale = new Locale(localeString);
             this.displayName = displayName;
@@ -3526,6 +3483,22 @@ private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN
 
         public Locale getLocale() {
             return locale;
+        }
+    }
+
+    class ComboCellRenderer implements ListCellRenderer {
+
+        protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+
+        public Component getListCellRendererComponent(JList list, Object value, int index,
+                boolean isSelected, boolean cellHasFocus) {
+            JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index,
+                    isSelected, cellHasFocus);
+            if (value instanceof BaseFile) {
+                BaseFile file = (BaseFile) value;
+                renderer.setIcon(ImageArchive.getImageFolder(file, true));
+            }
+            return renderer;
         }
     }
 // </editor-fold>

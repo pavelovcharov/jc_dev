@@ -122,6 +122,7 @@ abstract public class ImageArchive {
         return FileHelper.getFileType(file) == FileHelper.FileType.ARCHIVE
                 ? getImageArchive() : getImageFile();
     }
+
     public static Icon getImageFolder(boolean system) {
         return system ? systemFolderIcon : imageFolder;
     }
@@ -135,5 +136,20 @@ abstract public class ImageArchive {
         } catch (Exception e) {
         }
         return icon;
+    }
+    static HashMap<java.io.File, Icon> folders = new HashMap<java.io.File, Icon>();
+
+    public static Icon getImageFolder(BaseFile file, boolean system) {
+        File fi = file.toFile();
+        if (system && fi != null) {
+            if (folders.containsKey(fi)) {
+                return folders.get(fi);
+            } else {
+                Icon icon = fileSystemView.getSystemIcon(fi);
+                folders.put(fi, icon);
+                return icon;
+            }
+        }
+        return getImageFolder(system);
     }
 }

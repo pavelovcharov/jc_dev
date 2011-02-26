@@ -173,4 +173,6 @@ public interface BaseFile {
     public long getLastModifiedTime();
     
     public boolean isHidden();
+    public  boolean  isLocal();
+    public  java.io.File toFile();
 }

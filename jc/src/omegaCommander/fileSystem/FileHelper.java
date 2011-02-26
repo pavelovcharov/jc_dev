@@ -128,4 +128,7 @@ public abstract class FileHelper {
         }
         return FileType.UNKNOWN_FILE;
     }
+    static public boolean isLocal(BaseFile file) {
+        return file.isLocal();
+    }
 }
