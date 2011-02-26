@@ -22,11 +22,10 @@
  * Created on 7 Декабрь 2006 г., 9:38
  *
  */
-
 package omegaCommander.fileSystem.net;
 
 import java.io.FileFilter;
-import java.io.InputStream; 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import jcifs.smb.SmbException;
@@ -39,20 +38,20 @@ import omegaCommander.fileSystem.LocalFile;
  * jcifs-1.2.10
  * @author Strateg
  */
-
 public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys {
+
     private SmbFile smbFile;
     private NetFile parent;
-    
-    
+
     /**
      * Создает новый экземпляр класса NetFile для заданного пути
      * @param path путь к файлу в сети
      */
     public NetFile(String path) {
-		super(path);
-        if (path.equals(""))
+        super(path);
+        if (path.equals("")) {
             path = "smb://";
+        }
         try {
             smbFile = new SmbFile(path);
             //System.out.println(smbFile.getParent());
@@ -63,6 +62,7 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
             ex.printStackTrace();
         }
     }
+
     /**
      * Создает новый экземпляр класса NetFile по объекту <I>smbFile</I>
      * @param smbFile файл в сети
@@ -72,6 +72,7 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         this.smbFile = smbFile;
 
     }
+
     private NetFile(SmbFile smbFile, NetFile parent) {
         this(smbFile);
         this.parent = parent;
@@ -82,21 +83,20 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
      * @return пустую строку, если текущим файлом является каталог, иначе
      * возвращается строка, содержащая расширение файла
      */
-	@Override
+    @Override
     public String getExtention() {
         return isDirectory() ? "" : super.getExtention();
     }
-    
+
     /**
      * Получить список файлов, находящихся в данной папке в архиве
      * @return массив файлов
      */
-	
-	@Override
+    @Override
     public BaseFile[] getFiles() {
         try {
-            SmbFile [] f = smbFile.listFiles();
-            NetFile [] list = new NetFile[f.length];
+            SmbFile[] f = smbFile.listFiles();
+            NetFile[] list = new NetFile[f.length];
             for (int i = 0; i < f.length; i++) {
                 list[i] = new NetFile(f[i], this);
             }
@@ -108,26 +108,27 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return null;
     }
-	
-	@Override
-    public BaseFile[] getFiles(FileFilter filter){
+
+    @Override
+    public BaseFile[] getFiles(FileFilter filter) {
         return getFiles();
     }
-    
+
     /**
      * Получить родительскую папку для данного файла
      * @return объект класса BaseFile, представляющий родительскую папку данного файла
      */
-	@Override
+    @Override
     public BaseFile getAbsoluteParent() {
         //return new NetFile(smbFile.getParent());
         return parent;
     }
+
     /**
      * Определить, является ли данный объект файлом или каталогом
      * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
      */
-	@Override
+    @Override
     public boolean isDirectory() {
         try {
             return smbFile.isDirectory();
@@ -137,14 +138,17 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return false;
     }
+
     /**
      * Представляет размер в более наглядной форме. Например, число
      * 12455 будет иметь вид 12 455
      * @return строка содержащая размер файла в отформатированном виде
      */
-	@Override
+    @Override
     public String getFormatFileSize() {
-        if (isDirectory()) return DEFAULT_DIR_SIZE;
+        if (isDirectory()) {
+            return DEFAULT_DIR_SIZE;
+        }
         try {
             return getFormatFileSize(smbFile.length());
         } catch (SmbException ex) {
@@ -153,28 +157,32 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return "" + 0;
     }
+
     /**
      * Возвращает дату последеней модификации файла или каталога
      * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
-	@Override
+    @Override
     public String getLastModifiedDate() {
         long time = smbFile.getLastModified();
         return getLastModifiedDate(time);
     }
+
     /**
      * Возвращает атрибуты файла или каталога. ro - только для чтения,
      * h - скрытый
      * @return строку, содержащую атрибуты файла или каталога
      */
-	@Override
+    @Override
     public String getAtributeString() {
-        String atr="";
+        String atr = "";
         try {
-            if (false == smbFile.canWrite())
-                atr="ro  ";
-            if(smbFile.isHidden())
-                atr+="h";
+            if (false == smbFile.canWrite()) {
+                atr = "ro  ";
+            }
+            if (smbFile.isHidden()) {
+                atr += "h";
+            }
         } catch (SmbException ex) {
             ex.printStackTrace();
             //System.out.println(ex);
@@ -188,7 +196,7 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
      * Удалит данный файл с диска
      * @return <B>true</B>, если файл был успешно удален, иначе - <B>false</B>
      */
-	@Override
+    @Override
     public boolean delete() {
         try {
             smbFile.delete();
@@ -199,34 +207,37 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return false;
     }
-    
+
     /**
      * 
      * @return 
      */
-	@Override
+    @Override
     public String getAbsolutePath() {
         //return ""+parent+smbFile.getName();
         return smbFile.getPath();
     }
+
     /**
      * Получить поток для чтения из файла
      * @return поток для чтения из файла
      * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      */
-	@Override
+    @Override
     public InputStream getInputStream() throws java.io.IOException {
         return smbFile.getInputStream();
     }
+
     /**
      * Получить поток для записи в файл
      * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      * @return поток для записи в файл
      */
-	@Override
+    @Override
     public OutputStream getOutputStream() throws java.io.IOException {
         return smbFile.getOutputStream();
     }
+
     /**
      * Получить дату последней модификации файла
      * @return дата последней модификации файла - число миллисекунд прошедших с 00:00:00 1 
@@ -245,7 +256,7 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
      * Метод позволяет определить, существует ли файл физически на диске
      * @return <B>true</B>, ели файл существует, <B>false</B> - иначе
      */
-	@Override
+    @Override
     public boolean exists() {
         try {
             return smbFile.exists();
@@ -255,19 +266,21 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return false;
     }
+
     /**
      * Получить строковое представление объекта
      * @return строковое представление
      */
-	@Override
+    @Override
     public String toString() {
         return (null == parent) ? smbFile.getName() : (parent + smbFile.getName());
     }
+
     /**
      * Создать папки на пути, котоый задан данным файлом
      * @return <B>true</B>, если папки были созданы, иначе - <B>false</B>
      */
-	@Override
+    @Override
     public boolean mkdirs() {
         try {
             smbFile.mkdirs();
@@ -277,14 +290,15 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
             //System.out.println(ex);
             return false;
         }
-        
+
     }
+
     /**
      * Установить дату последеного изменения файла
      * @param time дата последней модификации - число миллисекунд, прошедших с начала эпохи
      * @return <B>true</B>, если дата успешно изменена, иначе - <B>false</B>
      */
-	@Override
+    @Override
     public boolean setLastModified(long time) {
         try {
             smbFile.setLastModified(time);
@@ -295,27 +309,30 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return false;
     }
+
     /**
      * Получить абсолютный путь к файлу, для каталога - с разделителем в конце
      * ("smb://123/sad/")
      * @return абсолютный путь к файлу
      */
-	@Override
+    @Override
     public String getPathWithSlash() {
         return smbFile.getPath();
     }
+
     /**
      * Переименовать данный файл в файл с именем, заданным <I>targetFile</I>
      * @param targetFile файл-преемник
      * @return <B>true</B>, если файл был переименовн, иначе - <B>false</B>
      */
-	@Override
+    @Override
     public boolean renameTo(BaseFile dest) {
         try {
-            if (dest instanceof NetFile)
-                smbFile.renameTo(((NetFile)dest).smbFile);
-            else 
+            if (dest instanceof NetFile) {
+                smbFile.renameTo(((NetFile) dest).smbFile);
+            } else {
                 smbFile.renameTo(new SmbFile(dest.getPathWithSlash()));
+            }
             return true;
         } catch (SmbException ex) {
             ex.printStackTrace();
@@ -323,35 +340,36 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
             //System.out.println(ex);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             //System.out.println(ex);
         }
         return false;
     }
+
     /**
      * Получить файл, соответствующий начальной папке в сети (smb://)
      * @return объект класса BaseFile - начальная папка в сети
      */
-	@Override
+    @Override
     public BaseFile getRoot() {
         return new NetFile("smb://");
         /*
         NetFile root = this;
         root.smbFile.
         while(root.hasParent()) {
-            root = (NetFile) root.getAbsoluteParent();
-            if (null == root) break; 
+        root = (NetFile) root.getAbsoluteParent();
+        if (null == root) break;
         }
         return root;
          */
     }
+
     /**
      * Определить размер файла
      * @return размер файла в байтах
      */
-	@Override
+    @Override
     public long length() {
         try {
             return smbFile.length();
@@ -361,13 +379,12 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return 0;
     }
-    
+
     public void setParent(NetFile parent) {
         this.parent = parent;
     }
-    
 
-	@Override
+    @Override
     public long getLastModifiedTime() {
         try {
             return smbFile.lastModified();
@@ -377,13 +394,18 @@ public class NetFile extends LocalFile implements omegaCommander.prefs.PrefKeys 
         }
         return 0;
     }
-    
-	@Override
+
+    @Override
     public boolean isHidden() {
         try {
             return smbFile.isHidden();
         } catch (SmbException ex) {
             return false;
         }
+    }
+
+    @Override
+    public boolean isLocal() {
+        return false;
     }
 }

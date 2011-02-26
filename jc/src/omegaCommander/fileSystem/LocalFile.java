@@ -22,10 +22,9 @@
  * Created on 27 Март 2006 г., 10:16
  *
  */
-
 package omegaCommander.fileSystem;
 
-import java.io.File; 
+import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,18 +35,18 @@ import java.text.SimpleDateFormat;
  * @author Pavel Ovcharov
  */
 public class LocalFile extends File implements BaseFile {
-    
+
     static protected String DEFAULT_DATE_FORMAT = "dd.MM.yyyy HH:mm";
     static protected String DEFAULT_DIR_SIZE = "<DIR>";
-    
+
     /**
      * Создать экземпляр класса LocalFile. По умолчанию это текущий каталог
      * файловой системы
      */
     public LocalFile() {
-		super(RootFileSystem.getReadableRoot().getAbsolutePath());
+        super(RootFileSystem.getReadableRoot().getAbsolutePath());
     }
-    
+
     /**
      * Создать экземпляр класса LocalFile с именем (путем) <I>fileName</I>
      * 
@@ -56,7 +55,7 @@ public class LocalFile extends File implements BaseFile {
     public LocalFile(String fileName) {
         super(fileName);
     }
-    
+
     /**
      * Создать экземпляр класса LocalFile по файлу anotherFile
      * 
@@ -66,6 +65,7 @@ public class LocalFile extends File implements BaseFile {
     public LocalFile(File anotherFile) {
         super(anotherFile.getAbsolutePath());
     }
+
     /**
      * Создать экземпляр класса LocalFile с именем <I>fileName</I> в папке,
      * заданной файлом <I>parentFile</I>.
@@ -76,6 +76,7 @@ public class LocalFile extends File implements BaseFile {
     public LocalFile(File parentFile, String fileName) {
         super(parentFile, fileName);
     }
+
     /**
      * Создать экземпляр класса LocalFile с именем <I>fileName</I> в папке,
      * заданной файлом <I>parentFile</I>.
@@ -86,6 +87,7 @@ public class LocalFile extends File implements BaseFile {
     public LocalFile(LocalFile parent, String child) {
         super(parent, child);
     }
+
     /**
      * Создать экземпляр класса LocalFile как копию файла aFile
      * 
@@ -94,6 +96,7 @@ public class LocalFile extends File implements BaseFile {
     public LocalFile(LocalFile aFile) {
         super(aFile.getAbsolutePath());
     }
+
     /**
      * Создать экземпляр класса LocalFile как копию файла aFile
      * 
@@ -102,146 +105,164 @@ public class LocalFile extends File implements BaseFile {
     public LocalFile(BaseFile aFile) {
         super(aFile.getAbsolutePath());
     }
+
     /**
      * Возвращает расширение файла
      * @return пустую строку, если текущим файлом является каталог, иначе
      * возвращается строка, содержащая расширение файла
      */
-    public String getExtention(){
-        if (super.isDirectory())
+    public String getExtention() {
+        if (super.isDirectory()) {
             return "";
+        }
         String name = super.getName();
-        int len=name.length();
-        for(int i=len-1;i>=0;i--){
-            if(name.charAt(i) == '.'){
+        int len = name.length();
+        for (int i = len - 1; i >= 0; i--) {
+            if (name.charAt(i) == '.') {
                 return name.substring(i + 1);
             }
         }
         return "";
     }
-    
+
     /**
      * Позволяет получить имя файла или каталога
      * @return имя текущего файла (без расширения) или каталога
      */
-    public String getAbstractFileName(){
+    public String getAbstractFileName() {
         String name = super.getName();
-        if (name.equals("")) return getAbsolutePath();
-        int len=name.length();
-        if (super.isDirectory())
+        if (name.equals("")) {
+            return getAbsolutePath();
+        }
+        int len = name.length();
+        if (super.isDirectory()) {
             return name;
-        len=name.length();
-        for(int i=len-1;i>=0;i--){
-            if(name.charAt(i) == '.'){
-                return name.substring(0,i);
+        }
+        len = name.length();
+        for (int i = len - 1; i >= 0; i--) {
+            if (name.charAt(i) == '.') {
+                return name.substring(0, i);
             }
         }
         return name;
     }
+
     /**
      * Получить родительский каталог данного файла
      * @return родительский каталог; если родительского каталога нет,
      * возвращается <B>null</B>
      */
-    public LocalFile getAbstractParent(){
-        if(super.getParentFile()!=null)
+    public LocalFile getAbstractParent() {
+        if (super.getParentFile() != null) {
             return new LocalFile(super.getParentFile());
-        else
+        } else {
             return null;
+        }
     }
+
     /**
      * Определить, есть ли родительский каталог у данного файла
      * @return <B>true</B>если родительский каталог есть, иначе - <B>false</B>
      */
     public boolean hasParent() {
-        return (null!=super.getParentFile()) ? true : false;
-        
+        return (null != super.getParentFile()) ? true : false;
+
     }
+
     /**
      * Возвращает имя файла или каталога
      * @return имя текщего каталога или файла (с расширением)
      */
-    public String getFilename(){
+    public String getFilename() {
         return super.getName();
     }
+
     /**
      * Возвращает относительный путь (относительный относительно path)
      * @param path
      * @return
      */
-    public String getPathRelativeTo(String path) throws IllegalArgumentException{
+    public String getPathRelativeTo(String path) throws IllegalArgumentException {
         String absolutePath = getAbsolutePath();
-        if (!absolutePath.startsWith(path))
+        if (!absolutePath.startsWith(path)) {
             throw new IllegalArgumentException(absolutePath + "don't contains " + path);
+        }
         return getAbsolutePath().substring(path.length());
     }
+
     /**
      * Возвращает дату последеней модификации файла или каталога
      * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
-    public String getLastModifiedDate(){
+    public String getLastModifiedDate() {
         return getLastModifiedDate(lastModified());
     }
-    
+
     protected String getLastModifiedDate(long time) {
-        Date date=new Date();
-        SimpleDateFormat sdate=new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-        date.setTime(time);        
+        Date date = new Date();
+        SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+        date.setTime(time);
         return sdate.format(date);
     }
+
     /**
      * Возващает размер файла
      * @return возвращается, количество байт занимаемых файлом
      */
-    public long getSize(){
+    public long getSize() {
         return length();
     }
+
     /**
      * Представляет размер в более наглядной форме. Например, число
      * 12455 будет иметь вид 12 455
      * @return строка содержащая размер файла в отформатированном виде
      */
-    public String getFormatFileSize(){
-        String str=new String("");
+    public String getFormatFileSize() {
+        String str = new String("");
         String size;
-        if (super.isDirectory())
+        if (super.isDirectory()) {
             return DEFAULT_DIR_SIZE;
+        }
         return getFormatFileSize(this.length());
     }
-    
+
     /**
      * 
      * @param fileSize 
      * @return 
      */
-    protected String getFormatFileSize(long fileSize){
+    protected String getFormatFileSize(long fileSize) {
         return FileSystemList.getFormatedSize(fileSize);
     }
+
     /**
      * Возвращает атрибуты файла или каталога. ro - только для чтения,
      * h - скрытый
      * @return строку, содержащую атрибуты файла или каталога
      */
-    public String getAtributeString(){
-        String atr="";
-        if (!canWrite())
-            atr="ro  ";
-        if(isHidden())
-            atr+="h";
+    public String getAtributeString() {
+        String atr = "";
+        if (!canWrite()) {
+            atr = "ro  ";
+        }
+        if (isHidden()) {
+            atr += "h";
+        }
         return atr;
     }
     /*
     public LocalFile[] getFileList() {
-        java.io.File[] fileList =this.listFiles();
-        LocalFile[] abstractRoots = new LocalFile[fileList.length];
-        for(int i=0; i<fileList.length; i++) {
-            abstractRoots[i] = new LocalFile(fileList[i]);
-        }
-        return abstractRoots;
-        
+    java.io.File[] fileList =this.listFiles();
+    LocalFile[] abstractRoots = new LocalFile[fileList.length];
+    for(int i=0; i<fileList.length; i++) {
+    abstractRoots[i] = new LocalFile(fileList[i]);
     }
-    */
-    
+    return abstractRoots;
+
+    }
+     */
+
     /**
      * Определяет совпадают ли пути файлов
      * 
@@ -252,7 +273,7 @@ public class LocalFile extends File implements BaseFile {
     public boolean equals(LocalFile aFile) {
         return this.getAbsolutePath().equals(aFile.getAbsolutePath());
     }
-    
+
 //    /**
 //     *
 //     * @param pathToFile
@@ -281,48 +302,51 @@ public class LocalFile extends File implements BaseFile {
      */
     public BaseFile getRoot() {
         LocalFile root = this;
-        while(root.hasParent()) {
+        while (root.hasParent()) {
             root = root.getAbstractParent();
         }
         return root;
     }
-    
+
     /**
      * Получить родительский каталог данного файла
      * @return родительский каталог - объект класса BaseFile; если
      * родительского каталога нет, возвращается <B>null</B>
      */
-     public BaseFile getAbsoluteParent() {
-         return getAbstractParent();
-     }
-     
+    public BaseFile getAbsoluteParent() {
+        return getAbstractParent();
+    }
+
     /**
      * Получить поток для чтения из файла
      * @return поток для чтения из файла
      * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      */
-     public java.io.InputStream getInputStream() throws java.io.IOException {
-         return new FileInputStream(this);
-     }
+    public java.io.InputStream getInputStream() throws java.io.IOException {
+        return new FileInputStream(this);
+    }
+
     /**
      * Получить поток для записи в файл
      * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      * @return поток для записи в файл
      */
-     public java.io.OutputStream getOutputStream() throws java.io.IOException {
-         return new FileOutputStream(this);
-     }
-     
+    public java.io.OutputStream getOutputStream() throws java.io.IOException {
+        return new FileOutputStream(this);
+    }
+
     /**
      * Получить абсолютный путь к файлу с разделителем в конце
      * ("C:\123\", "C:\123\1.zip\", "/home/user/")
      * @return абсолютный путь к файлу
      */
-     public String getPathWithSlash() {
-         String path = super.getAbsolutePath();
-         if (false == isDirectory() ) return super.getAbsolutePath();
-         return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
-     }
+    public String getPathWithSlash() {
+        String path = super.getAbsolutePath();
+        if (false == isDirectory()) {
+            return super.getAbsolutePath();
+        }
+        return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
+    }
 
     /**
      * Физически переименовывает данный файл в файл, заданный файлом <I>targetFile</I>
@@ -330,7 +354,7 @@ public class LocalFile extends File implements BaseFile {
      * @return <B>true</B>,если переименование прошло успешно; иначе - <B>false</B>
      */
     public boolean renameTo(BaseFile targetFile) {
-        return super.renameTo((File)targetFile);
+        return super.renameTo((File) targetFile);
     }
 
     public long getLastModifiedTime() {
@@ -342,27 +366,40 @@ public class LocalFile extends File implements BaseFile {
      * @return массив файлов в данном каталоге
      */
     public BaseFile[] getFiles(FileFilter filter) {
-         File [] list = super.listFiles(filter);
-         if (null == list) return null;//throw new NullPointerException("File "+this+" has no children");
-         LocalFile [] af = new LocalFile[list.length];
-         for (int i=0; i<list.length; i++) {
-             af[i] = new LocalFile(list[i]);
-         }
-         return af;
+        File[] list = super.listFiles(filter);
+        if (null == list) {
+            return null;//throw new NullPointerException("File "+this+" has no children");
+        }
+        LocalFile[] af = new LocalFile[list.length];
+        for (int i = 0; i < list.length; i++) {
+            af[i] = new LocalFile(list[i]);
+        }
+        return af;
     }
 
     /**
      * Получить список файлов в данном каталоге
      * @return массив файлов в данном каталоге
      */
-     public BaseFile [] getFiles() {
-         File [] list = super.listFiles();
-         if (null == list) return null;//throw new NullPointerException("File "+this+" has no children");
-         LocalFile [] af = new LocalFile[list.length];
-         for (int i=0; i<list.length; i++) {
-             af[i] = new LocalFile(list[i]);
-         }
-         return af;         
-     }
- 
+    public BaseFile[] getFiles() {
+        File[] list = super.listFiles();
+        if (null == list) {
+            return null;//throw new NullPointerException("File "+this+" has no children");
+        }
+        LocalFile[] af = new LocalFile[list.length];
+        for (int i = 0; i < list.length; i++) {
+            af[i] = new LocalFile(list[i]);
+        }
+        return af;
+    }
+
+    public boolean isLocal() {
+        return true;
+    }
+
+    public File toFile() {
+        if (isLocal())
+            return (File)this;
+        else return null;
+    }
 }

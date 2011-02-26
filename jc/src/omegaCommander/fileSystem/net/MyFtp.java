@@ -5,6 +5,7 @@
 
 package omegaCommander.fileSystem.net;
 
+import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -125,4 +126,11 @@ public class MyFtp implements BaseFile {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public boolean isLocal() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public File toFile() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
