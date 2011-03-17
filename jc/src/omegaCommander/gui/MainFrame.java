@@ -2918,10 +2918,8 @@ private void jComboBoxRightPopupMenuWillBecomeVisible(javax.swing.event.PopupMen
     BaseFile[] roots = RootFileSystem.getRoots();
     rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
     Object obj = jComboBoxRight.getSelectedItem();
-    setDriveComboBox(jComboBoxRight, roots);
-
+    initDriveComboBox(jComboBoxRight, roots);
     jComboBoxRight.setSelectedItem(obj);
-
 }//GEN-LAST:event_jComboBoxRightPopupMenuWillBecomeVisible
 
 private void jComboBoxRightPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeInvisible
@@ -2958,7 +2956,7 @@ private void jComboBoxLeftPopupMenuWillBecomeVisible(javax.swing.event.PopupMenu
     BaseFile[] roots = RootFileSystem.getRoots();
     leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
     Object obj = jComboBoxLeft.getSelectedItem();
-    setDriveComboBox(jComboBoxLeft, roots);
+    initDriveComboBox(jComboBoxLeft, roots);
 
     jComboBoxLeft.setSelectedItem(obj);
 }//GEN-LAST:event_jComboBoxLeftPopupMenuWillBecomeVisible
