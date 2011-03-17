@@ -80,10 +80,14 @@ public class NewSearchThread extends BaseThread {
         }
         if (-1 != rs) {
             if (null != searchText && !searchText.equals("")) {
+                LineNumberReader lineNumberReader = null;
+                InputStreamReader inputStreamReader = null;
+                rs = -1;
                 try {
-                    LineNumberReader lnr = new LineNumberReader(new InputStreamReader(file.getInputStream()));
+                    inputStreamReader = new InputStreamReader(file.getInputStream());
+                    lineNumberReader = new LineNumberReader(inputStreamReader);
                     String line;
-                    while (null != (line = lnr.readLine())) {
+                    while (null != (line = lineNumberReader.readLine())) {
                         line = matchCase ? line : line.toLowerCase();
                         rs = line.indexOf(searchText);
                         if (-1 != rs) {
@@ -92,6 +96,16 @@ public class NewSearchThread extends BaseThread {
                     }
                 } catch (IOException ex) {
                     rs = -1;
+                } finally {
+                    try {
+                        if (inputStreamReader != null) {
+                            inputStreamReader.close();
+                        }
+                        if (lineNumberReader != null) {
+                            lineNumberReader.close();
+                        }
+                    } catch (IOException ex) {
+                    }
                 }
             }
         }
