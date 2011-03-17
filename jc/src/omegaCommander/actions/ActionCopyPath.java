@@ -50,6 +50,6 @@ public class ActionCopyPath extends AbstractAction {
 			return;
 		}
 		JTextField cmdLine = parent.getCmdLine();
-		cmdLine.setText(cmdLine.getText() + " " + currentFile.getFilename() + " ");
+		cmdLine.setText(cmdLine.getText() + " " + currentFile.getAbsolutePath() + " ");
 	}
 }
