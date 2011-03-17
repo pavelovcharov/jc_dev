@@ -49,7 +49,7 @@ public class ActionCopyName extends AbstractAction {
 			return;
 		}
 		JTextField cmdLine = parent.getCmdLine();
-		cmdLine.setText(cmdLine.getText() + " " + currentFile.getAbsolutePath() + " ");
+		cmdLine.setText(cmdLine.getText() + " " + currentFile.getFilename() + " ");
 
 	}
 }
