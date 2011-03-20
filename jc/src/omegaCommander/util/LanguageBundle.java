@@ -33,6 +33,10 @@ import omegaCommander.prefs.PrefKeys;
  */
 public class LanguageBundle implements PrefKeys {
 
+    public static final String LocaleDescription_RU = "Русский";
+    public static final String LocaleDescription_EN = "English";
+    public static final String LocaleDescription_IT = "Italiano by joe20";
+
     private ResourceBundle bundle;
     private static LanguageBundle instance = new LanguageBundle();
 
