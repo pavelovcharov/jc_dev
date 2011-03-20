@@ -81,6 +81,7 @@ import omegaCommander.prefs.JCPreferenses;
 import omegaCommander.threads.newThreads.NewSearchThread;
 import omegaCommander.threads.newThreads.SearchStatusThread;
 import omegaCommander.util.LanguageBundle;
+import omegaCommander.util.LocaleWrapper;
 
 /**
  * Класс наследован от JFrame и описывает основное окно 
@@ -228,7 +229,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         try {
 
             Locale defaultLocale = Locale.getDefault();
-            currentLocale = new Locale(pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry()));
+            String currentLocale = pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry());
+            currentLocaleWrapper = LocaleWrapper.getLocaleWrapper(currentLocale);
 
             jButtonView.setText(lb.getString("ButtonView"));
             jButtonEdit.setText(lb.getString("ButtonEdit"));
@@ -420,7 +422,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             pref.putInt(TPK_RIGHT_SORTER, d.getColumn());
             pref.putInt(TPK_RIGHT_SORT_DIRECTION, d.getDirection());
         }
-        pref.put(PK_LOCALE, currentLocale.toString());
+        pref.put(PK_LOCALE, currentLocaleWrapper.getLocale().toString());
 
         pref.put(PK_CONSOLE_CHARSET, consoleCharset.displayName());
         pref.putBoolean(PK_SHOW_BUTTONS, jPanel7.isVisible());
@@ -598,9 +600,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jcPrefs.showToolTips = jCheckBoxPrefShowTooltips.isSelected();
         jcPrefs.useSystemIcons = jCheckBoxPrefsUseSystemIcons.isSelected();
 
-        Locale l = ((Locale) jComboBoxLang.getSelectedItem());
-        if (false == l.equals(currentLocale)) {
-            currentLocale = l;
+        LocaleWrapper l = ((LocaleWrapper) jComboBoxLang.getSelectedItem());
+        if (false == l.equals(currentLocaleWrapper)) {
+            currentLocaleWrapper = l;
             savePrefs();
             setupComponents();
         }
@@ -865,8 +867,11 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         jTableHotKeys = createHotKeysTable();
         jTableHotKeys.addKeyListener(new HKTableListener(this));
         jScrollPanePrefHK.setViewportView(jTableHotKeys);
-        jComboBoxLang.addItem(new Locale("ru_ru"));
-        jComboBoxLang.addItem(new Locale("en_us"));
+
+        Collection<LocaleWrapper> locales = LocaleWrapper.getLocales();
+        for (LocaleWrapper localeWrapper : locales) {
+            jComboBoxLang.addItem(localeWrapper);
+        }
 
         LookAndFeelInfo[] l = UIManager.getInstalledLookAndFeels();
         for (int i = 0; i < l.length; i++) {
@@ -1239,7 +1244,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     }
 
     public void jDialogPreferencesReset() {
-        jComboBoxLang.setSelectedItem(currentLocale);
+        jComboBoxLang.setSelectedItem(currentLocaleWrapper);
         jComboBoxCharset.setSelectedItem(consoleCharset.displayName());
 
         jCheckBoxEditor.setSelected(jcPrefs.useExternEditor);
@@ -3167,7 +3172,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private NewSearchThread searchThread;
     JCPreferenses jcPrefs = JCPreferenses.getJCPreferenses();
     private ArrayList<BookmarkItem> favoriteFolders = new ArrayList<BookmarkItem>();
-    private Locale currentLocale = null;
+    private LocaleWrapper currentLocaleWrapper = null;
     LanguageBundle lb = LanguageBundle.getInstance();
     JPopupMenu splitterPopupMenu;
 
@@ -3464,25 +3469,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
         }
     }
 
-    class LocaleWrapper {
-
-        private Locale locale;
-        private String displayName;
-
-        public LocaleWrapper(String localeString, String displayName) {
-            locale = new Locale(localeString);
-            this.displayName = displayName;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s [%s]", displayName, locale);
-        }
-
-        public Locale getLocale() {
-            return locale;
-        }
-    }
+    
 
     class ComboCellRenderer implements ListCellRenderer {
 
