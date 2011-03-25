@@ -39,6 +39,6 @@ public class Launcher {
      */
     public static void main(String[] args) {
         String javaVersion = System.getProperty("java.version");
-        MainFrame.run("jc", "v.0.657" + " @ Java " + javaVersion);
+        MainFrame.run("jc", "v.0.659" + " @ Java " + javaVersion);
     }
 }
