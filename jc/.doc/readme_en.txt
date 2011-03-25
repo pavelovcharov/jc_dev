@@ -24,6 +24,17 @@ jc Launch
 If Java vrtaul machine is installed properly, jc can be runned by double click on jc.jar. To run jc from command line
 execute java -jar jc.jar command. You can use jc_win.exe to run jc in Windows OS.
 
+What's new in jc 0.657
+  • added - partial drag and drop support (files can be dropped to the jc window from other programs);
+  • added - new command - copy file to the current dir (Shift+F5);
+  • added - system icons for files;
+  • added - Italian loclization (by joe20 http://sourceforge.net/users/joe20);
+  • fixed - search in text locks files;
+  • fixed - Hot keys "Copy path" and "Copy name" are mixed;
+  • fixed - File cleared when copied to itself;
+  • fixed - Search - Any text can be found in empty file;
+  • fixed - some small bugs.
+
 Known Bugs
   • error occurs after opening a big file by internal viewer
 
@@ -33,5 +44,5 @@ Additionally, jc uses the following third party works:
 The Commons-IO library is used by jc under the terms of the Apache license
 The jCIFS library is used under the terms of the LGPL license
 
-New virsions available at http://jcommander.narod.ru
+New versions available at http://jc-dev.sourceforge.net/
 java.commander@gmail.com
