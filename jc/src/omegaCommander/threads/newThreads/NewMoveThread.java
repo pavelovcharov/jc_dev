@@ -166,6 +166,7 @@ public class NewMoveThread extends FileThread {
                     file.delete();
                 }
             }
+            sourceDir.delete();
         }
 
     }
