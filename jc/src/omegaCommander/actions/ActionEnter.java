@@ -106,7 +106,8 @@ public class ActionEnter extends AbstractAction {
                 }
             }
         }
-        activeTable.setCurrentPosition(index);
+        if(activeTable.getCurrentDir() == currentFile)
+            activeTable.setCurrentPosition(index);
         activeTable.clearSelectedList();
         parent.updateActivePanel();
 
