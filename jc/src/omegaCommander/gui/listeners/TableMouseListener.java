@@ -73,6 +73,7 @@ public class TableMouseListener extends MouseInputAdapter {
 				if (evt.getClickCount() == 1) {
 					table.setCurrentPosition(table.getSelectedRow());
 					table.requestFocus();
+                                        table.setActive(true);
 					return;
 				}
 				if (evt.getClickCount() == 2) {
