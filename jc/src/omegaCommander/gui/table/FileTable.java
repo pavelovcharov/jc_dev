@@ -381,11 +381,6 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
 
     public int[] getHeaderSizes() {
-//        int[] hs = new int[TITLE.length];
-//		for (int i = 0; i < hs.length; i++) {
-//			hs[i] = getTableHeader().getColumnModel().getColumn(0).getPreferredWidth();
-//		}
-//		return hs;
         return headerSizes;
     }
 
@@ -403,9 +398,7 @@ public class FileTable extends JTable implements ColumnNumbers {
                 if (ICON == i) {
                     continue;
                 }
-                //obj = getValueAt(row, i);
                 Element e = (Element) v.get(i);
-                //((Element)e).setSelected(!((Element)e).isSelected());
                 e.setSelected(!e.isSelected());
             }
         }
@@ -442,15 +435,11 @@ public class FileTable extends JTable implements ColumnNumbers {
     public void showFileSize() {
         BaseFile af = getFileAtCursor();
         if (null != af) {
-//			setCursor(new Cursor(Cursor.WAIT_CURSOR));
             long size = FileSystemList.getSize(af);
             Size newSize = new Size(size);
             newSize.setSelected(((Size) getValueAt(currentPosition, SIZE)).isSelected());
             setValueAt(newSize, currentPosition, SIZE);
-//			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
-        //changeSelection(currentPosition, NAME, false, false);
-        //repaint();
     }
 
     protected Icon getHeaderRendererIcon(int column, int size) {
@@ -461,6 +450,11 @@ public class FileTable extends JTable implements ColumnNumbers {
         return new Arrow(d.getDirection() == FileTableSorter.DESCENDING, size, model.sortingColumns.indexOf(d));
     }
 
+    public void setSortingColumns(Directive directive) {
+        sortingColumns.clear();
+        sortingColumns.add(directive);
+    }
+    
     public ArrayList getSortingColumns() {
         return sortingColumns;
     }
