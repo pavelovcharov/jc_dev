@@ -47,6 +47,8 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.JComponent;
@@ -70,11 +72,9 @@ import omegaCommander.gui.message.KeyShortcat;
 import omegaCommander.gui.message.Message;
 import omegaCommander.gui.message.MessageList;
 import omegaCommander.prefs.PrefKeys;
-import omegaCommander.gui.table.TablePrefKeys;
 import omegaCommander.gui.table.Directive;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.FileTablePanel;
-import omegaCommander.gui.table.FileTableSorter;
 import omegaCommander.gui.table.dragdrop.FileTransferHandler;
 import omegaCommander.gui.table.tableHeader.TableHeader;
 import omegaCommander.prefs.JCPreferenses;
@@ -89,7 +89,7 @@ import omegaCommander.util.LocaleWrapper;
  * @author Pavel Ovcharov
  * @version 2005/04/26 9:27
  */
-public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePrefKeys {
+public class MainFrame extends javax.swing.JFrame implements PrefKeys {
 
     private Preferences pref = null;
     // <editor-fold defaultstate="collapsed" desc=" MainFrame Actions ">
@@ -325,7 +325,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         try {
             UIManager.setLookAndFeel(lnf);
         } catch (Exception e) {
-//            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
         }
         SwingUtilities.updateComponentTreeUI(this);
         SwingUtilities.updateComponentTreeUI(jDialogAbout);
@@ -390,8 +390,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         pref.putInt(PK_WIDTH, jcPrefs.windowSize.width);
         pref.putInt(PK_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
         pref.putInt(PK_WINDOW_STATE, getExtendedState());
-        pref.put(PK_LEFT_DIR, getTable(true).getCurrentDir().getAbsolutePath());
-        pref.put(PK_RIGHT_DIR, getTable(false).getCurrentDir().getAbsolutePath());
+
         pref.putInt(PK_LOCATION_X, jcPrefs.location.x);
         pref.putInt(PK_LOCATION_Y, jcPrefs.location.y);
         if (currentLeftTable.isActive()) {
@@ -400,28 +399,9 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             pref.putInt(PK_ACTIVE_TABLE, 1);
         }
 
-        int sizes[] = currentLeftTable.getHeaderSizes();
-        for (int i = 0; i < TableHeader.TITLE.length; i++) {
-            pref.putInt(TPK_LEFT[i], sizes[i]);
-        }
-        sizes = currentRightTable.getHeaderSizes();
-        for (int i = 0; i < TableHeader.TITLE.length; i++) {
-            pref.putInt(TPK_RIGHT[i], sizes[i]);
-        }
+        saveTablePrefs(true);
+        saveTablePrefs(false);
 
-        ArrayList list = currentLeftTable.getSortingColumns();
-        if (0 < list.size()) {
-            Directive d = (Directive) list.get(0);
-            pref.putInt(TPK_LEFT_SORTER, d.getColumn());
-            pref.putInt(TPK_LEFT_SORT_DIRECTION, d.getDirection());
-        }
-
-        list = currentRightTable.getSortingColumns();
-        if (0 < list.size()) {
-            Directive d = (Directive) list.get(0);
-            pref.putInt(TPK_RIGHT_SORTER, d.getColumn());
-            pref.putInt(TPK_RIGHT_SORT_DIRECTION, d.getDirection());
-        }
         pref.put(PK_LOCALE, currentLocaleWrapper.getLocale().toString());
 
         pref.put(PK_CONSOLE_CHARSET, consoleCharset.displayName());
@@ -445,55 +425,111 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
 
     }
 
-    private void loadPrefs() {
+    FileTable[] getFileTables(boolean left) {
+        JTabbedPane jTabbedPane = getTabbedPane(left);
+        if (jTabbedPane.getTabCount() < 2) {
+            return new FileTable[]{getTable(left)};
+        }
+        FileTable[] tables = new FileTable[jTabbedPane.getTabCount()];
+        for (int i = 0; i < jTabbedPane.getTabCount(); i++) {
+            tables[i] = ((FileTablePanel) jTabbedPane.getComponentAt(i)).getFileTable();
+        }
+        return tables;
+    }
 
+    private void saveTablePrefs(boolean left) {
+        String paths = "";
+        String headerSizes = "";
+        String sortColumns = "";
+        FileTable[] tables = getFileTables(left);
+        for (int i = 0; i < tables.length; i++) {
+            String path = tables[i].getCurrentDir().getAbsolutePath();
+            int[] sizes = tables[i].getHeaderSizes();
+            ArrayList sortingColumns = tables[i].getSortingColumns();
+
+            paths += path + JCPreferenses.PRIMARY_DELIMITER;
+
+            for (int j = 0; j < sizes.length - 1; j++) {
+                headerSizes += "" + sizes[j] + JCPreferenses.SECONDARY_DELIMITER;
+            }
+            headerSizes += "" + sizes[sizes.length - 1] + JCPreferenses.PRIMARY_DELIMITER;
+
+            for (int j = 0; j < sortingColumns.size(); j++) {
+                Directive d = ((Directive) sortingColumns.get(j));
+                sortColumns += "" + d.getColumn() + JCPreferenses.SECONDARY_DELIMITER + d.getDirection();
+            }
+            sortColumns += JCPreferenses.PRIMARY_DELIMITER;
+        }
+
+        pref.put(left ? PK_LEFT_DIR : PK_RIGHT_DIR, paths);
+        pref.put(left ? PK_LEFT_SIZE : PK_RIGHT_SIZE, headerSizes);
+        pref.put(left ? PK_LEFT_SORT : PK_RIGHT_SORT, sortColumns);
+
+    }
+
+    private void loadPrefs() {
         try {
             Preferences.importPreferences(new FileInputStream(new java.io.File("jc.xml")));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (null == pref) {
                 pref = Preferences.userNodeForPackage(this.getClass());
             }
         }
 
-        jcPrefs.windowSize.width = pref.getInt(PK_WIDTH, jcPrefs.DEFAULT_WINDOW_SIZE.width);
-        jcPrefs.windowSize.height = pref.getInt(PK_HEIGHT, jcPrefs.DEFAULT_WINDOW_SIZE.height);
-        jcPrefs.location.x = pref.getInt(PK_LOCATION_X, jcPrefs.DEFAULT_LOCATION.x);
-        jcPrefs.location.y = pref.getInt(PK_LOCATION_Y, jcPrefs.DEFAULT_LOCATION.y);
-        jcPrefs.extendedState = pref.getInt(PK_WINDOW_STATE, jcPrefs.DEFAULT_STATE);
-        jcPrefs.dividerLocation = pref.getInt(PK_DIVIDER_LOCATION, jcPrefs.DEFAULT_DIVIDER_LOCATION);
-        jcPrefs.leftPanelPath = pref.get(PK_LEFT_DIR, jcPrefs.DEFAULT_LEFT_PANEL_PATH);
-        jcPrefs.rightPanelPath = pref.get(PK_RIGHT_DIR, jcPrefs.DEFAULT_RIGHT_PANEL_PATH);
-        jcPrefs.activeTable = pref.getInt(PK_ACTIVE_TABLE, jcPrefs.DEFAULT_ACTIVE_TABLE);
+        jcPrefs.windowSize.width = pref.getInt(PK_WIDTH, JCPreferenses.DEFAULT_WINDOW_SIZE.width);
+        jcPrefs.windowSize.height = pref.getInt(PK_HEIGHT, JCPreferenses.DEFAULT_WINDOW_SIZE.height);
+        jcPrefs.location.x = pref.getInt(PK_LOCATION_X, JCPreferenses.DEFAULT_LOCATION.x);
+        jcPrefs.location.y = pref.getInt(PK_LOCATION_Y, JCPreferenses.DEFAULT_LOCATION.y);
+        jcPrefs.extendedState = pref.getInt(PK_WINDOW_STATE, JCPreferenses.DEFAULT_STATE);
+        jcPrefs.dividerLocation = pref.getInt(PK_DIVIDER_LOCATION, JCPreferenses.DEFAULT_DIVIDER_LOCATION);
+        jcPrefs.leftPanelPath = pref.get(PK_LEFT_DIR, JCPreferenses.DEFAULT_LEFT_PANEL_PATH);
+        jcPrefs.rightPanelPath = pref.get(PK_RIGHT_DIR, JCPreferenses.DEFAULT_RIGHT_PANEL_PATH);
+
+        jcPrefs.activeTable = pref.getInt(PK_ACTIVE_TABLE, JCPreferenses.DEFAULT_ACTIVE_TABLE);
+
+        jcPrefs.leftHeaderSizes = pref.get(PK_LEFT_SIZE, "");
+        jcPrefs.rightHeaderSizes = pref.get(PK_RIGHT_SIZE, "");
+
+        jcPrefs.leftSortingColumns = pref.get(PK_LEFT_SORT, "");
+        jcPrefs.rightSortingColumns = pref.get(PK_RIGHT_SORT, "");
+
         for (int i = 0; i < TableHeader.TITLE.length; i++) {
-            jcPrefs.leftSizes[i] = pref.getInt(TPK_LEFT[i], jcPrefs.DEFAULT_HEADER_SIZE);
+            jcPrefs.leftHeaderSizesCompatible += pref.get(PK_LEFT[i], "") + JCPreferenses.PRIMARY_DELIMITER;
         }
         for (int i = 0; i < TableHeader.TITLE.length; i++) {
-            jcPrefs.rightSizes[i] = pref.getInt(TPK_RIGHT[i], jcPrefs.DEFAULT_HEADER_SIZE);
+            jcPrefs.rightHeaderSizesCompatible += pref.get(PK_RIGHT[i], "") + JCPreferenses.PRIMARY_DELIMITER;
+        }
+        jcPrefs.leftSortingCompatible = pref.get(PK_LEFT_SORTER, "") + JCPreferenses.SECONDARY_DELIMITER + pref.get(PK_LEFT_SORT_DIRECTION, "");
+        jcPrefs.rightSortingCompatible = pref.get(PK_RIGHT_SORTER, "") + JCPreferenses.SECONDARY_DELIMITER + pref.get(PK_RIGHT_SORT_DIRECTION, "");
+
+        if (jcPrefs.leftHeaderSizes.isEmpty()) {
+            jcPrefs.leftHeaderSizes = jcPrefs.leftHeaderSizesCompatible;
+        }
+        if (jcPrefs.rightHeaderSizes.isEmpty()) {
+            jcPrefs.rightHeaderSizes = jcPrefs.rightHeaderSizesCompatible;
+        }
+        if (jcPrefs.leftSortingColumns.isEmpty()) {
+            jcPrefs.leftSortingColumns = jcPrefs.leftSortingCompatible;
+        }
+        if (jcPrefs.rightSortingColumns.isEmpty()) {
+            jcPrefs.rightSortingColumns = jcPrefs.rightSortingCompatible;
         }
 
-        int column = pref.getInt(TPK_LEFT_SORTER, FileTable.NAME);
-        int direction = pref.getInt(TPK_LEFT_SORT_DIRECTION, FileTableSorter.ASCENDING);
-        jcPrefs.leftSortingColumns.add(new Directive(column, direction));
-
-
-        column = pref.getInt(TPK_RIGHT_SORTER, FileTable.NAME);
-        direction = pref.getInt(TPK_RIGHT_SORT_DIRECTION, FileTableSorter.ASCENDING);
-        jcPrefs.rightSortingColumns.add(new Directive(column, direction));
 
         jcPrefs.consoleCharset = pref.get(PK_CONSOLE_CHARSET, "");
-        jcPrefs.showButtons = pref.getBoolean(PK_SHOW_BUTTONS, jcPrefs.DEFAULT_SHOW_BUTTONS);
-        jcPrefs.showCommandLine = pref.getBoolean(PK_SHOW_COMMAND_LINE, jcPrefs.DEFAULT_SHOW_COMMAND_LINE);
+        jcPrefs.showButtons = pref.getBoolean(PK_SHOW_BUTTONS, JCPreferenses.DEFAULT_SHOW_BUTTONS);
+        jcPrefs.showCommandLine = pref.getBoolean(PK_SHOW_COMMAND_LINE, JCPreferenses.DEFAULT_SHOW_COMMAND_LINE);
         jcPrefs.showHiddenFiles = pref.getBoolean(PK_SHOW_HIDDEN_FILES, jcPrefs.showHiddenFiles);
 
-        jcPrefs.useExternEditor = pref.getBoolean(PK_USE_EXTERNAL_EDITOR, jcPrefs.DEFAULT_USE_EXTERN_EDITOR);
-        jcPrefs.externEditor = pref.get(PK_EXTERNAL_EDITOR, jcPrefs.DEFAULT_EXTERN_EDITOR);
+        jcPrefs.useExternEditor = pref.getBoolean(PK_USE_EXTERNAL_EDITOR, JCPreferenses.DEFAULT_USE_EXTERN_EDITOR);
+        jcPrefs.externEditor = pref.get(PK_EXTERNAL_EDITOR, JCPreferenses.DEFAULT_EXTERN_EDITOR);
 
-        jcPrefs.theme = pref.get(PK_THEME, jcPrefs.DEFAULT_THEME);
-        jcPrefs.showToolTips = pref.getBoolean(PK_SHOW_TOOLTIPS, jcPrefs.DEFAULT_SHOW_TOOLTIPS);
-        jcPrefs.arrangement = pref.getBoolean(PK_ARRANGEMENT, jcPrefs.DEFAULT_ARRANGEMENT);
-        jcPrefs.useSystemIcons = pref.getBoolean(PK_USE_SYSTEM_ICONS, jcPrefs.DEFAULT_USE_SYSTEM_ICONS);
+        jcPrefs.theme = pref.get(PK_THEME, JCPreferenses.DEFAULT_THEME);
+        jcPrefs.showToolTips = pref.getBoolean(PK_SHOW_TOOLTIPS, JCPreferenses.DEFAULT_SHOW_TOOLTIPS);
+        jcPrefs.arrangement = pref.getBoolean(PK_ARRANGEMENT, JCPreferenses.DEFAULT_ARRANGEMENT);
+        jcPrefs.useSystemIcons = pref.getBoolean(PK_USE_SYSTEM_ICONS, JCPreferenses.DEFAULT_USE_SYSTEM_ICONS);
     }
 
     public void applyPrefs() {
@@ -503,11 +539,41 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         setExtendedState(jcPrefs.extendedState);
         jSplitPane1.setDividerLocation(jcPrefs.dividerLocation);
 
-        //XXX createMessages tabs
-        BaseFile file = FileHelper.getRealFile(jcPrefs.leftPanelPath);
-        currentLeftTable.setFileList(file);
-        file = FileHelper.getRealFile(jcPrefs.rightPanelPath);
-        currentRightTable.setFileList(file);
+        String[] leftPaths = ParseHelper.parsePath(jcPrefs.leftPanelPath, JCPreferenses.DEFAULT_LEFT_PANEL_PATH);
+        String[] rightPaths = ParseHelper.parsePath(jcPrefs.rightPanelPath, JCPreferenses.DEFAULT_RIGHT_PANEL_PATH);
+
+        Directive[] leftDirective = ParseHelper.parseSortingColumns(jcPrefs.leftSortingColumns, JCPreferenses.DIRECTIVE, leftPaths.length);
+        Directive[] rightDirective = ParseHelper.parseSortingColumns(jcPrefs.rightSortingColumns, JCPreferenses.DIRECTIVE, rightPaths.length);
+
+        ArrayList<int[]> leftSizes = ParseHelper.parseHeaderSize(jcPrefs.leftHeaderSizes, JCPreferenses.DEFAULT_HEADER_SIZE, leftPaths.length);
+        ArrayList<int[]> rightSizes = ParseHelper.parseHeaderSize(jcPrefs.rightHeaderSizes, JCPreferenses.DEFAULT_HEADER_SIZE, rightPaths.length);
+
+        if (leftPaths.length == 1) {
+            BaseFile file = FileHelper.getRealFile(leftPaths[0]);
+            currentLeftTable.setFileList(file);
+            currentLeftTable.setHeaderSizes(leftSizes.get(0));
+            currentLeftTable.setSortingColumns(leftDirective[0]);
+        } else {
+            for (int i = 0; i < leftPaths.length; i++) {
+                BaseFile file = FileHelper.getRealFile(leftPaths[i]);
+                ArrayList list = new ArrayList();
+                list.add(leftDirective[i]);
+                addTab(true, file, list, leftSizes.get(i));
+            }
+        }
+        if (rightPaths.length == 1) {
+            BaseFile file = FileHelper.getRealFile(rightPaths[0]);
+            currentRightTable.setFileList(file);
+            currentRightTable.setHeaderSizes(leftSizes.get(0));
+            currentRightTable.setSortingColumns(rightDirective[0]);
+        } else {
+            for (int i = 0; i < rightPaths.length; i++) {
+                BaseFile file = FileHelper.getRealFile(rightPaths[i]);
+                ArrayList list = new ArrayList();
+                list.add(rightDirective[i]);
+                addTab(false, file, list, rightSizes.get(i));
+            }
+        }
 
         if (0 == jcPrefs.activeTable) {
             setActiveTable(true);
@@ -516,15 +582,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             setActiveTable(false);
             currentRightTable.requestFocus();
         }
-        currentLeftTable.setHeaderSizes(jcPrefs.leftSizes);
-        currentRightTable.setHeaderSizes(jcPrefs.rightSizes);
-
-        ArrayList list = currentLeftTable.getSortingColumns();
-        list.clear();
-        list.addAll(jcPrefs.leftSortingColumns);
-        list = currentRightTable.getSortingColumns();
-        list.clear();
-        list.addAll(jcPrefs.rightSortingColumns);
 
         if (jcPrefs.consoleCharset.equals("")) {
             consoleCharset = Charset.defaultCharset();
@@ -719,8 +776,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     }
 
     /**
-     * Обновить правую (левую) панель
-     * @param left <B>true</B> для обновления левой панели, <B>false</B> - для обновления правой
+     * Updates left/right panel
+     * @param left <B>true</B>Update left panel, <B>false</B> - update right panel
      */
     public void updatePanel(boolean left) {
         FileTable currentTable;
@@ -940,13 +997,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
     }
 
     public void setActiveTable(boolean left) {
-        if (true == left) {
-            currentLeftTable.setActive(true);
-            currentRightTable.setActive(false);
-        } else {
-            currentLeftTable.setActive(false);
-            currentRightTable.setActive(true);
-        }
+        currentLeftTable.setActive(left);
+        currentRightTable.setActive(!left);
     }
 
     public JPanel getActiveSearchPanel() {
@@ -1078,7 +1130,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             }
             ois.close();
         } catch (IOException ex) {
-            System.out.println("Favorites file not found");
+            Logger.getLogger(MainFrame.class.getName()).log(Level.WARNING, null, ex);
         }
         initFavorites();
     }
@@ -1115,7 +1167,37 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
 
+    void onTabsChanged(boolean left) {
+        JTabbedPane jTabbedPane = getTabbedPane(left);
+        FileTablePanel fileTablePanel = getFileTablePanel(left);
+
+        boolean tabsVisible = jTabbedPane.getTabCount() >= 2;
+
+        jTabbedPane.setVisible(tabsVisible);
+        fileTablePanel.setVisible(!tabsVisible);
+
+
+        setTable(left, tabsVisible ? ((FileTablePanel) jTabbedPane.getSelectedComponent()).getFileTable() : fileTablePanel.getFileTable());
+    }
+
+    FileTable addTab(boolean left, BaseFile dir, ArrayList sortingColumns, int[] headerSizes) {
+        JTabbedPane jTabbedPane = getTabbedPane(left);
+        FileTable newTable = new FileTable(dir);
+        newTable.setHeaderSizes(headerSizes);
+        newTable.getSortingColumns().addAll(sortingColumns);
+        newTable.addMouseInputAdapter(new TableMouseListener(this));
+        newTable.addKeyListener(new TableKeyListener(this));
+        newTable.addFocusListener(new TableFocusListener(this));
+        FileTablePanel ftp = new FileTablePanel(newTable);
+        ftp.setTransferHandler(new FileTransferHandler(this));
+        jTabbedPane.addTab(dir.getAbstractFileName(), ftp);
+        jTabbedPane.setIconAt(jTabbedPane.getTabCount() - 1, ImageArchive.getImageFolder());
+
+        onTabsChanged(left);
+
+        return newTable;
     }
 
     public void addTab(boolean left) {
@@ -1151,6 +1233,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
         newTable.setActive(true);
         getTable(!left).setActive(false);
         requestFocus();
+
+        onTabsChanged(left);
     }
 
     public void removeTab(boolean left) {
@@ -1176,7 +1260,11 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys, TablePref
             table = ftp.getFileTable();
         }
         setTable(left, table);
+        setActiveTable(left);
         updatePanel(left);
+
+        onTabsChanged(left);
+
         requestFocus();
     }
 
@@ -3469,8 +3557,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
         }
     }
 
-    
-
     class ComboCellRenderer implements ListCellRenderer {
 
         protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
@@ -3484,6 +3570,76 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
                 renderer.setIcon(ImageArchive.getImageFolder(file, true));
             }
             return renderer;
+        }
+    }
+
+    static class ParseHelper {
+
+        public static String[] parsePath(String paths, String defaultPath) {
+            ArrayList<String> list = new ArrayList<String>();
+            for (StringTokenizer stringTokenizer = new StringTokenizer(paths, JCPreferenses.PRIMARY_DELIMITER); stringTokenizer.hasMoreTokens();) {
+                String token = stringTokenizer.nextToken();
+                list.add(token);
+            }
+            return list.isEmpty() ? new String[]{defaultPath} : list.toArray(new String[list.size()]);
+        }
+
+        public static ArrayList<int[]> parseHeaderSize(String headerSize, int defaultSize, int length) {
+            ArrayList<int[]> list = new ArrayList<int[]>();
+
+            for (StringTokenizer stringTokenizer = new StringTokenizer(headerSize, JCPreferenses.PRIMARY_DELIMITER); stringTokenizer.hasMoreTokens();) {
+                String token = stringTokenizer.nextToken();
+                StringTokenizer st2 = new StringTokenizer(token, JCPreferenses.SECONDARY_DELIMITER);
+                int tokenCount = 0;
+                int[] sizes = new int[TableHeader.TITLE.length];
+                for (int i = 0; i < sizes.length; i++) {
+                    sizes[i] = st2.hasMoreTokens() ? parseInt(st2.nextToken(), defaultSize) : defaultSize;
+                }
+                list.add(sizes);
+            }
+            int count = list.size();
+            if (count < length) {
+                for (int i = count; i < length; i++) {
+                    int[] sizes = new int[TableHeader.TITLE.length];
+                    for (int j = 0; j < sizes.length; j++) {
+                        sizes[j] = defaultSize;
+                    }
+                    list.add(sizes);
+                }
+            }
+            return list;
+        }
+
+        public static int parseInt(String str, int value) {
+            int v = value;
+            try {
+                v = Integer.parseInt(str);
+            } catch (Exception e) {
+            }
+            return v;
+        }
+
+        public static Directive[] parseSortingColumns(String directives, Directive defaultDirective, int length) {
+            Directive[] ds = new Directive[length];
+            int count = 0;
+            for (StringTokenizer stringTokenizer = new StringTokenizer(directives, JCPreferenses.PRIMARY_DELIMITER); stringTokenizer.hasMoreTokens();) {
+                String token = stringTokenizer.nextToken();
+                StringTokenizer st2 = new StringTokenizer(token, JCPreferenses.SECONDARY_DELIMITER);
+                String col = st2.hasMoreTokens() ? st2.nextToken() : "0";
+                String dir = st2.hasMoreTokens() ? st2.nextToken() : "0";
+
+                Directive d = new Directive(parseInt(col, 0), parseInt(dir, 0));
+                ds[count++] = d;
+                if (count == length) {
+                    break;
+                }
+            }
+            if (count < length) {
+                for (int i = count; i < length; i++) {
+                    ds[count] = defaultDirective;
+                }
+            }
+            return ds;
         }
     }
 // </editor-fold>

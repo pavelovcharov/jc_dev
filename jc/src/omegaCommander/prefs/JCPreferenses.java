@@ -24,7 +24,8 @@ package omegaCommander.prefs;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.ArrayList;
+
+import omegaCommander.gui.table.Directive;
 import omegaCommander.gui.table.tableHeader.TableHeader;
 
 /**
@@ -33,24 +34,31 @@ import omegaCommander.gui.table.tableHeader.TableHeader;
  */
 public class JCPreferenses {
 
-    public final Dimension DEFAULT_WINDOW_SIZE = new Dimension(800, 600);
-    public final Point DEFAULT_LOCATION = new Point(100, 100);
-    public final int DEFAULT_STATE = 0;
-    public final int DEFAULT_DIVIDER_LOCATION = DEFAULT_WINDOW_SIZE.width / 2;
-    public final String DEFAULT_LEFT_PANEL_PATH = "";
-    public final String DEFAULT_RIGHT_PANEL_PATH = "";
-    public final int DEFAULT_ACTIVE_TABLE = 0;
-    public final int DEFAULT_HEADER_SIZE = 50;
-    public final String DEFAULT_CONSOLE_CHARSET = "";
-    public final boolean DEFAULT_SHOW_BUTTONS = true;
-    public final boolean DEFAULT_SHOW_COMMAND_LINE = true;
-    public final boolean DEFAULT_SHOW_HIDDEN_FILES = true;
-    public final boolean DEFAULT_USE_EXTERN_EDITOR = false;
-    public final String DEFAULT_EXTERN_EDITOR = "";
-    public final String DEFAULT_THEME = "javax.swing.plaf.metal.MetalLookAndFeel";
-    public final boolean DEFAULT_SHOW_TOOLTIPS = true;
-    public final boolean DEFAULT_ARRANGEMENT = false;
-    public final boolean DEFAULT_USE_SYSTEM_ICONS = true;
+    public static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(800, 600);
+    public static final Point DEFAULT_LOCATION = new Point(100, 100);
+    public static final int DEFAULT_STATE = 0;
+    public static final int DEFAULT_DIVIDER_LOCATION = DEFAULT_WINDOW_SIZE.width / 2;
+    public static final String DEFAULT_LEFT_PANEL_PATH = "";
+    public static final String DEFAULT_RIGHT_PANEL_PATH = "";
+    public static final int DEFAULT_ACTIVE_TABLE = 0;
+    public static final int DEFAULT_HEADER_SIZE = 50;
+    public static final String DEFAULT_CONSOLE_CHARSET = "";
+    public static final boolean DEFAULT_SHOW_BUTTONS = true;
+    public static final boolean DEFAULT_SHOW_COMMAND_LINE = true;
+    public static final boolean DEFAULT_SHOW_HIDDEN_FILES = true;
+    public static final boolean DEFAULT_USE_EXTERN_EDITOR = false;
+    public static final String DEFAULT_EXTERN_EDITOR = "";
+    public static final String DEFAULT_THEME = "javax.swing.plaf.metal.MetalLookAndFeel";
+    public static final boolean DEFAULT_SHOW_TOOLTIPS = true;
+    public static final boolean DEFAULT_ARRANGEMENT = false;
+    public static final boolean DEFAULT_USE_SYSTEM_ICONS = true;
+    public static final Directive DIRECTIVE = new Directive(1, 1);
+    
+    private static JCPreferenses instance = new JCPreferenses();
+    
+    public static final String PRIMARY_DELIMITER = ";";
+    public static final String SECONDARY_DELIMITER = ",";
+    
     public Dimension windowSize = new Dimension();
     public Point location = new Point();
     public int extendedState = 0;
@@ -58,10 +66,7 @@ public class JCPreferenses {
     public String leftPanelPath = "";
     public String rightPanelPath = "";
     public int activeTable = 0;
-    public int leftSizes[] = new int[TableHeader.TITLE.length];
-    public int rightSizes[] = new int[TableHeader.TITLE.length];
-    public ArrayList leftSortingColumns = new ArrayList();
-    public ArrayList rightSortingColumns = new ArrayList();
+
     public String consoleCharset = "";
     public boolean showButtons = true;
     public boolean showCommandLine = true;
@@ -72,7 +77,18 @@ public class JCPreferenses {
     public boolean showToolTips = true;
     public boolean arrangement = false;
     public boolean useSystemIcons = true;
-    private static JCPreferenses instance = new JCPreferenses();
+    
+    
+    public String leftHeaderSizes = "";
+    public String rightHeaderSizes = "";
+    public String leftSortingColumns = "";
+    public String rightSortingColumns = "";
+    
+    public String leftHeaderSizesCompatible = "";
+    public String rightHeaderSizesCompatible = "";
+    public String leftSortingCompatible = "";
+    public String rightSortingCompatible = "";
+    
 
     private JCPreferenses() {
     }
