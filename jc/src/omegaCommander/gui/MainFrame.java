@@ -89,9 +89,8 @@ import omegaCommander.util.LocaleWrapper;
  * @author Pavel Ovcharov
  * @version 2005/04/26 9:27
  */
-public class MainFrame extends javax.swing.JFrame implements PrefKeys {
+public class MainFrame extends javax.swing.JFrame {
 
-    private Preferences pref = null;
     // <editor-fold defaultstate="collapsed" desc=" MainFrame Actions ">
     private ActionManager operationManager = new ActionManager(this);
     public final omegaCommander.actions.Action ACTION_COPY = new ActionCopy(this);
@@ -162,7 +161,6 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
         }
         System.out.println("File system root was found. Starting application...");
 
-        /**********init comboboxes**********/
         initDriveComboBox(jComboBoxLeft, RootFileSystem.getRoots());
         initDriveComboBox(jComboBoxRight, RootFileSystem.getRoots());
         /***********************************/
@@ -227,10 +225,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
 
         lb.generateBundle();
         try {
-
-            Locale defaultLocale = Locale.getDefault();
-            String currentLocale = pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry());
-            currentLocaleWrapper = LocaleWrapper.getLocaleWrapper(currentLocale);
+            currentLocaleWrapper = LocaleWrapper.getLocaleWrapper(jcPrefs.currentLocale);
 
             jButtonView.setText(lb.getString("ButtonView"));
             jButtonEdit.setText(lb.getString("ButtonEdit"));
@@ -315,7 +310,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
             updateStatusLabel(true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
         }
 
     }
@@ -385,58 +380,10 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
         table.setCurrentPosition(table.getFilePosition(af));
     }
 
-    private void savePrefs() {
-        pref.putInt(PK_HEIGHT, jcPrefs.windowSize.height);
-        pref.putInt(PK_WIDTH, jcPrefs.windowSize.width);
-        pref.putInt(PK_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
-        pref.putInt(PK_WINDOW_STATE, getExtendedState());
-
-        pref.putInt(PK_LOCATION_X, jcPrefs.location.x);
-        pref.putInt(PK_LOCATION_Y, jcPrefs.location.y);
-        if (currentLeftTable.isActive()) {
-            pref.putInt(PK_ACTIVE_TABLE, 0);
-        } else {
-            pref.putInt(PK_ACTIVE_TABLE, 1);
-        }
-
-        saveTablePrefs(true);
-        saveTablePrefs(false);
-
-        pref.put(PK_LOCALE, currentLocaleWrapper.getLocale().toString());
-
-        pref.put(PK_CONSOLE_CHARSET, consoleCharset.displayName());
-        pref.putBoolean(PK_SHOW_BUTTONS, jPanel7.isVisible());
-        pref.putBoolean(PK_SHOW_COMMAND_LINE, jTextField3.isVisible());
-        pref.putBoolean(PK_SHOW_HIDDEN_FILES, jCheckBoxMenuItemHiddenFiles.isSelected());
-
-        pref.put(PK_EXTERNAL_EDITOR, jcPrefs.externEditor);
-        pref.putBoolean(PK_USE_EXTERNAL_EDITOR, jcPrefs.useExternEditor);
-
-        pref.put(PK_THEME, jcPrefs.theme);
-
-        pref.putBoolean(PK_SHOW_TOOLTIPS, jcPrefs.showToolTips);
-        pref.putBoolean(PK_ARRANGEMENT, jcPrefs.arrangement);
-        pref.putBoolean(PK_USE_SYSTEM_ICONS, jcPrefs.useSystemIcons);
-        try {
-            pref.exportNode(new FileOutputStream(new java.io.File("jc.xml")));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+    private void loadPrefs() {
+        jcPrefs.loadPrefs();
     }
-
-    FileTable[] getFileTables(boolean left) {
-        JTabbedPane jTabbedPane = getTabbedPane(left);
-        if (jTabbedPane.getTabCount() < 2) {
-            return new FileTable[]{getTable(left)};
-        }
-        FileTable[] tables = new FileTable[jTabbedPane.getTabCount()];
-        for (int i = 0; i < jTabbedPane.getTabCount(); i++) {
-            tables[i] = ((FileTablePanel) jTabbedPane.getComponentAt(i)).getFileTable();
-        }
-        return tables;
-    }
-
+    
     private void saveTablePrefs(boolean left) {
         String paths = "";
         String headerSizes = "";
@@ -460,76 +407,44 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
             }
             sortColumns += JCPreferenses.PRIMARY_DELIMITER;
         }
+        if (left) {
+            jcPrefs.leftPanelPath = paths;
+            jcPrefs.leftHeaderSizes = headerSizes;
+            jcPrefs.leftSortingColumns = sortColumns;
+        }
+        else {
+            jcPrefs.rightPanelPath = paths;
+            jcPrefs.rightHeaderSizes = headerSizes;
+            jcPrefs.rightSortingColumns = sortColumns;
+        }
+    }
+    
+    private void savePrefs() {
+        jcPrefs.dividerLocation = jSplitPane1.getDividerLocation();
+        jcPrefs.extendedState = getExtendedState();
+        jcPrefs.activeTable = currentLeftTable.isActive() ? 0 : 1;
+        jcPrefs.currentLocale = currentLocaleWrapper.getLocale().toString();
+        jcPrefs.consoleCharset = consoleCharset.displayName();
+        jcPrefs.showButtons = jPanel7.isVisible();
+        jcPrefs.showCommandLine = jTextField3.isVisible();
+        jcPrefs.showHiddenFiles = jCheckBoxMenuItemHiddenFiles.isSelected();
 
-        pref.put(left ? PK_LEFT_DIR : PK_RIGHT_DIR, paths);
-        pref.put(left ? PK_LEFT_SIZE : PK_RIGHT_SIZE, headerSizes);
-        pref.put(left ? PK_LEFT_SORT : PK_RIGHT_SORT, sortColumns);
-
+        saveTablePrefs(true);
+        saveTablePrefs(false);
+        
+        jcPrefs.savePrefs();
     }
 
-    private void loadPrefs() {
-        try {
-            Preferences.importPreferences(new FileInputStream(new java.io.File("jc.xml")));
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (null == pref) {
-                pref = Preferences.userNodeForPackage(this.getClass());
-            }
+    FileTable[] getFileTables(boolean left) {
+        JTabbedPane jTabbedPane = getTabbedPane(left);
+        if (jTabbedPane.getTabCount() < 2) {
+            return new FileTable[]{getTable(left)};
         }
-
-        jcPrefs.windowSize.width = pref.getInt(PK_WIDTH, JCPreferenses.DEFAULT_WINDOW_SIZE.width);
-        jcPrefs.windowSize.height = pref.getInt(PK_HEIGHT, JCPreferenses.DEFAULT_WINDOW_SIZE.height);
-        jcPrefs.location.x = pref.getInt(PK_LOCATION_X, JCPreferenses.DEFAULT_LOCATION.x);
-        jcPrefs.location.y = pref.getInt(PK_LOCATION_Y, JCPreferenses.DEFAULT_LOCATION.y);
-        jcPrefs.extendedState = pref.getInt(PK_WINDOW_STATE, JCPreferenses.DEFAULT_STATE);
-        jcPrefs.dividerLocation = pref.getInt(PK_DIVIDER_LOCATION, JCPreferenses.DEFAULT_DIVIDER_LOCATION);
-        jcPrefs.leftPanelPath = pref.get(PK_LEFT_DIR, JCPreferenses.DEFAULT_LEFT_PANEL_PATH);
-        jcPrefs.rightPanelPath = pref.get(PK_RIGHT_DIR, JCPreferenses.DEFAULT_RIGHT_PANEL_PATH);
-
-        jcPrefs.activeTable = pref.getInt(PK_ACTIVE_TABLE, JCPreferenses.DEFAULT_ACTIVE_TABLE);
-
-        jcPrefs.leftHeaderSizes = pref.get(PK_LEFT_SIZE, "");
-        jcPrefs.rightHeaderSizes = pref.get(PK_RIGHT_SIZE, "");
-
-        jcPrefs.leftSortingColumns = pref.get(PK_LEFT_SORT, "");
-        jcPrefs.rightSortingColumns = pref.get(PK_RIGHT_SORT, "");
-
-        for (int i = 0; i < TableHeader.TITLE.length; i++) {
-            jcPrefs.leftHeaderSizesCompatible += pref.get(PK_LEFT[i], "") + JCPreferenses.PRIMARY_DELIMITER;
+        FileTable[] tables = new FileTable[jTabbedPane.getTabCount()];
+        for (int i = 0; i < jTabbedPane.getTabCount(); i++) {
+            tables[i] = ((FileTablePanel) jTabbedPane.getComponentAt(i)).getFileTable();
         }
-        for (int i = 0; i < TableHeader.TITLE.length; i++) {
-            jcPrefs.rightHeaderSizesCompatible += pref.get(PK_RIGHT[i], "") + JCPreferenses.PRIMARY_DELIMITER;
-        }
-        jcPrefs.leftSortingCompatible = pref.get(PK_LEFT_SORTER, "") + JCPreferenses.SECONDARY_DELIMITER + pref.get(PK_LEFT_SORT_DIRECTION, "");
-        jcPrefs.rightSortingCompatible = pref.get(PK_RIGHT_SORTER, "") + JCPreferenses.SECONDARY_DELIMITER + pref.get(PK_RIGHT_SORT_DIRECTION, "");
-
-        if (jcPrefs.leftHeaderSizes.isEmpty()) {
-            jcPrefs.leftHeaderSizes = jcPrefs.leftHeaderSizesCompatible;
-        }
-        if (jcPrefs.rightHeaderSizes.isEmpty()) {
-            jcPrefs.rightHeaderSizes = jcPrefs.rightHeaderSizesCompatible;
-        }
-        if (jcPrefs.leftSortingColumns.isEmpty()) {
-            jcPrefs.leftSortingColumns = jcPrefs.leftSortingCompatible;
-        }
-        if (jcPrefs.rightSortingColumns.isEmpty()) {
-            jcPrefs.rightSortingColumns = jcPrefs.rightSortingCompatible;
-        }
-
-
-        jcPrefs.consoleCharset = pref.get(PK_CONSOLE_CHARSET, "");
-        jcPrefs.showButtons = pref.getBoolean(PK_SHOW_BUTTONS, JCPreferenses.DEFAULT_SHOW_BUTTONS);
-        jcPrefs.showCommandLine = pref.getBoolean(PK_SHOW_COMMAND_LINE, JCPreferenses.DEFAULT_SHOW_COMMAND_LINE);
-        jcPrefs.showHiddenFiles = pref.getBoolean(PK_SHOW_HIDDEN_FILES, jcPrefs.showHiddenFiles);
-
-        jcPrefs.useExternEditor = pref.getBoolean(PK_USE_EXTERNAL_EDITOR, JCPreferenses.DEFAULT_USE_EXTERN_EDITOR);
-        jcPrefs.externEditor = pref.get(PK_EXTERNAL_EDITOR, JCPreferenses.DEFAULT_EXTERN_EDITOR);
-
-        jcPrefs.theme = pref.get(PK_THEME, JCPreferenses.DEFAULT_THEME);
-        jcPrefs.showToolTips = pref.getBoolean(PK_SHOW_TOOLTIPS, JCPreferenses.DEFAULT_SHOW_TOOLTIPS);
-        jcPrefs.arrangement = pref.getBoolean(PK_ARRANGEMENT, JCPreferenses.DEFAULT_ARRANGEMENT);
-        jcPrefs.useSystemIcons = pref.getBoolean(PK_USE_SYSTEM_ICONS, JCPreferenses.DEFAULT_USE_SYSTEM_ICONS);
+        return tables;
     }
 
     public void applyPrefs() {
@@ -542,8 +457,8 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
         String[] leftPaths = ParseHelper.parsePath(jcPrefs.leftPanelPath, JCPreferenses.DEFAULT_LEFT_PANEL_PATH);
         String[] rightPaths = ParseHelper.parsePath(jcPrefs.rightPanelPath, JCPreferenses.DEFAULT_RIGHT_PANEL_PATH);
 
-        Directive[] leftDirective = ParseHelper.parseSortingColumns(jcPrefs.leftSortingColumns, JCPreferenses.DIRECTIVE, leftPaths.length);
-        Directive[] rightDirective = ParseHelper.parseSortingColumns(jcPrefs.rightSortingColumns, JCPreferenses.DIRECTIVE, rightPaths.length);
+        Directive[] leftDirective = ParseHelper.parseSortingColumns(jcPrefs.leftSortingColumns, JCPreferenses.DEFAULT_DIRECTIVE, leftPaths.length);
+        Directive[] rightDirective = ParseHelper.parseSortingColumns(jcPrefs.rightSortingColumns, JCPreferenses.DEFAULT_DIRECTIVE, rightPaths.length);
 
         ArrayList<int[]> leftSizes = ParseHelper.parseHeaderSize(jcPrefs.leftHeaderSizes, JCPreferenses.DEFAULT_HEADER_SIZE, leftPaths.length);
         ArrayList<int[]> rightSizes = ParseHelper.parseHeaderSize(jcPrefs.rightHeaderSizes, JCPreferenses.DEFAULT_HEADER_SIZE, rightPaths.length);
@@ -644,7 +559,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
             }
             oos.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         initMessageList();
@@ -1165,7 +1080,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
             }
             oos.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -2844,7 +2759,7 @@ public class MainFrame extends javax.swing.JFrame implements PrefKeys {
                     ps.start();
                 } catch (java.io.IOException e) {
                     jTextArea1.append(lineSeparator + e.toString());
-                    e.printStackTrace();
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, null, e);
                 }
             }
         }
@@ -3286,7 +3201,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
                     jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
                 }
             } catch (java.io.IOException e) {
-                e.printStackTrace();
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }
@@ -3318,7 +3233,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
                 try {
                     sleep(100);
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             jTextArea1.append(getActiveTable().getCurrentDir().getAbsolutePath() + ">");
@@ -3625,7 +3540,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
             for (StringTokenizer stringTokenizer = new StringTokenizer(directives, JCPreferenses.PRIMARY_DELIMITER); stringTokenizer.hasMoreTokens();) {
                 String token = stringTokenizer.nextToken();
                 StringTokenizer st2 = new StringTokenizer(token, JCPreferenses.SECONDARY_DELIMITER);
-                String col = st2.hasMoreTokens() ? st2.nextToken() : "0";
+                String col = st2.hasMoreTokens() ? st2.nextToken() : "1";
                 String dir = st2.hasMoreTokens() ? st2.nextToken() : "0";
 
                 Directive d = new Directive(parseInt(col, 0), parseInt(dir, 0));
