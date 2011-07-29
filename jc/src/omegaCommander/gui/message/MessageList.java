@@ -36,7 +36,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
 
         TitleNavigation, Enter, Tab, DirUp, LeftCombo, RightCombo, ActivateLeft,
         ActiateRight, Up, Down, PgUp, PgDown, First, Last, ShowPanels, GotoCmdLine, SwapPanels, Exit,
-        TitleFiles, Rename, View, Edit, Copy, CopySameFolder, Move, NewDir, Delete, Refresh, Sync, Pack, EditNew,
+        TitleFiles, Rename, View, Edit, Copy, CopySameFolder, Move, NewDir, Delete, Refresh, Sync, Pack, EditNew, MoveToTrash,
         QuickSearch, Find,
         TitleSelection, SelectAll, SelectDown, SelectUp, SelectSpace,
         TitleTabs, AddTab, RemoveTab, NextTab, PrevTab,
@@ -44,7 +44,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
     };
     LinkedHashMap<Object, MessageDescriptor> descriptors;
     LinkedHashMap<Object, Message> messages;
-    static LinkedHashMap<Object, Integer> numbers = new LinkedHashMap<Object, Integer>();
+    static final LinkedHashMap<Object, Integer> numbers = new LinkedHashMap<Object, Integer>();
 
     static {
         numbers.put(MessageType.TitleNavigation, MSG_TITLE_NAVIGATION);
@@ -95,6 +95,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
         numbers.put(MessageType.CopyName, MSG_COPY_NAME);
         numbers.put(MessageType.DecodeHex, MSG_DECODE_HEX);
         numbers.put(MessageType.Explorer, MSG_EXPLORER);
+        numbers.put(MessageType.MoveToTrash, MSG_MOVE_TO_TRASH);
     }
 
     void createMaps() {
@@ -151,6 +152,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
             descriptors.put(MessageType.CopyName, new MessageDescriptor("MSG_COPY_NAME", lb.getString("KeyCopyFilename")));
             descriptors.put(MessageType.DecodeHex, new MessageDescriptor("MSG_DECODE_HEX", lb.getString("KeyDecodeHex")));
             descriptors.put(MessageType.Explorer, new MessageDescriptor("MSG_EXPORER", lb.getString("KeyExplorer")));
+            descriptors.put(MessageType.MoveToTrash, new MessageDescriptor("MSG_MOVE_TO_TRASH", lb.getString("KeyMoveToTrash")));
 
 
             int msgCount = 0;
@@ -222,6 +224,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
     public Message MESSAGE_SWAP;
     public Message MESSAGE_EXPLORER;
     public Message MESSAGE_COPY_SAME_FOLDER;
+    public Message MESSAGE_MOVE_TO_TRASH;
 
     private MessageList() {
         createMaps();
@@ -265,6 +268,7 @@ public class MessageList implements MessageID, omegaCommander.prefs.PrefKeys {
         MESSAGE_NEW_EDIT = messages.get(MessageType.EditNew);
         MESSAGE_QUICK_SEARCH = messages.get(MessageType.QuickSearch);
         MESSAGE_FIND = messages.get(MessageType.Find);
+        MESSAGE_MOVE_TO_TRASH = messages.get(MessageType.MoveToTrash);
 
         MESSAGE_TITLE_SELECTION = messages.get(MessageType.TitleSelection);
         MESSAGE_TITLE_SELECTION.setAction(false);

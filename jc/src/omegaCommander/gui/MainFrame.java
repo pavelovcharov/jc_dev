@@ -44,12 +44,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
@@ -71,7 +69,6 @@ import omegaCommander.gui.listeners.combobox.BaseComboBoxListener;
 import omegaCommander.gui.message.KeyShortcat;
 import omegaCommander.gui.message.Message;
 import omegaCommander.gui.message.MessageList;
-import omegaCommander.prefs.PrefKeys;
 import omegaCommander.gui.table.Directive;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.FileTablePanel;
@@ -137,6 +134,7 @@ public class MainFrame extends javax.swing.JFrame {
     public final omegaCommander.actions.Action ACTION_CHANGE_ARRANGEMENT = new ActionChangeArrangement(this);
     public final omegaCommander.actions.Action ACTION_COPY_SAME_FOLDER = new ActionCopySameFolder(this);
     public final omegaCommander.actions.Action ACTION_EXPLORER = new ActionExplorer(this);
+    public final omegaCommander.actions.Action ACTION_MOVE_TO_TRASH = new ActionMoveToTrash((this));
     // </editor-fold>
 
     /**
@@ -148,7 +146,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
 
         loadPrefs();
-
+        
         this.mainTitle = title;
         this.mainVersion = version;
 
@@ -314,7 +312,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
     }
-
+    
     public void updateUI(String lnf) {
         UIManager.put("swing.boldMetal", Boolean.FALSE);
         try {
@@ -609,7 +607,8 @@ public class MainFrame extends javax.swing.JFrame {
         messageList.MESSAGE_COPY_SAME_FOLDER.setDefaultKey(new KeyShortcat(KeyEvent.VK_F5, false, false, true));
         messageList.MESSAGE_MOVE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F6));
         messageList.MESSAGE_RENAME.setDefaultKey(new KeyShortcat(KeyEvent.VK_F2));
-        messageList.MESSAGE_DELETE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F8));
+        messageList.MESSAGE_MOVE_TO_TRASH.setDefaultKey(new KeyShortcat(KeyEvent.VK_F8));
+        messageList.MESSAGE_DELETE.setDefaultKey(new KeyShortcat(KeyEvent.VK_F8, false, false, true));
         messageList.MESSAGE_PACK.setDefaultKey(new KeyShortcat(KeyEvent.VK_F9));
         messageList.MESSAGE_EXIT.setDefaultKey(new KeyShortcat(KeyEvent.VK_F4, true, false, false));
         messageList.MESSAGE_SHOW_LEFT_COMBOBOX.setDefaultKey(new KeyShortcat(KeyEvent.VK_F1, true, false, false));

@@ -20,7 +20,6 @@
  * DeleteDialog.java
  * Created on 31.03.2009 16:25:29
  */
-
 package omegaCommander.gui.dialog;
 
 import javax.swing.JOptionPane;
@@ -35,58 +34,35 @@ import omegaCommander.util.LanguageBundle;
  */
 public class DeleteDialog implements PrefKeys {
 
-	private static int filesToShowCount = 3;
+    private static int filesToShowCount = 3;
 
-	//	public DeleteDialog(MainFrame parent, BaseFile[] filesToDelete) {
-//		String messageText = "<html><P>Выбранные файлы/каталоги будут удалены<br><br>";
-//		if (filesToShowCount < filesToDelete.length) {
-//
-//		}
-//		for (int i = 0; i < filesToShowCount; i++) {
-//			messageText += filesToDelete[i].getFilename() + "<br>";
-//		}
-//		messageText += "....<br>";
-//		messageText += "</P></html>";
-//		Object[] message = new Object[]{messageText};
-//
-//		Object[] options = new Object[] {"OK", "Cancel"};
-//
-//		BaseDialog bd = new BaseDialog(parent, "jc", message, options, 0);
-//		bd.setSize(350, 200);
-//		bd.setIcon(new JLabel(ImageArchive.getImageFile()));
-//		bd.setVisible(true);
-//
-//	}
+    public static boolean showDeleteDialog(MainFrame parent, BaseFile[] filesToDelete, boolean moveToTrash) {
 
-	public static boolean showDeleteDialog(MainFrame parent, BaseFile[] filesToDelete) {
-		
-		if (null == filesToDelete) return false;
+        if (null == filesToDelete) {
+            return false;
+        }
 
-		LanguageBundle lb = LanguageBundle.getInstance();
+        LanguageBundle lb = LanguageBundle.getInstance();
+        String deleteString = moveToTrash ? lb.getString("StrMoveToTrash") : lb.getString("StrDeleteFiles");
+        String messageText = "<html><P>" + deleteString + "<br><br>";
+        for (int i = 0; i < filesToDelete.length; i++) {
+            messageText += filesToDelete[i].getFilename() + "<br>";
+            if (i == filesToShowCount && i != filesToDelete.length - 1) {
+                messageText += "....<br>";
+                messageText += lb.getString("StrTotalFilesDirs") + " " + filesToDelete.length + "<br>";
+                break;
+            }
+        }
 
-		String messageText = "<html><P>" + lb.getString("StrDeleteFiles") + "<br><br>";
-//		if (filesToShowCount < filesToDelete.length) {
-//
-//		}
-		for (int i = 0; i < filesToDelete.length; i++) {
-			messageText += filesToDelete[i].getFilename() + "<br>";
-			if (i == filesToShowCount && i != filesToDelete.length-1) {
-				messageText += "....<br>";
-				messageText += lb.getString("StrTotalFilesDirs")+ " " + filesToDelete.length + "<br>";
-				break;
-			}
-		}
-//		messageText += "....<br>";
-		
-		messageText += "</P></html>";
-		Object[] message = new Object[]{messageText};
+        messageText += "</P></html>";
+        Object[] message = new Object[]{messageText};
 
-		Object[] options = new Object[] {lb.getString("StrOk"), lb.getString("StrCancel")};
-		//XXX use Warning Dialog
-		if (0 == JOptionPane.showOptionDialog(parent, message, lb.getString("StrJC"), JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0])) {
-			return true;
-		}
-		else
-			return false;
-	}
+        Object[] options = new Object[]{lb.getString("StrOk"), lb.getString("StrCancel")};
+        //XXX use Warning Dialog
+        if (0 == JOptionPane.showOptionDialog(parent, message, lb.getString("StrJC"), JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
