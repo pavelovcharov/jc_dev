@@ -78,4 +78,5 @@ public interface MessageID {
     static final int MSG_SWAP = 45;
     static final int MSG_EXPLORER = 46;
     static final int MSG_COPY_SAME_FOLDER = 47;
+    static final int MSG_MOVE_TO_TRASH = 48;
 }

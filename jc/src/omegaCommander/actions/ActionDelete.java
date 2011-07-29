@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package omegaCommander.actions;
 
 import omegaCommander.fileSystem.BaseFile;
@@ -30,11 +29,9 @@ import omegaCommander.gui.dialog.DeleteDialog;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.tableElements.NameInterface;
 import omegaCommander.gui.table.tableElements.UpperDirectory;
-//import omegaCommander.threads.DeletingThread;
 import omegaCommander.threads.newThreads.NewDeleteThread;
 import omegaCommander.threads.newThreads.ProgressThread;
 import omegaCommander.gui.dialog.ProgressDialog;
-//import omegaCommander.threads.ThreadStatus;
 
 /**
  *
@@ -42,54 +39,49 @@ import omegaCommander.gui.dialog.ProgressDialog;
  */
 public class ActionDelete extends AbstractAction {
 
-	public ActionDelete(MainFrame parent) {
-		super(parent);
-	}
+    public ActionDelete(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-//		FileTable passiveTable = parent.getPassiveTable();
-		NameInterface name = activeTable.getElementAtCursor();
-		BaseFile currentFile;
-		if (null != name) {
-			currentFile = name.getFile();
-		} else {
-			currentFile = null;
-		}
-		if (null == currentFile) {
-			return;
-		}
-//		if (activeTable.getSelectedList().size() < 1) {
-		if (!activeTable.hasSelectedFiles()) {
-			if (true == (name instanceof UpperDirectory)) {
-				return;
-			}
-			activeTable.selectFileAt(activeTable.getCurrentPosition());
-			activeTable.repaint();
-			parent.updateActiveStatusLabel();
-		}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        NameInterface name = activeTable.getElementAtCursor();
+        BaseFile currentFile;
+        if (null != name) {
+            currentFile = name.getFile();
+        } else {
+            currentFile = null;
+        }
+        if (null == currentFile) {
+            return;
+        }
+        if (!activeTable.hasSelectedFiles()) {
+            if (true == (name instanceof UpperDirectory)) {
+                return;
+            }
+            activeTable.selectFileAt(activeTable.getCurrentPosition());
+            activeTable.repaint();
+            parent.updateActiveStatusLabel();
+        }
+        BaseFile[] filesToDelete = activeTable.getActiveFiles();
+        if (DeleteDialog.showDeleteDialog(parent, filesToDelete, canMoveToTrash())) {
+            deleteCore(filesToDelete);
+        }
+        parent.updateMainWindow();
+        parent.requestFocus();
+    }
 
-//		DeleteDialog dd = new DeleteDialog(parent, activeTable.getActiveFiles());
-		BaseFile[] filesToDelete = activeTable.getActiveFiles();
-		if (DeleteDialog.showDeleteDialog(parent, filesToDelete)) {
-			NewDeleteThread ndt = new NewDeleteThread(filesToDelete);
-			ProgressDialog pd = new ProgressDialog(parent, ndt);
-			ProgressThread pt = new ProgressThread(ndt, pd);
-			ndt.setFrameParent(pd.getDialog());
-			ndt.start();
-			pt.start();
-			pd.show();
-		}
+    protected void deleteCore(BaseFile[] filesToDelete) {
+        NewDeleteThread ndt = new NewDeleteThread(filesToDelete);
+        ProgressDialog pd = new ProgressDialog(parent, ndt);
+        ProgressThread pt = new ProgressThread(ndt, pd);
+        ndt.setFrameParent(pd.getDialog());
+        ndt.start();
+        pt.start();
+        pd.show();
+    }
 
-
-//		DeleteDialog dd = new DeleteDialog(parent, activeTable.getSelectedList());
-//		if (dd.getResultStatus() == ThreadStatus.THREAD_IS_NOT_RUNNING) {
-//			return;
-//		}
-
-
-
-		parent.updateMainWindow();
-		parent.requestFocus();
-	}
+    protected boolean canMoveToTrash() {
+        return false;
+    }
 }

@@ -143,6 +143,9 @@ public class TableKeyListener implements KeyListener, MessageID {
                 action = parent.ACTION_DELETE;
                 break;
             }
+            case MSG_MOVE_TO_TRASH:
+                action = parent.ACTION_MOVE_TO_TRASH;
+                break;
             case MSG_REFRESH: {
                 action = parent.ACTION_REFRESH;
                 break;
