@@ -414,6 +414,7 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
             public void run() {
                 jList1.setCellRenderer(defaultListCellRenderer);
                 jLabelSearchStatus.setText(currentBundle.getString("StrSearch") + "...");
+                jButtonFind.setActionCommand("stop");
             }
         });
     }
@@ -443,6 +444,7 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
                 jButtonFind.setText(currentBundle.getString("StrSearch"));
                 jButtonPanelize.setEnabled(model.getSize() > 0);
                 jList1.setCellRenderer(searchResultListCellRenderer);
+                jButtonFind.setActionCommand("find");
             }
         });
 
@@ -453,7 +455,6 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
         String command = e.getActionCommand();
         if (command.equals("find")) {
             jButtonPanelize.setEnabled(false);
-            jButtonFind.setActionCommand("stop");
             String what = jTextFieldFindWhat.getText().trim();
             String where = jTextFieldFindWhere.getText().trim();
             if (where.equals("")) {
@@ -467,7 +468,6 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
             jButtonFind.setText(currentBundle.getString("StrStop"));
         }
         if (command.equals("stop")) {
-            jButtonFind.setActionCommand("find");
             if (null != searchThread) {
                 if (searchThread.isAlive()) {
                     stopSearchThread();
@@ -490,6 +490,7 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
             BaseFile[] files = model.getList();
             PseudoFolder pseudoFolder = new PseudoFolder(parent.getActiveTable().getCurrentDir(), files);
             parent.getActiveTable().setFileList(pseudoFolder);
+            parent.updateActivePanel();
             closeDialog();
         }
         if (command.equals("searchText")) {
