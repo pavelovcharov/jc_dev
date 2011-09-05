@@ -1,6 +1,6 @@
 /*
  * This file is part of jc, http://www.jcommander.narod.ru
- * Copyright (C) 2005-2010 Pavel Ovcharov
+ * Copyright (C) 2005-2011 Pavel Ovcharov
  *
  * jc is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+package omegaCommander.gui.search;
 
-package omegaCommander.actions;
-
-import javax.swing.JDialog;
-import omegaCommander.gui.MainFrame;
+import java.util.List;
 
 /**
  *
- * @author Programmer
+ * @author master
  */
-public class ActionFind extends AbstractAction {
-
-	public ActionFind(MainFrame parent) {
-		super(parent);
-	}
-
-	public void execute() {
-            JDialog form = parent.getFindDialog();
-            form.setLocationRelativeTo(parent);
-            form.setVisible(true);
-	}
-
+public interface SearchStatusListener {
+    /** Method called before search started
+     */
+    public void onSearchStart();
+    /**
+     */
+    public void onSearchProgressChange(List found);
+    /** Method called after search finished
+     */
+    public void onSearchEnd(List found);
 }

@@ -42,6 +42,13 @@ public class BaseThread extends Thread {
     protected JDialog parent = null;
 //	protected JComponent parent = null;
 
+    public BaseThread() {
+    }
+
+    public BaseThread(String name) {
+        super(name);
+    }
+    
     public void setInterrupt(boolean interrupt) {
         this.interrupt = interrupt;
     }
