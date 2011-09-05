@@ -44,8 +44,10 @@ public class NewSearchThread extends BaseThread {
     private String searchText;
     private boolean matchCase = false;
     private WildcardFilenameFilter w;
+    private static final String name = "NewSearchThread";
 
     public NewSearchThread(BaseFile file, String namePart, String searchText, boolean matchCase) {
+        super(name);
         resultList = new Vector();
         this.file = file;
         this.namePart = namePart.trim().toLowerCase();
@@ -111,7 +113,9 @@ public class NewSearchThread extends BaseThread {
         }
         if (-1 != rs) {
             synchronized (resultList) {
-                resultList.add(file);
+                if (this.file != file) {
+                    resultList.add(file);
+                }
             }
         }
     }
@@ -119,7 +123,6 @@ public class NewSearchThread extends BaseThread {
     @Override
     public void run() {
         action(file);
-
     }
 
     public Vector getResultList() {

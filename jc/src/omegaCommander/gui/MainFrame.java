@@ -69,6 +69,7 @@ import omegaCommander.gui.listeners.combobox.BaseComboBoxListener;
 import omegaCommander.gui.message.KeyShortcat;
 import omegaCommander.gui.message.Message;
 import omegaCommander.gui.message.MessageList;
+import omegaCommander.gui.search.SearchDialog;
 import omegaCommander.gui.table.Directive;
 import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.FileTablePanel;
@@ -76,7 +77,6 @@ import omegaCommander.gui.table.dragdrop.FileTransferHandler;
 import omegaCommander.gui.table.tableHeader.TableHeader;
 import omegaCommander.prefs.JCPreferenses;
 import omegaCommander.threads.newThreads.NewSearchThread;
-import omegaCommander.threads.newThreads.SearchStatusThread;
 import omegaCommander.util.LanguageBundle;
 import omegaCommander.util.LocaleWrapper;
 
@@ -146,7 +146,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
 
         loadPrefs();
-        
+
         this.mainTitle = title;
         this.mainVersion = version;
 
@@ -193,7 +193,6 @@ public class MainFrame extends javax.swing.JFrame {
         setupComponents();
 
         setAboutDialog();
-        setSearchDialog();
         setDeleteFavoritesDialog();
         setPreferencesDialog();
 
@@ -259,10 +258,7 @@ public class MainFrame extends javax.swing.JFrame {
             jTabbedPanePrefs.setTitleAt(0, lb.getString("StrGeneral"));
             jTabbedPanePrefs.setTitleAt(1, lb.getString("StrAppearance"));
             jTabbedPanePrefs.setTitleAt(2, lb.getString("HotKeys"));
-            jCheckBoxCase.setText(lb.getString("StrCase"));
-            jButtonFind.setText(lb.getString("StrSearch"));
-            jButtonCancelFind.setText(lb.getString("StrCancel"));
-            jLabelSearchStatus.setText(lb.getString("StrReady"));
+            searchDialog.setupComponents(lb);
             jCheckBoxMenuItemButtonBar.setText(lb.getString("StrShowButtons"));
             jCheckBoxMenuItemCommandLine.setText(lb.getString("StrShowCommandLine"));
             jCheckBoxMenuItemHiddenFiles.setText(lb.getString("StrShowHiddenFiles"));
@@ -277,8 +273,7 @@ public class MainFrame extends javax.swing.JFrame {
             jMenuItemDecodeHex.setText(lb.getString("KeyDecodeHex"));
 
             jTextAreaHotKeysHelp.setText(lb.getString("StrHotKeysHelp"));
-
-            jDialogFind.setTitle(lb.getString("StrSearch"));
+            
             jDialogAbout.setTitle(mainTitle);
             jDialogDeleteFavorites.setTitle(lb.getString("StrReady"));
 
@@ -290,10 +285,6 @@ public class MainFrame extends javax.swing.JFrame {
             jCheckBoxPrefShowHidden.setText(lb.getString("StrShowHiddenFiles"));
             jCheckBoxPrefShowTooltips.setText(lb.getString("StrShowTooltips"));
             jCheckBoxPrefsUseSystemIcons.setText(lb.getString("StrUseSystemIcons"));
-
-            jLabelFindWhat.setText(lb.getString("StrFindWhat"));
-            jLabelFindWhere.setText(lb.getString("StrFindWhere"));
-            jCheckBoxFindText.setText(lb.getString("StrFindText"));
 
             initMessageList();
 
@@ -312,7 +303,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
     }
-    
+
     public void updateUI(String lnf) {
         UIManager.put("swing.boldMetal", Boolean.FALSE);
         try {
@@ -323,7 +314,7 @@ public class MainFrame extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(this);
         SwingUtilities.updateComponentTreeUI(jDialogAbout);
         SwingUtilities.updateComponentTreeUI(jDialogDeleteFavorites);
-        SwingUtilities.updateComponentTreeUI(jDialogFind);
+        SwingUtilities.updateComponentTreeUI(searchDialog);
         SwingUtilities.updateComponentTreeUI(jDialogHotKeys);
         SwingUtilities.updateComponentTreeUI(jDialogPreferences);
         SwingUtilities.updateComponentTreeUI(jPopupMenuFavorites);
@@ -335,25 +326,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         InputMap imP = jSplitPane1.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).getParent();
         imP.remove(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
-    }
-
-    private void closeFindDialog() {
-        jDialogFind.setVisible(false);
-        stopSearchThread();
-    }
-
-    private void findDialogKeyPressed(KeyEvent evt) {
-        if (KeyEvent.VK_ESCAPE == evt.getKeyCode()) {
-            jDialogFind.setVisible(false);
-        }
-        Message msg = findMessage(evt);
-        if (null == msg) {
-            return;
-        }
-        if (MessageList.MSG_ENTER == msg.getMessageID()) {
-            jButtonFind.doClick();
-        }
-        return;
     }
 
     private double getDividerLocation() {
@@ -368,7 +340,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    private void moveToFile(BaseFile af) {
+    public void moveToFile(BaseFile af) {
         if (af == null) {
             return;
         }
@@ -381,7 +353,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void loadPrefs() {
         jcPrefs.loadPrefs();
     }
-    
+
     private void saveTablePrefs(boolean left) {
         String paths = "";
         String headerSizes = "";
@@ -409,14 +381,13 @@ public class MainFrame extends javax.swing.JFrame {
             jcPrefs.leftPanelPath = paths;
             jcPrefs.leftHeaderSizes = headerSizes;
             jcPrefs.leftSortingColumns = sortColumns;
-        }
-        else {
+        } else {
             jcPrefs.rightPanelPath = paths;
             jcPrefs.rightHeaderSizes = headerSizes;
             jcPrefs.rightSortingColumns = sortColumns;
         }
     }
-    
+
     private void savePrefs() {
         jcPrefs.dividerLocation = jSplitPane1.getDividerLocation();
         jcPrefs.extendedState = getExtendedState();
@@ -429,7 +400,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         saveTablePrefs(true);
         saveTablePrefs(false);
-        
+
         jcPrefs.savePrefs();
     }
 
@@ -686,7 +657,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public JDialog getFindDialog() {
-        return jDialogFind;
+        return searchDialog;
     }
 
     /**
@@ -822,11 +793,6 @@ public class MainFrame extends javax.swing.JFrame {
         JTable tb = createHotKeysTable();
         tb.setShowHorizontalLines(false);
         jScrollPaneHelpHK.setViewportView(tb);
-    }
-
-    private void setSearchDialog() {
-        jDialogFind.setSize(500, 400);
-        jList1.setModel(new GeneratedListModel());
     }
 
     private void setPreferencesDialog() {
@@ -1281,24 +1247,6 @@ public class MainFrame extends javax.swing.JFrame {
         currentRightTable.refreshTable();
     }
 
-    private void startSearchThread(String findWhat, String findWhere, String findText, boolean matchCase) {
-        ((GeneratedListModel) jList1.getModel()).clear();
-        BaseFile file = FileHelper.getRealFile(findWhere);
-        searchThread = new NewSearchThread(file, findWhat, findText, matchCase);
-        SearchStatusThread sst =
-                new SearchStatusThread(searchThread, jLabelSearchStatus, jList1, jButtonFind);
-        sst.start();
-        searchThread.start();
-    }
-
-    private void stopSearchThread() {
-        if (searchThread != null) {
-            searchThread.setInterrupt(true);
-            while (searchThread.isAlive()) {
-            }
-        }
-    }
-
     public void viewFile(BaseFile file) {
         if (file == null || file.isDirectory()) {
             return;
@@ -1414,25 +1362,6 @@ public class MainFrame extends javax.swing.JFrame {
         jButtonPrefOk = new javax.swing.JButton();
         jButtonPrefCancel = new javax.swing.JButton();
         jButtonPrefApply = new javax.swing.JButton();
-        jDialogFind = new javax.swing.JDialog(this);
-        jPanelFindButtons = new javax.swing.JPanel();
-        jPanel17 = new javax.swing.JPanel();
-        jLabelSearchStatus = new javax.swing.JLabel();
-        jPanel18 = new javax.swing.JPanel();
-        jPanelFindInput = new javax.swing.JPanel();
-        jLabelFindWhat = new javax.swing.JLabel();
-        jTextFieldFindWhat = new javax.swing.JTextField();
-        jLabelFindWhere = new javax.swing.JLabel();
-        jTextFieldFindWhere = new javax.swing.JTextField();
-        jCheckBoxFindText = new javax.swing.JCheckBox();
-        jTextFieldFindText = new javax.swing.JTextField();
-        jCheckBoxCase = new javax.swing.JCheckBox();
-        jPanelFindResults = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jPanel16 = new javax.swing.JPanel();
-        jButtonFind = new javax.swing.JButton();
-        jButtonCancelFind = new javax.swing.JButton();
         jDialogHotKeys = new javax.swing.JDialog(this);
         jPanel13 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
@@ -1743,179 +1672,6 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel15.add(jPanel9, java.awt.BorderLayout.SOUTH);
 
         jDialogPreferences.getContentPane().add(jPanel15);
-
-        jDialogFind.setResizable(false);
-        jDialogFind.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                jDialogFindWindowActivated(evt);
-            }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                jDialogFindWindowClosing(evt);
-            }
-        });
-        jDialogFind.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                jDialogFindComponentShown(evt);
-            }
-        });
-
-        jPanelFindButtons.setLayout(new java.awt.BorderLayout());
-
-        jPanel17.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel17.setLayout(new javax.swing.BoxLayout(jPanel17, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabelSearchStatus.setText("Готово");
-        jPanel17.add(jLabelSearchStatus);
-
-        jPanelFindButtons.add(jPanel17, java.awt.BorderLayout.SOUTH);
-
-        jDialogFind.getContentPane().add(jPanelFindButtons, java.awt.BorderLayout.SOUTH);
-
-        jPanel18.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel18.setLayout(new java.awt.BorderLayout());
-
-        jPanelFindInput.setLayout(new java.awt.GridBagLayout());
-
-        jLabelFindWhat.setText("jLabel2");
-        jLabelFindWhat.setPreferredSize(new java.awt.Dimension(50, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
-        jPanelFindInput.add(jLabelFindWhat, gridBagConstraints);
-
-        jTextFieldFindWhat.setPreferredSize(new java.awt.Dimension(400, 25));
-        jTextFieldFindWhat.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldFindWhatKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(7, 0, 7, 0);
-        jPanelFindInput.add(jTextFieldFindWhat, gridBagConstraints);
-
-        jLabelFindWhere.setText("jLabel3");
-        jLabelFindWhere.setPreferredSize(new java.awt.Dimension(50, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanelFindInput.add(jLabelFindWhere, gridBagConstraints);
-
-        jTextFieldFindWhere.setPreferredSize(new java.awt.Dimension(400, 25));
-        jTextFieldFindWhere.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldFindWhereKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(7, 0, 7, 0);
-        jPanelFindInput.add(jTextFieldFindWhere, gridBagConstraints);
-
-        jCheckBoxFindText.setText("jCheckBox1");
-        jCheckBoxFindText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxFindTextActionPerformed(evt);
-            }
-        });
-        jCheckBoxFindText.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jCheckBoxFindTextKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanelFindInput.add(jCheckBoxFindText, gridBagConstraints);
-
-        jTextFieldFindText.setEnabled(false);
-        jTextFieldFindText.setPreferredSize(new java.awt.Dimension(400, 25));
-        jTextFieldFindText.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldFindTextKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(7, 0, 7, 0);
-        jPanelFindInput.add(jTextFieldFindText, gridBagConstraints);
-
-        jCheckBoxCase.setText("С учетом регистра");
-        jCheckBoxCase.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jCheckBoxCase.setEnabled(false);
-        jCheckBoxCase.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jCheckBoxCase.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jCheckBoxCaseKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(7, 0, 7, 0);
-        jPanelFindInput.add(jCheckBoxCase, gridBagConstraints);
-
-        jPanel18.add(jPanelFindInput, java.awt.BorderLayout.NORTH);
-
-        jPanelFindResults.setLayout(new javax.swing.BoxLayout(jPanelFindResults, javax.swing.BoxLayout.LINE_AXIS));
-
-        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jList1MouseClicked(evt);
-            }
-        });
-        jList1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jList1KeyPressed(evt);
-            }
-        });
-        jScrollPane4.setViewportView(jList1);
-
-        jPanelFindResults.add(jScrollPane4);
-
-        jPanel18.add(jPanelFindResults, java.awt.BorderLayout.CENTER);
-
-        jPanel16.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        jButtonFind.setText("Поиск");
-        jButtonFind.setPreferredSize(new java.awt.Dimension(90, 25));
-        jButtonFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonFindActionPerformed(evt);
-            }
-        });
-        jPanel16.add(jButtonFind);
-
-        jButtonCancelFind.setText("Отмена");
-        jButtonCancelFind.setPreferredSize(new java.awt.Dimension(90, 25));
-        jButtonCancelFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelFindActionPerformed(evt);
-            }
-        });
-        jPanel16.add(jButtonCancelFind);
-
-        jPanel18.add(jPanel16, java.awt.BorderLayout.SOUTH);
-
-        jDialogFind.getContentPane().add(jPanel18, java.awt.BorderLayout.CENTER);
 
         jDialogHotKeys.setModal(true);
         jDialogHotKeys.setResizable(false);
@@ -2486,73 +2242,6 @@ public class MainFrame extends javax.swing.JFrame {
         initFavorites();
     }//GEN-LAST:event_jButtonDeleteFavoriteActionPerformed
 
-    private void jDialogFindWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogFindWindowActivated
-        jTextFieldFindWhere.setText("" + getActiveTable().getCurrentDir());
-    }//GEN-LAST:event_jDialogFindWindowActivated
-
-    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
-        if (2 == evt.getClickCount()) {
-            BaseFile af = (BaseFile) jList1.getSelectedValue();
-            if (af != null) {
-                closeFindDialog();
-                moveToFile(af);
-            }
-        }
-    }//GEN-LAST:event_jList1MouseClicked
-
-    private void jTextFieldFindWhereKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFindWhereKeyPressed
-        findDialogKeyPressed(evt);
-    }//GEN-LAST:event_jTextFieldFindWhereKeyPressed
-
-    private void jTextFieldFindWhatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFindWhatKeyPressed
-        findDialogKeyPressed(evt);
-    }//GEN-LAST:event_jTextFieldFindWhatKeyPressed
-
-    private void jButtonCancelFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelFindActionPerformed
-        closeFindDialog();
-    }//GEN-LAST:event_jButtonCancelFindActionPerformed
-
-    private void jList1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jList1KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            closeFindDialog();
-            return;
-        }
-        Message msg = findMessage(evt);
-        BaseFile af = (BaseFile) jList1.getSelectedValue();
-        if (msg != null && af != null) {
-            if (msg.getMessageID() == MessageList.MSG_ENTER) {
-                closeFindDialog();
-                moveToFile(af);
-            }
-            if (msg.getMessageID() == MessageList.MSG_VIEW) {
-                viewFile(af);
-            }
-            if (msg.getMessageID() == MessageList.MSG_EDIT) {
-                runFileInEditor(af);
-            }
-        }
-    }//GEN-LAST:event_jList1KeyPressed
-
-    private void jButtonFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFindActionPerformed
-        if (null != searchThread) {
-            if (searchThread.isAlive()) {
-                stopSearchThread();
-                return;
-            }
-        }
-        String what = jTextFieldFindWhat.getText().trim();
-        String where = jTextFieldFindWhere.getText().trim();
-        if (where.equals("")) {
-            return;
-        }
-        String text = "";
-        if (jCheckBoxFindText.isSelected()) {
-            text = jTextFieldFindText.getText();
-        }
-        startSearchThread(what, where, text, jCheckBoxCase.isSelected());
-        jButtonFind.setText(lb.getString("StrStop"));
-    }//GEN-LAST:event_jButtonFindActionPerformed
-
     private void jTextFieldSearchRightFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchRightFocusLost
         setSearchVisible(false);
     }//GEN-LAST:event_jTextFieldSearchRightFocusLost
@@ -2841,12 +2530,6 @@ private void jTextArea1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-
 
 }//GEN-LAST:event_jTextArea1ComponentShown
 
-private void jDialogFindWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogFindWindowClosing
-    if (searchThread != null) {
-        stopSearchThread();
-    }
-}//GEN-LAST:event_jDialogFindWindowClosing
-
 private void jTabbedPaneLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPaneLeftMouseClicked
     setActiveTable(true);
     getTabbedPane(true).updateUI();
@@ -2862,14 +2545,6 @@ private void jTabbedPaneRightMouseClicked(java.awt.event.MouseEvent evt) {//GEN-
         ACTION_REMOVE_TAB.execute();
     }
 }//GEN-LAST:event_jTabbedPaneRightMouseClicked
-
-private void jCheckBoxFindTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFindTextActionPerformed
-    jTextFieldFindText.setEnabled(jCheckBoxFindText.isSelected());
-    jCheckBoxCase.setEnabled(jCheckBoxFindText.isSelected());
-    if (jCheckBoxFindText.isSelected()) {
-        jTextFieldFindText.requestFocus();
-    }
-}//GEN-LAST:event_jCheckBoxFindTextActionPerformed
 
 private void jButtonFavorities1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFavorities1MouseClicked
     jPopupMenuFavorites.show(evt.getComponent(), evt.getX(), evt.getY());
@@ -2904,22 +2579,6 @@ private void formComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:
 private void jCheckBoxMenuItemArrangementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemArrangementActionPerformed
     ACTION_CHANGE_ARRANGEMENT.execute();
 }//GEN-LAST:event_jCheckBoxMenuItemArrangementActionPerformed
-
-private void jTextFieldFindTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFindTextKeyPressed
-    findDialogKeyPressed(evt);
-}//GEN-LAST:event_jTextFieldFindTextKeyPressed
-
-private void jCheckBoxCaseKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCheckBoxCaseKeyPressed
-    findDialogKeyPressed(evt);
-}//GEN-LAST:event_jCheckBoxCaseKeyPressed
-
-private void jCheckBoxFindTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCheckBoxFindTextKeyPressed
-    findDialogKeyPressed(evt);
-}//GEN-LAST:event_jCheckBoxFindTextKeyPressed
-
-private void jDialogFindComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jDialogFindComponentShown
-    jTextFieldFindWhat.requestFocus();
-}//GEN-LAST:event_jDialogFindComponentShown
 
 private void jComboBoxRightPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBoxRightPopupMenuWillBecomeVisible
     BaseFile[] roots = RootFileSystem.getRoots();
@@ -3004,7 +2663,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButtonCancelFind;
     private javax.swing.JButton jButtonCopy;
     private javax.swing.JButton jButtonCreateDir;
     private javax.swing.JButton jButtonDel;
@@ -3014,7 +2672,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JButton jButtonExit;
     private javax.swing.JButton jButtonFavorities1;
     private javax.swing.JButton jButtonFavorities2;
-    private javax.swing.JButton jButtonFind;
     private javax.swing.JButton jButtonHideDeleteFavoriteDialog;
     private javax.swing.JButton jButtonMove;
     private javax.swing.JButton jButtonPack;
@@ -3025,9 +2682,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBoxCase;
     private javax.swing.JCheckBox jCheckBoxEditor;
-    private javax.swing.JCheckBox jCheckBoxFindText;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemArrangement;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemButtonBar;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemCommandLine;
@@ -3045,24 +2700,19 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JDialog jDialogAbout;
     private javax.swing.JDialog jDialogDeleteFavorites;
     private javax.swing.JDialog jDialogFileProperties;
-    private javax.swing.JDialog jDialogFind;
     private javax.swing.JDialog jDialogHotKeys;
     private javax.swing.JDialog jDialogPreferences;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelCopyright;
     private javax.swing.JLabel jLabelCurrentVersion;
     private javax.swing.JLabel jLabelEditor;
-    private javax.swing.JLabel jLabelFindWhat;
-    private javax.swing.JLabel jLabelFindWhere;
     private javax.swing.JLabel jLabelMail;
     private javax.swing.JLabel jLabelPage;
     private javax.swing.JLabel jLabelPrefCharset;
     private javax.swing.JLabel jLabelPrefLang;
-    private javax.swing.JLabel jLabelSearchStatus;
     private javax.swing.JLabel jLabelStatusLeft;
     private javax.swing.JLabel jLabelStatusRight;
     private javax.swing.JLabel jLabelTheme;
-    private javax.swing.JList jList1;
     private javax.swing.JList jListFavorites;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenu jMenuEdit;
@@ -3085,9 +2735,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
@@ -3107,9 +2754,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JPanel jPanelCenterLeft;
     private javax.swing.JPanel jPanelCenterRight;
     private javax.swing.JPanel jPanelEditor;
-    private javax.swing.JPanel jPanelFindButtons;
-    private javax.swing.JPanel jPanelFindInput;
-    private javax.swing.JPanel jPanelFindResults;
     private javax.swing.JPanel jPanelPrefConsole;
     private javax.swing.JPanel jPanelPrefTheme;
     private javax.swing.JPanel jPanelPrefView;
@@ -3123,7 +2767,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JPopupMenu jPopupMenuFavorites;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPaneHelpHK;
     private javax.swing.JScrollPane jScrollPanePrefHK;
@@ -3142,9 +2785,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextFieldEditor;
-    private javax.swing.JTextField jTextFieldFindText;
-    private javax.swing.JTextField jTextFieldFindWhat;
-    private javax.swing.JTextField jTextFieldFindWhere;
     private javax.swing.JTextField jTextFieldSearchLeft;
     private javax.swing.JTextField jTextFieldSearchRight;
     private javax.swing.JToolBar jToolBar1;
@@ -3177,6 +2817,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private LocaleWrapper currentLocaleWrapper = null;
     LanguageBundle lb = LanguageBundle.getInstance();
     JPopupMenu splitterPopupMenu;
+    SearchDialog searchDialog = new SearchDialog(this, false);
 
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc=" Inner classes  ">
@@ -3376,78 +3017,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
         @Override
         public void actionPerformed(ActionEvent e) {
             showDeleteFavoritesDialog();
-        }
-    }
-
-    class SearchResultListCellRenderer extends DefaultListCellRenderer {
-
-        @Override
-        public Component getListCellRendererComponent(
-                JList list,
-                Object value,
-                int index,
-                boolean isSelected,
-                boolean cellHasFocus) {
-            Component retValue = super.getListCellRendererComponent(
-                    list, value, index, isSelected, cellHasFocus);
-            if (value instanceof BaseFile) {
-                BaseFile file = (BaseFile) value;
-                ImageIcon icon = null;
-                switch (FileHelper.getFileType(file)) {
-                    case DIRECTORY:
-                        icon = ImageArchive.getImageFolder();
-                        break;
-                    case ARCHIVE:
-                        icon = ImageArchive.getImageArchive();
-                        break;
-                    default:
-                        icon = ImageArchive.getImageFile();
-                        break;
-                }
-                setIcon(icon);
-            }
-            return retValue;
-        }
-    }
-
-    public class GeneratedListModel extends AbstractListModel {
-
-        private final Vector data = new Vector();
-
-        public GeneratedListModel() {
-        }
-
-        private void update() {
-            this.fireContentsChanged(this, 0, getSize());
-        }
-
-        private void update(int start, int end) {
-            this.fireIntervalAdded(this, start, end);
-        }
-
-        public void addData(Vector v) {
-            data.addAll(v);
-            update(getSize() - v.size(), getSize());
-        }
-
-        @Override
-        public int getSize() {
-            return data.size();
-        }
-
-        @Override
-        public Object getElementAt(int index) {
-            return data.elementAt(index);
-        }
-
-        public void sortByPath() {
-            Collections.sort(data);
-            update();
-        }
-
-        public void clear() {
-            data.clear();
-            update();
         }
     }
 

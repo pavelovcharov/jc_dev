@@ -22,12 +22,9 @@
  */
 package omegaCommander.threads.newThreads;
 
-import java.util.Vector;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import omegaCommander.gui.MainFrame.GeneratedListModel;
-import omegaCommander.util.LanguageBundle;
+import java.util.ArrayList;
+import java.util.List;
+import omegaCommander.gui.search.SearchStatusListener;
 
 /**
  *
@@ -36,40 +33,46 @@ import omegaCommander.util.LanguageBundle;
 public class SearchStatusThread extends Thread {
 
     private NewSearchThread nst;
-    private JLabel label;
-    private JList list;
-    private JButton button;
+    private final static String name = "SearchStatusThread";
 
     /** Creates a new instance of SearchStatusThread */
-    public SearchStatusThread(NewSearchThread nst, JLabel label, JList list, JButton button) {
+    public SearchStatusThread(NewSearchThread nst/*, JLabel label, JList list, JButton button*/) {
+        super(name);
         this.nst = nst;
-        this.label = label;
-        this.list = list;
-        this.button = button;
     }
 
     @Override
     public void run() {
         while (State.RUNNABLE != nst.getState()) {
         }
-        LanguageBundle lb = LanguageBundle.getInstance();
-        label.setText(lb.getString("StrSearch") + "...");
-        Vector al = new Vector();
-        GeneratedListModel model = (GeneratedListModel)list.getModel();
+        if (listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onSearchStart();
+            }
+        }
         while (nst.isAlive()) {
-            al = nst.getResultList();
-//            list.setListData(al.toArray());
-            model.addData(al);
             try {
                 sleep(500);
             } catch (InterruptedException exc) {
             }
+            if (listeners != null) {
+                for (int i = 0; i < listeners.size(); i++) {
+                    listeners.get(i).onSearchProgressChange(nst.getResultList());
+                }
+            }
         }
-        al = nst.getResultList();
-//        list.setListData(al.toArray());
-        model.addData(al);
-//        ((GeneratedListModel)list.getModel()).sortByPath();
-        label.setText(lb.getString("StrSearchComplete") + ". " + lb.getString("StrFound") + " " + model.getSize());
-        button.setText(lb.getString("StrSearch"));
+        if (listeners != null) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).onSearchEnd(nst.getResultList());
+            }
+        }
+    }
+    private List<SearchStatusListener> listeners = null;
+
+    public void addListener(SearchStatusListener listener) {
+        if (listeners == null) {
+            listeners = new ArrayList<SearchStatusListener>(1);
+        }
+        listeners.add(listener);
     }
 }
