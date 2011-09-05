@@ -67,54 +67,52 @@ public class NewSearchThread extends BaseThread {
         if (interrupt) {
             return;
         }
-        if (file.isDirectory() || file instanceof ArchiveFile) {
-            BaseFile[] files = file.getFiles();
-
-            if (files != null) {
-                for (int i = 0; i < files.length; i++) {
-                    action(files[i]);
-                }
-            }
-        }
-        int rs = 0;
-        if (!w.accept(file.getFilename())) {
-            rs = -1;
-        }
-        if (-1 != rs) {
-            if (null != searchText && !searchText.equals("")) {
-                LineNumberReader lineNumberReader = null;
-                InputStreamReader inputStreamReader = null;
-                rs = -1;
-                try {
-                    inputStreamReader = new InputStreamReader(file.getInputStream());
-                    lineNumberReader = new LineNumberReader(inputStreamReader);
-                    String line;
-                    while (null != (line = lineNumberReader.readLine())) {
-                        line = matchCase ? line : line.toLowerCase();
-                        rs = line.indexOf(searchText);
-                        if (-1 != rs) {
-                            break;
-                        }
-                    }
-                } catch (IOException ex) {
-                    rs = -1;
-                } finally {
-                    try {
-                        if (inputStreamReader != null) {
-                            inputStreamReader.close();
-                        }
-                        if (lineNumberReader != null) {
-                            lineNumberReader.close();
-                        }
-                    } catch (IOException ex) {
+        BaseFile[] files = file.getFiles();
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isDirectory() || files[i] instanceof ArchiveFile) {
+                if (w.accept(files[i].getFilename())) {
+                    synchronized (resultList) {
+                        resultList.add(files[i]);
                     }
                 }
-            }
-        }
-        if (-1 != rs) {
-            synchronized (resultList) {
-                if (this.file != file) {
-                    resultList.add(file);
+                action(files[i]);
+            } else {
+                int rs = 0;
+                if (w.accept(files[i].getFilename())) {
+                    if (null != searchText && !searchText.equals("")) {
+                        LineNumberReader lineNumberReader = null;
+                        InputStreamReader inputStreamReader = null;
+                        rs = -1;
+                        try {
+                            inputStreamReader = new InputStreamReader(file.getInputStream());
+                            lineNumberReader = new LineNumberReader(inputStreamReader);
+                            String line;
+                            while (null != (line = lineNumberReader.readLine())) {
+                                line = matchCase ? line : line.toLowerCase();
+                                rs = line.indexOf(searchText);
+                                if (-1 != rs) {
+                                    break;
+                                }
+                            }
+                        } catch (IOException ex) {
+                            rs = -1;
+                        } finally {
+                            try {
+                                if (inputStreamReader != null) {
+                                    inputStreamReader.close();
+                                }
+                                if (lineNumberReader != null) {
+                                    lineNumberReader.close();
+                                }
+                            } catch (IOException ex) {
+                            }
+                        }
+                    }
+                }
+                if (rs != -1) {
+                    synchronized (resultList) {
+                        resultList.add(files[i]);
+                    }
                 }
             }
         }
