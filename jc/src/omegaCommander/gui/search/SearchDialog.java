@@ -482,8 +482,9 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
             JFileChooser fileChooser = new JFileChooser();
             //fileChooser.setMultiSelectionEnabled(true);
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fileChooser.showOpenDialog(this);
-            jTextFieldFindWhere.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
+                jTextFieldFindWhere.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            }
         }
         if (command.equals("panelize")) {
             GeneratedListModel model = (GeneratedListModel) jList1.getModel();

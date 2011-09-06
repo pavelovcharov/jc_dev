@@ -45,6 +45,7 @@ public class NewSearchThread extends BaseThread {
     private boolean matchCase = false;
     private WildcardFilenameFilter w;
     private static final String name = "NewSearchThread";
+    private boolean fSearchText;
 
     public NewSearchThread(BaseFile file, String namePart, String searchText, boolean matchCase) {
         super(name);
@@ -60,6 +61,7 @@ public class NewSearchThread extends BaseThread {
         } else {
             this.searchText = searchText.toLowerCase();
         }
+        fSearchText = null != searchText && !searchText.equals("");
         w = new WildcardFilenameFilter(this.namePart, IOCase.INSENSITIVE);
     }
 
@@ -70,7 +72,7 @@ public class NewSearchThread extends BaseThread {
         BaseFile[] files = file.getFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isDirectory() || files[i] instanceof ArchiveFile) {
-                if (w.accept(files[i].getFilename())) {
+                if (w.accept(files[i].getFilename()) && !fSearchText) {
                     synchronized (resultList) {
                         resultList.add(files[i]);
                     }
@@ -79,12 +81,12 @@ public class NewSearchThread extends BaseThread {
             } else {
                 int rs = 0;
                 if (w.accept(files[i].getFilename())) {
-                    if (null != searchText && !searchText.equals("")) {
+                    if (fSearchText) {
                         LineNumberReader lineNumberReader = null;
                         InputStreamReader inputStreamReader = null;
                         rs = -1;
                         try {
-                            inputStreamReader = new InputStreamReader(file.getInputStream());
+                            inputStreamReader = new InputStreamReader(files[i].getInputStream());
                             lineNumberReader = new LineNumberReader(inputStreamReader);
                             String line;
                             while (null != (line = lineNumberReader.readLine())) {
@@ -108,10 +110,10 @@ public class NewSearchThread extends BaseThread {
                             }
                         }
                     }
-                }
-                if (rs != -1) {
-                    synchronized (resultList) {
-                        resultList.add(files[i]);
+                    if (rs != -1) {
+                        synchronized (resultList) {
+                            resultList.add(files[i]);
+                        }
                     }
                 }
             }
