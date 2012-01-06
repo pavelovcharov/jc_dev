@@ -32,7 +32,7 @@ import java.io.Serializable;
  * class to compare filenames.
  *
  * @author Stephen Colebourne
- * @version $Id: IOCase.java 484844 2006-12-08 23:27:18Z ggregory $
+ * @version $Id: IOCase.java 1003647 2010-10-01 20:53:59Z niallp $
  * @since Commons IO 1.3
  */
 public final class IOCase implements Serializable {
@@ -41,13 +41,20 @@ public final class IOCase implements Serializable {
      * The constant for case sensitive regardless of operating system.
      */
     public static final IOCase SENSITIVE = new IOCase("Sensitive", true);
+    
     /**
      * The constant for case insensitive regardless of operating system.
      */
     public static final IOCase INSENSITIVE = new IOCase("Insensitive", false);
+    
     /**
      * The constant for case sensitivity determined by the current operating system.
      * Windows is case-insensitive when comparing filenames, Unix is case-sensitive.
+     * <p>
+     * <strong>Note:</strong> This only caters for Windows and Unix. Other operating
+     * systems (e.g. OSX and OpenVMS) are treated as case sensitive if they use the
+     * Unix file separator and case-insensitive if they use the Windows file separator
+     * (see {@link java.io.File#separatorChar}).
      * <p>
      * If you derialize this constant of Windows, and deserialize on Unix, or vice
      * versa, then the value of the case-sensitivity flag will change.
@@ -59,6 +66,7 @@ public final class IOCase implements Serializable {
 
     /** The enumeration name. */
     private final String name;
+    
     /** The sensitivity flag. */
     private final transient boolean sensitive;
 
@@ -128,6 +136,24 @@ public final class IOCase implements Serializable {
     /**
      * Compares two strings using the case-sensitivity rule.
      * <p>
+     * This method mimics {@link String#compareTo} but takes case-sensitivity
+     * into account.
+     * 
+     * @param str1  the first string to compare, not null
+     * @param str2  the second string to compare, not null
+     * @return true if equal using the case rules
+     * @throws NullPointerException if either string is null
+     */
+    public int checkCompareTo(String str1, String str2) {
+        if (str1 == null || str2 == null) {
+            throw new NullPointerException("The strings must not be null");
+        }
+        return sensitive ? str1.compareTo(str2) : str1.compareToIgnoreCase(str2);
+    }
+
+    /**
+     * Compares two strings using the case-sensitivity rule.
+     * <p>
      * This method mimics {@link String#equals} but takes case-sensitivity
      * into account.
      * 
@@ -175,6 +201,33 @@ public final class IOCase implements Serializable {
     }
 
     /**
+     * Checks if one string contains another starting at a specific index using the
+     * case-sensitivity rule.
+     * <p>
+     * This method mimics parts of {@link String#indexOf(String, int)} 
+     * but takes case-sensitivity into account.
+     * 
+     * @param str  the string to check, not null
+     * @param strStartIndex  the index to start at in str
+     * @param search  the start to search for, not null
+     * @return the first index of the search String,
+     *  -1 if no match or <code>null</code> string input
+     * @throws NullPointerException if either string is null
+     * @since Commons IO 2.0
+     */
+    public int checkIndexOf(String str, int strStartIndex, String search) {
+        int endIndex = str.length() - search.length();
+        if (endIndex >= strStartIndex) {
+            for (int i = strStartIndex; i <= endIndex; i++) {
+                if (checkRegionMatches(str, i, search)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Checks if one string contains another at a specific index using the case-sensitivity rule.
      * <p>
      * This method mimics parts of {@link String#regionMatches(boolean, int, String, int, int)} 
@@ -190,26 +243,13 @@ public final class IOCase implements Serializable {
         return str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
     }
 
-    /**
-     * Converts the case of the input String to a standard format.
-     * Subsequent operations can then use standard String methods.
-     * 
-     * @param str  the string to convert, null returns null
-     * @return the lower-case version if case-insensitive
-     */
-    String convertCase(String str) {
-        if (str == null) {
-            return null;
-        }
-        return sensitive ? str : str.toLowerCase();
-    }
-
     //-----------------------------------------------------------------------
     /**
      * Gets a string describing the sensitivity.
      * 
      * @return a string describing the sensitivity
      */
+    @Override
     public String toString() {
         return name;
     }

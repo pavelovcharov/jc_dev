@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -87,15 +86,22 @@ import java.util.Stack;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java 490424 2006-12-27 01:20:43Z bayard $
+ * @version $Id: FilenameUtils.java 1004077 2010-10-04 00:58:42Z niallp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
 
     /**
      * The extension separator character.
+     * @since Commons IO 1.4
      */
-    private static final char EXTENSION_SEPARATOR = '.';
+    public static final char EXTENSION_SEPARATOR = '.';
+
+    /**
+     * The extension separator String.
+     * @since Commons IO 1.4
+     */
+    public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
 
     /**
      * The Unix separator character.
@@ -194,7 +200,55 @@ public class FilenameUtils {
      * @return the normalized filename, or null if invalid
      */
     public static String normalize(String filename) {
-        return doNormalize(filename, true);
+        return doNormalize(filename, SYSTEM_SEPARATOR, true);
+    }
+    /**
+     * Normalizes a path, removing double and single dot path steps.
+     * <p>
+     * This method normalizes a path to a standard format.
+     * The input may contain separators in either Unix or Windows format.
+     * The output will contain separators in the format specified.
+     * <p>
+     * A trailing slash will be retained.
+     * A double slash will be merged to a single slash (but UNC names are handled).
+     * A single dot path segment will be removed.
+     * A double dot will cause that path segment and the one before to be removed.
+     * If the double dot has no parent path segment to work with, <code>null</code>
+     * is returned.
+     * <p>
+     * The output will be the same on both Unix and Windows except
+     * for the separator character.
+     * <pre>
+     * /foo//               -->   /foo/
+     * /foo/./              -->   /foo/
+     * /foo/../bar          -->   /bar
+     * /foo/../bar/         -->   /bar/
+     * /foo/../bar/../baz   -->   /baz
+     * //foo//./bar         -->   /foo/bar
+     * /../                 -->   null
+     * ../foo               -->   null
+     * foo/bar/..           -->   foo/
+     * foo/../../bar        -->   null
+     * foo/../bar           -->   bar
+     * //server/foo/../bar  -->   //server/bar
+     * //server/../bar      -->   null
+     * C:\foo\..\bar        -->   C:\bar
+     * C:\..\bar            -->   null
+     * ~/foo/../bar/        -->   ~/bar/
+     * ~/../bar             -->   null
+     * </pre>
+     * The output will be the same on both Unix and Windows including
+     * the separator character.
+     *
+     * @param filename  the filename to normalize, null returns null
+     * @param unixSeparator <code>true</code> if a unix separator should
+     * be used or <code>false</code> if a windows separator should be used.
+     * @return the normalized filename, or null if invalid
+     * @since Commons IO 2.0
+     */
+    public static String normalize(String filename, boolean unixSeparator) {
+        char separator = (unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR);
+        return doNormalize(filename, separator, true);
     }
 
     //-----------------------------------------------------------------------
@@ -240,17 +294,66 @@ public class FilenameUtils {
      * @return the normalized filename, or null if invalid
      */
     public static String normalizeNoEndSeparator(String filename) {
-        return doNormalize(filename, false);
+        return doNormalize(filename, SYSTEM_SEPARATOR, false);
+    }
+
+    /**
+     * Normalizes a path, removing double and single dot path steps,
+     * and removing any final directory separator.
+     * <p>
+     * This method normalizes a path to a standard format.
+     * The input may contain separators in either Unix or Windows format.
+     * The output will contain separators in the format specified.
+     * <p>
+     * A trailing slash will be removed.
+     * A double slash will be merged to a single slash (but UNC names are handled).
+     * A single dot path segment will be removed.
+     * A double dot will cause that path segment and the one before to be removed.
+     * If the double dot has no parent path segment to work with, <code>null</code>
+     * is returned.
+     * <p>
+     * The output will be the same on both Unix and Windows including
+     * the separator character.
+     * <pre>
+     * /foo//               -->   /foo
+     * /foo/./              -->   /foo
+     * /foo/../bar          -->   /bar
+     * /foo/../bar/         -->   /bar
+     * /foo/../bar/../baz   -->   /baz
+     * //foo//./bar         -->   /foo/bar
+     * /../                 -->   null
+     * ../foo               -->   null
+     * foo/bar/..           -->   foo
+     * foo/../../bar        -->   null
+     * foo/../bar           -->   bar
+     * //server/foo/../bar  -->   //server/bar
+     * //server/../bar      -->   null
+     * C:\foo\..\bar        -->   C:\bar
+     * C:\..\bar            -->   null
+     * ~/foo/../bar/        -->   ~/bar
+     * ~/../bar             -->   null
+     * </pre>
+     *
+     * @param filename  the filename to normalize, null returns null
+     * @param unixSeparator <code>true</code> if a unix separator should
+     * be used or <code>false</code> if a windows separtor should be used.
+     * @return the normalized filename, or null if invalid
+     * @since Commons IO 2.0
+     */
+    public static String normalizeNoEndSeparator(String filename, boolean unixSeparator) {
+         char separator = (unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR);
+        return doNormalize(filename, separator, false);
     }
 
     /**
      * Internal method to perform the normalization.
      *
      * @param filename  the filename
+     * @param separator The separator character to use
      * @param keepSeparator  true to keep the final separator
      * @return the normalized filename
      */
-    private static String doNormalize(String filename, boolean keepSeparator) {
+    private static String doNormalize(String filename, char separator, boolean keepSeparator) {
         if (filename == null) {
             return null;
         }
@@ -267,22 +370,23 @@ public class FilenameUtils {
         filename.getChars(0, filename.length(), array, 0);
         
         // fix separators throughout
+        char otherSeparator = (separator == SYSTEM_SEPARATOR ? OTHER_SEPARATOR : SYSTEM_SEPARATOR);
         for (int i = 0; i < array.length; i++) {
-            if (array[i] == OTHER_SEPARATOR) {
-                array[i] = SYSTEM_SEPARATOR;
+            if (array[i] == otherSeparator) {
+                array[i] = separator;
             }
         }
         
         // add extra separator on the end to simplify code below
         boolean lastIsDirectory = true;
-        if (array[size - 1] != SYSTEM_SEPARATOR) {
-            array[size++] = SYSTEM_SEPARATOR;
+        if (array[size - 1] != separator) {
+            array[size++] = separator;
             lastIsDirectory = false;
         }
         
         // adjoining slashes
         for (int i = prefix + 1; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == SYSTEM_SEPARATOR) {
+            if (array[i] == separator && array[i - 1] == separator) {
                 System.arraycopy(array, i, array, i - 1, size - i);
                 size--;
                 i--;
@@ -291,8 +395,8 @@ public class FilenameUtils {
         
         // dot slash
         for (int i = prefix + 1; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' &&
-                    (i == prefix + 1 || array[i - 2] == SYSTEM_SEPARATOR)) {
+            if (array[i] == separator && array[i - 1] == '.' &&
+                    (i == prefix + 1 || array[i - 2] == separator)) {
                 if (i == size - 1) {
                     lastIsDirectory = true;
                 }
@@ -305,8 +409,8 @@ public class FilenameUtils {
         // double dot slash
         outer:
         for (int i = prefix + 2; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' && array[i - 2] == '.' &&
-                    (i == prefix + 2 || array[i - 3] == SYSTEM_SEPARATOR)) {
+            if (array[i] == separator && array[i - 1] == '.' && array[i - 2] == '.' &&
+                    (i == prefix + 2 || array[i - 3] == separator)) {
                 if (i == prefix + 2) {
                     return null;
                 }
@@ -315,7 +419,7 @@ public class FilenameUtils {
                 }
                 int j;
                 for (j = i - 4 ; j >= prefix; j--) {
-                    if (array[j] == SYSTEM_SEPARATOR) {
+                    if (array[j] == separator) {
                         // remove b/../ from a/b/../c
                         System.arraycopy(array, i + 1, array, j + 1, size - i);
                         size -= (i - j);
@@ -692,10 +796,11 @@ public class FilenameUtils {
             return null;
         }
         int index = indexOfLastSeparator(filename);
-        if (prefix >= filename.length() || index < 0) {
+        int endIndex = index+separatorAdd;
+        if (prefix >= filename.length() || index < 0 || prefix >= endIndex) {
             return "";
         }
-        return filename.substring(prefix, index + separatorAdd);
+        return filename.substring(prefix, endIndex);
     }
 
     /**
@@ -784,6 +889,9 @@ public class FilenameUtils {
             return filename.substring(0, prefix);
         }
         int end = index + (includeSeparator ?  1 : 0);
+        if (end == 0) {
+            end++;
+        }
         return filename.substring(0, end);
     }
 
@@ -848,7 +956,8 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename the filename to retrieve the extension of.
-     * @return the extension of the file or an empty string if none exists.
+     * @return the extension of the file or an empty string if none exists or <code>null</code>
+     * if the filename is <code>null</code>.
      */
     public static String getExtension(String filename) {
         if (filename == null) {
@@ -972,11 +1081,15 @@ public class FilenameUtils {
             boolean normalized, IOCase caseSensitivity) {
         
         if (filename1 == null || filename2 == null) {
-            return filename1 == filename2;
+            return (filename1 == null && filename2 == null);
         }
         if (normalized) {
             filename1 = normalize(filename1);
             filename2 = normalize(filename2);
+            if (filename1 == null || filename2 == null) {
+                throw new NullPointerException(
+                    "Error normalizing one or both of the file names");
+            }
         }
         if (caseSensitivity == null) {
             caseSensitivity = IOCase.SENSITIVE;
@@ -1026,8 +1139,8 @@ public class FilenameUtils {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        for (int i = 0; i < extensions.length; i++) {
-            if (fileExt.equals(extensions[i])) {
+        for (String extension : extensions) {
+            if (fileExt.equals(extension)) {
                 return true;
             }
         }
@@ -1045,7 +1158,7 @@ public class FilenameUtils {
      * @param extensions  the extensions to check for, null checks for no extension
      * @return true if the filename is one of the extensions
      */
-    public static boolean isExtension(String filename, Collection extensions) {
+    public static boolean isExtension(String filename, Collection<String> extensions) {
         if (filename == null) {
             return false;
         }
@@ -1053,8 +1166,8 @@ public class FilenameUtils {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        for (Iterator it = extensions.iterator(); it.hasNext();) {
-            if (fileExt.equals(it.next())) {
+        for (String extension : extensions) {
+            if (fileExt.equals(extension)) {
                 return true;
             }
         }
@@ -1067,7 +1180,7 @@ public class FilenameUtils {
      * always testing case-sensitive.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
-     * single or multiple wildcard characters.
+     * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on Dos/Unix command lines.
      * The check is case-sensitive always.
      * <pre>
@@ -1077,6 +1190,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --> true
      * wildcardMatch("c.txt", "*.????")     --> false
      * </pre>
+     * N.B. the sequence "*?" does not work properly at present in match strings.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1092,7 +1206,7 @@ public class FilenameUtils {
      * using the case rules of the system.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
-     * single or multiple wildcard characters.
+     * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on Dos/Unix command lines.
      * The check is case-sensitive on Unix and case-insensitive on Windows.
      * <pre>
@@ -1102,6 +1216,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --> true
      * wildcardMatch("c.txt", "*.????")     --> false
      * </pre>
+     * N.B. the sequence "*?" does not work properly at present in match strings.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1117,7 +1232,8 @@ public class FilenameUtils {
      * allowing control over case-sensitivity.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
-     * single or multiple wildcard characters.
+     * single or multiple (zero or more) wildcard characters.
+     * N.B. the sequence "*?" does not work properly at present in match strings.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1135,18 +1251,16 @@ public class FilenameUtils {
         if (caseSensitivity == null) {
             caseSensitivity = IOCase.SENSITIVE;
         }
-        filename = caseSensitivity.convertCase(filename);
-        wildcardMatcher = caseSensitivity.convertCase(wildcardMatcher);
         String[] wcs = splitOnTokens(wildcardMatcher);
         boolean anyChars = false;
         int textIdx = 0;
         int wcsIdx = 0;
-        Stack backtrack = new Stack();
+        Stack<int[]> backtrack = new Stack<int[]>();
         
         // loop around a backtrack stack, to handle complex * matching
         do {
             if (backtrack.size() > 0) {
-                int[] array = (int[]) backtrack.pop();
+                int[] array = backtrack.pop();
                 wcsIdx = array[0];
                 textIdx = array[1];
                 anyChars = true;
@@ -1158,6 +1272,9 @@ public class FilenameUtils {
                 if (wcs[wcsIdx].equals("?")) {
                     // ? so move to next text char
                     textIdx++;
+                    if (textIdx > filename.length()) {
+                        break;
+                    }
                     anyChars = false;
                     
                 } else if (wcs[wcsIdx].equals("*")) {
@@ -1171,18 +1288,18 @@ public class FilenameUtils {
                     // matching text token
                     if (anyChars) {
                         // any chars then try to locate text token
-                        textIdx = filename.indexOf(wcs[wcsIdx], textIdx);
+                        textIdx = caseSensitivity.checkIndexOf(filename, textIdx, wcs[wcsIdx]);
                         if (textIdx == -1) {
                             // token not found
                             break;
                         }
-                        int repeat = filename.indexOf(wcs[wcsIdx], textIdx + 1);
+                        int repeat = caseSensitivity.checkIndexOf(filename, textIdx + 1, wcs[wcsIdx]);
                         if (repeat >= 0) {
                             backtrack.push(new int[] {wcsIdx, repeat});
                         }
                     } else {
                         // matching from current position
-                        if (!filename.startsWith(wcs[wcsIdx], textIdx)) {
+                        if (!caseSensitivity.checkRegionMatches(filename, textIdx, wcs[wcsIdx])) {
                             // couldnt match token
                             break;
                         }
@@ -1208,21 +1325,23 @@ public class FilenameUtils {
 
     /**
      * Splits a string into a number of tokens.
+     * The text is split by '?' and '*'.
+     * Where multiple '*' occur consecutively they are collapsed into a single '*'.
      * 
      * @param text  the text to split
-     * @return the tokens, never null
+     * @return the array of tokens, never null
      */
     static String[] splitOnTokens(String text) {
         // used by wildcardMatch
         // package level so a unit test may run on this
         
-        if (text.indexOf("?") == -1 && text.indexOf("*") == -1) {
+        if (text.indexOf('?') == -1 && text.indexOf('*') == -1) {
             return new String[] { text };
         }
 
         char[] array = text.toCharArray();
-        ArrayList list = new ArrayList();
-        StringBuffer buffer = new StringBuffer();
+        ArrayList<String> list = new ArrayList<String>();
+        StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             if (array[i] == '?' || array[i] == '*') {
                 if (buffer.length() != 0) {
@@ -1243,7 +1362,7 @@ public class FilenameUtils {
             list.add(buffer.toString());
         }
 
-        return (String[]) list.toArray( new String[ list.size() ] );
+        return list.toArray( new String[ list.size() ] );
     }
 
 }
