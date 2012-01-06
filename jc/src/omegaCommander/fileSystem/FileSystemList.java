@@ -58,8 +58,8 @@ public class FileSystemList {
      * Создает файловую систему с текущим каталогом <b>abstractFile</b>
      * @param file текущий каталог файловой системы
      */
-    public FileSystemList(BaseFile file) {
-        setFileList(file);
+    public FileSystemList() {
+        
     }
 
     /**

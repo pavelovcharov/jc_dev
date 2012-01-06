@@ -41,7 +41,7 @@ public class ActionParentDir extends AbstractAction {
 		FileTable activeTable = parent.getActiveTable();
 		BaseFile file = activeTable.getCurrentDir();
 		if (file.hasParent()) {
-			activeTable.setFileList(file.getAbsoluteParent());
+			activeTable.setCurrentDir(file.getAbsoluteParent());
 			activeTable.refreshTable();
 			activeTable.setCurrentPosition(activeTable.getFilePosition(file));
 			parent.updateActivePanel();
