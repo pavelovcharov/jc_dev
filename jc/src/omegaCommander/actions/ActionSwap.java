@@ -48,8 +48,8 @@ public class ActionSwap extends AbstractAction {
         int rightPos = rightTable.getCurrentPosition();
 
 
-        leftTable.setFileList(right);
-        rightTable.setFileList(left);
+        leftTable.setCurrentDir(right);
+        rightTable.setCurrentDir(left);
 
         leftTable.setCurrentPosition(rightPos);
         rightTable.setCurrentPosition(leftPos);

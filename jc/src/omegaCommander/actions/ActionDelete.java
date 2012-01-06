@@ -66,8 +66,8 @@ public class ActionDelete extends AbstractAction {
         BaseFile[] filesToDelete = activeTable.getActiveFiles();
         if (DeleteDialog.showDeleteDialog(parent, filesToDelete, canMoveToTrash())) {
             deleteCore(filesToDelete);
+            parent.updateMainWindow();
         }
-        parent.updateMainWindow();
         parent.requestFocus();
     }
 

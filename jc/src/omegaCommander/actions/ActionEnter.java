@@ -70,29 +70,29 @@ public class ActionEnter extends AbstractAction {
         int index = 0;
         if (true == (name instanceof UpperDirectory)) {
             BaseFile file = activeTable.getCurrentDir();
-            activeTable.setFileList(currentFile);
+            activeTable.setCurrentDir(currentFile);
             activeTable.refreshTable();
             index = activeTable.getFilePosition(file);
         } else {
             if (true == (name instanceof Directory)) {
-                activeTable.setFileList(currentFile);
+                activeTable.setCurrentDir(currentFile);
             } else {
                 if (FileHelper.FileType.ARCHIVE == FileHelper.getFileType(currentFile)) {
                     if (currentFile instanceof ArchiveFile) {
                         currentFile = copyToTemp(currentFile);
                         currentFile = FileHelper.getRealFile((ArchiveFile) activeTable.getCurrentDir(),
                                 new LocalFile((LocalFile) currentFile.getAbsoluteParent(), ((LocalFile) currentFile).getFilename()));
-                        activeTable.setFileList(currentFile);
+                        activeTable.setCurrentDir(currentFile);
                     } else {
                         String filename = currentFile.getFilename().toLowerCase();
                         if (filename.endsWith("zip") || filename.endsWith("jar")) {
-                            activeTable.setFileList(new MyZipFile(currentFile));
+                            activeTable.setCurrentDir(new MyZipFile(currentFile));
                         }
                         if (filename.endsWith("tar")) {
-                            activeTable.setFileList(new MyTarFile(currentFile));
+                            activeTable.setCurrentDir(new MyTarFile(currentFile));
                         }
                         if (filename.endsWith("tgz") || filename.endsWith("tar.gz")) {
-                            activeTable.setFileList(new MyTgzFile(currentFile));
+                            activeTable.setCurrentDir(new MyTgzFile(currentFile));
                         }
                     }
                 } else {

@@ -345,7 +345,7 @@ public class MainFrame extends javax.swing.JFrame {
             return;
         }
         FileTable table = getActiveTable();
-        table.setFileList(new FileSystemList(af));
+        table.setCurrentDir(af);
         updateActivePanel();
         table.setCurrentPosition(table.getFilePosition(af));
     }
@@ -434,7 +434,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (leftPaths.length == 1) {
             BaseFile file = FileHelper.getRealFile(leftPaths[0]);
-            currentLeftTable.setFileList(file);
+            currentLeftTable.setCurrentDir(file);
             currentLeftTable.setHeaderSizes(leftSizes.get(0));
             currentLeftTable.setSortingColumns(leftDirective[0]);
         } else {
@@ -447,7 +447,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         if (rightPaths.length == 1) {
             BaseFile file = FileHelper.getRealFile(rightPaths[0]);
-            currentRightTable.setFileList(file);
+            currentRightTable.setCurrentDir(file);
             currentRightTable.setHeaderSizes(leftSizes.get(0));
             currentRightTable.setSortingColumns(rightDirective[0]);
         } else {
@@ -1747,6 +1747,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -2425,7 +2428,7 @@ public class MainFrame extends javax.swing.JFrame {
                     return;
                 }
                 try {
-                    getActiveTable().setFileList(af);
+                    getActiveTable().setCurrentDir(af);
                     getActiveTable().setCurrentPosition(0);
                     updateActivePanel();
                 } catch (NullPointerException e) {
@@ -2608,7 +2611,7 @@ private void jComboBoxRightPopupMenuWillBecomeInvisible(javax.swing.event.PopupM
     }
 
     rightComboBoxIndex = jComboBoxRight.getSelectedIndex();
-    currentRightTable.setFileList(new FileSystemList(root));
+    currentRightTable.setCurrentDir(root);
     currentRightTable.setCurrentPosition(0);
     updatePanel(false);
     currentRightTable.setActive(true);
@@ -2647,7 +2650,7 @@ private void jComboBoxLeftPopupMenuWillBecomeInvisible(javax.swing.event.PopupMe
     }
 
     leftComboBoxIndex = jComboBoxLeft.getSelectedIndex();
-    currentLeftTable.setFileList(new FileSystemList(root));
+    currentLeftTable.setCurrentDir(root);
     currentLeftTable.setCurrentPosition(0);
     updatePanel(true);
     currentLeftTable.setActive(true);
@@ -2660,6 +2663,11 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     jComboBoxLeft.setSelectedIndex(leftComboBoxIndex);
     getActiveTable().requestFocus();
 }//GEN-LAST:event_jComboBoxLeftPopupMenuCanceled
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        currentLeftTable.refreshTableIfNeeded();
+        currentRightTable.refreshTableIfNeeded();
+    }//GEN-LAST:event_formWindowActivated
 // </editor-fold>  
     // <editor-fold defaultstate="collapsed" desc=" Variables declaration ">
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -43,6 +43,7 @@ import omegaCommander.gui.table.tableElements.Size;
 import omegaCommander.gui.table.tableElements.UpperDirectory;
 import omegaCommander.gui.table.tableHeader.ColumnNumbers;
 import omegaCommander.gui.table.tableHeader.TableHeader;
+import org.apache.commons.io.monitor.FileEntry;
 
 /**
  * Класс наследован от JTable и описывают таблицу для отображения списка
@@ -62,6 +63,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     private int currentPosition;
     private ArrayList selectedFilesList;
     private BaseFile currentDir;
+    private FileEntry currentFileEntry;
     private FileTableSorter model;
     private final String[] TITLE = TableHeader.TITLE;
     public int[] headerSizes = new int[TITLE.length];
@@ -76,12 +78,8 @@ public class FileTable extends JTable implements ColumnNumbers {
      */
     public FileTable(BaseFile file) {
         super();
-        try {
-            fsl = new FileSystemList(file);
-            currentDir = fsl.getCurrentDir();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        fsl = new FileSystemList();
+        setCurrentDir(file);
         setShowGrid(false);
 
         setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -117,11 +115,16 @@ public class FileTable extends JTable implements ColumnNumbers {
         addMouseListener(mouseInputAdapter);
     }
 
+    public void refreshTableIfNeeded() {
+        if (currentFileEntry.refresh(currentDir.toFile())) {
+            refreshTable();
+        }
+    }
+
     /**
      * Обновляет содержание таблицы
      */
     public void refreshTable() {
-        currentDir = fsl.getCurrentDir();
         fsl.setFileList(currentDir);
         model = new FileTableSorter(fsl, sortingColumns);
         setModel(model);
@@ -159,19 +162,6 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
 
     /**
-     * Устанавливает новую фаловую систему
-     * @param fsl изменяет текущую файловую систему на <i>fsl</i>
-     */
-    public void setFileList(FileSystemList fsl) {
-        refreshTable(fsl);
-    }
-
-    public void setFileList(BaseFile file) {
-        fsl.setFileList(file);
-        refreshTable();
-    }
-
-    /**
      * Устанавливает состояние данной таблицы
      * @param active <b>true</b> делает таблицу активной (т.е. с
      * которой ведется работа), <b>false</b> - делает таблицу неактивной
@@ -187,16 +177,6 @@ public class FileTable extends JTable implements ColumnNumbers {
      */
     public boolean isActive() {
         return active;
-    }
-
-    /**
-     * Изменяет файловую систему на <i>fsl</> и обновляет содержание
-     * таблицы
-     * @param fls новая файловая система
-     */
-    public void refreshTable(FileSystemList fsl) {
-        this.fsl.setFileList(fsl.getCurrentDir());
-        refreshTable();
     }
 
     /**
@@ -384,6 +364,12 @@ public class FileTable extends JTable implements ColumnNumbers {
      */
     public BaseFile getCurrentDir() {
         return currentDir;
+    }
+
+    public void setCurrentDir(BaseFile currentDir) {
+        this.currentDir = currentDir;
+        fsl.setFileList(currentDir);
+        currentFileEntry = new FileEntry(currentDir.toFile());
     }
 
     public int[] getHeaderSizes() {

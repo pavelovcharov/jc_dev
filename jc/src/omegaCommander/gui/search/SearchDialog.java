@@ -490,7 +490,7 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
             GeneratedListModel model = (GeneratedListModel) jList1.getModel();
             BaseFile[] files = model.getList();
             PseudoFolder pseudoFolder = new PseudoFolder(parent.getActiveTable().getCurrentDir(), files);
-            parent.getActiveTable().setFileList(pseudoFolder);
+            parent.getActiveTable().setCurrentDir(pseudoFolder);
             parent.updateActivePanel();
             closeDialog();
         }

@@ -40,7 +40,7 @@ public class ActionSync extends AbstractAction {
 		FileTable activeTable = parent.getActiveTable();
 		FileTable passiveTable = parent.getPassiveTable();
 		//passiveTable.setFileList(activeTable.getFileList());
-		passiveTable.setFileList(activeTable.getCurrentDir());
+		passiveTable.setCurrentDir(activeTable.getCurrentDir());
 		passiveTable.setCurrentPosition(activeTable.getCurrentPosition());
 		parent.updatePassivePanel();
 	}
