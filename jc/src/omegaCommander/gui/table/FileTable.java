@@ -35,6 +35,7 @@ import javax.swing.table.TableColumnModel;
 
 import omegaCommander.fileSystem.BaseFile;
 import omegaCommander.fileSystem.FileSystemList;
+import omegaCommander.fileSystem.utils.FileMonitor;
 import omegaCommander.gui.table.tableElements.Directory;
 import omegaCommander.gui.table.tableElements.Element;
 import omegaCommander.gui.table.tableElements.Filename;
@@ -43,7 +44,6 @@ import omegaCommander.gui.table.tableElements.Size;
 import omegaCommander.gui.table.tableElements.UpperDirectory;
 import omegaCommander.gui.table.tableHeader.ColumnNumbers;
 import omegaCommander.gui.table.tableHeader.TableHeader;
-import org.apache.commons.io.monitor.FileEntry;
 
 /**
  * Класс наследован от JTable и описывают таблицу для отображения списка
@@ -63,7 +63,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     private int currentPosition;
     private ArrayList selectedFilesList;
     private BaseFile currentDir;
-    private FileEntry currentFileEntry;
+    private FileMonitor currentFileMonitor;
     private FileTableSorter model;
     private final String[] TITLE = TableHeader.TITLE;
     public int[] headerSizes = new int[TITLE.length];
@@ -116,7 +116,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
 
     public void refreshTableIfNeeded() {
-        if (currentFileEntry.refresh(currentDir.toFile())) {
+        if (currentFileMonitor.refresh(currentDir)) {
             refreshTable();
         }
     }
@@ -369,7 +369,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     public void setCurrentDir(BaseFile currentDir) {
         this.currentDir = currentDir;
         fsl.setFileList(currentDir);
-        currentFileEntry = new FileEntry(currentDir.toFile());
+        currentFileMonitor = new FileMonitor(currentDir);
     }
 
     public int[] getHeaderSizes() {
