@@ -50,6 +50,7 @@ public interface PrefKeys {
     public final String PK_SHOW_TOOLTIPS = "PK_SHOW_TOOLTIPS";
     public final String PK_ARRANGEMENT = "PK_ARRANGEMENT";
     public final String PK_USE_SYSTEM_ICONS = "PK_USE_SYSTEM_ICONS";
+    public final String PK_QUICK_SEARCH_MODE = "PK_QUICK_SEARCH_MODE";
     public final String PATH_TO_LANGUAGE = "omegaCommander/resources/lang";
     
     public final String PK_LEFT_SORT = "LEFT_SORT";

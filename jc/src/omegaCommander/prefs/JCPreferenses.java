@@ -33,6 +33,7 @@ import java.util.prefs.Preferences;
 import omegaCommander.gui.MainFrame;
 
 import omegaCommander.gui.table.Directive;
+import omegaCommander.gui.table.FileTable;
 import omegaCommander.gui.table.tableHeader.TableHeader;
 
 /**
@@ -60,6 +61,7 @@ public class JCPreferenses implements PrefKeys {
     public static final boolean DEFAULT_ARRANGEMENT = false;
     public static final boolean DEFAULT_USE_SYSTEM_ICONS = true;
     public static final Directive DEFAULT_DIRECTIVE = new Directive(1, 1);
+    public static final int DEFAULT_QUICK_SEARCH_MODE = FileTable.QUICK_SEARCH_FROM_BEGINING;
     private static JCPreferenses instance = new JCPreferenses();
     public static final String PRIMARY_DELIMITER = ";";
     public static final String SECONDARY_DELIMITER = ",";
@@ -89,6 +91,7 @@ public class JCPreferenses implements PrefKeys {
     public String leftSortingCompatible = "";
     public String rightSortingCompatible = "";
     public String currentLocale = "";
+    public int quickSearchMode = 0;
 
     private JCPreferenses() {
     }
@@ -162,6 +165,7 @@ public class JCPreferenses implements PrefKeys {
         useSystemIcons = pref.getBoolean(PK_USE_SYSTEM_ICONS, JCPreferenses.DEFAULT_USE_SYSTEM_ICONS);
         Locale defaultLocale = Locale.getDefault();
         currentLocale =  pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry());
+        quickSearchMode = pref.getInt(PK_QUICK_SEARCH_MODE, JCPreferenses.DEFAULT_QUICK_SEARCH_MODE);
     }
 
     private void saveTablePrefs(boolean left) {
@@ -198,6 +202,7 @@ public class JCPreferenses implements PrefKeys {
         pref.putBoolean(PK_SHOW_TOOLTIPS, showToolTips);
         pref.putBoolean(PK_ARRANGEMENT, arrangement);
         pref.putBoolean(PK_USE_SYSTEM_ICONS, useSystemIcons);
+        pref.putInt(PK_QUICK_SEARCH_MODE, quickSearchMode);
         try {
             pref.exportNode(new FileOutputStream(new java.io.File("jc.xml")));
         } catch (Exception ex) {
