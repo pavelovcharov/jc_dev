@@ -481,13 +481,17 @@ public class MainFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemCommandLine.setSelected(jcPrefs.showCommandLine);
         jTextField3.setVisible(jcPrefs.showCommandLine);
         jCheckBoxMenuItemHiddenFiles.setSelected(jcPrefs.showHiddenFiles);
+        
+        currentLeftTable.setQuickSearchMode(jcPrefs.quickSearchMode);
         currentLeftTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
-        currentRightTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
-        currentLeftTable.refreshTable();
-        currentRightTable.refreshTable();
         currentLeftTable.showToolTip(jcPrefs.showToolTips);
+        currentLeftTable.refreshTable();
+        
+        currentRightTable.setQuickSearchMode(jcPrefs.quickSearchMode);
+        currentRightTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
         currentRightTable.showToolTip(jcPrefs.showToolTips);
-
+        currentRightTable.refreshTable();
+        
         if (jcPrefs.arrangement) {
             changeArrangement();
         }

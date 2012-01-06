@@ -54,6 +54,8 @@ import omegaCommander.gui.table.tableHeader.TableHeader;
  */
 public class FileTable extends JTable implements ColumnNumbers {
 
+    public static final int QUICK_SEARCH_FROM_BEGINING = 0;
+    public static final int QUICK_SEARCH_WHOLE_WORD = 1;
     private static final Color BK_COLOR = Color.getColor("238, 238, 238");
     private boolean active;
     private FileSystemList fsl;
@@ -65,6 +67,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     public int[] headerSizes = new int[TITLE.length];
     private ArrayList sortingColumns = new ArrayList();
     private boolean showToolTip;
+    private int quickSearchMode;
 
     /**
      * Создает новую таблицу. Текущим каталогом устанавливается каталог
@@ -268,6 +271,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             return (NameInterface) getValueAt(pos, NAME);
         }
     }
+
     public BaseFile getFileAt(int pos) {
         return getElementAt(pos).getFile();
     }
@@ -326,8 +330,10 @@ public class FileTable extends JTable implements ColumnNumbers {
         for (int i = 0; i < getRowCount(); i++) {
             obj = getValueAt(i, FileTable.NAME);
             if (false == (obj instanceof UpperDirectory)) {
-                //if (true==((NameInterface)obj).getName().startsWith(str))
-                if (true == ((NameInterface) obj).getFileName().startsWith(str)) {
+                boolean fResult = quickSearchMode == QUICK_SEARCH_FROM_BEGINING
+                        ? ((NameInterface) obj).getFileName().startsWith(str)
+                        : ((NameInterface) obj).getFileName().contains(str);
+                if (fResult) {
                     return i;
                 }
             }
@@ -454,7 +460,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         sortingColumns.clear();
         sortingColumns.add(directive);
     }
-    
+
     public ArrayList getSortingColumns() {
         return sortingColumns;
     }
@@ -543,9 +549,13 @@ public class FileTable extends JTable implements ColumnNumbers {
         showToolTip = show;
         setToolTipText("");
     }
-   
+
+    public void setQuickSearchMode(int quickSearchMode) {
+        this.quickSearchMode = quickSearchMode;
+    }
 
     class TableHeaderListener implements MouseListener {
+
         private FileTable table;
 
         public TableHeaderListener(FileTable table) {
@@ -691,4 +701,3 @@ public class FileTable extends JTable implements ColumnNumbers {
         }
     }
 }
-
