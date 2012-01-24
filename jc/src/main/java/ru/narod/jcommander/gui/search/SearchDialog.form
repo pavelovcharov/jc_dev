@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
@@ -85,7 +85,7 @@
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jPanel3" min="-2" pref="148" max="-2" attributes="0"/>
+                          <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -243,8 +243,8 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jButtonFind" alignment="0" max="32767" attributes="2"/>
                           <Component id="jButtonPanelize" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jSeparator1" alignment="0" pref="73" max="32767" attributes="1"/>
-                          <Component id="jButtonCancelFind" alignment="0" pref="73" max="32767" attributes="2"/>
+                          <Component id="jSeparator1" alignment="0" max="32767" attributes="1"/>
+                          <Component id="jButtonCancelFind" alignment="0" max="32767" attributes="2"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
