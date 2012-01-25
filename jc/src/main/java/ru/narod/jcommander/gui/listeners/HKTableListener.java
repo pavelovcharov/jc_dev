@@ -19,7 +19,7 @@
 /*
  * HKTableListener.java
  *
- * Created on 16 ��� 2007 �., 15:18
+ * Created on 16 may 2007, 15:18
  *
  */
 package ru.narod.jcommander.gui.listeners;

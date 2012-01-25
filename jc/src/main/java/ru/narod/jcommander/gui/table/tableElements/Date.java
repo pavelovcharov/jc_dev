@@ -19,7 +19,7 @@
 /*
  * Date.java
  *
- * Created on 25 ���� 2007 �., 10:14
+ * Created on 25 jun 2007, 10:14
  *
  */
 

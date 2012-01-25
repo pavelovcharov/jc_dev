@@ -19,7 +19,7 @@
 /*
  * NetFile.java
  *
- * Created on 7 ������� 2006 �., 9:38
+ * Created on 7 dec 2006, 9:38
  *
  */
 package ru.narod.jcommander.fileSystem.net;
@@ -34,7 +34,7 @@ import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.LocalFile;
 
 /**
- * ����� ������ ���� � ����. ��� ������� � ���� ������������ ���������� 
+ * Класс задает файл в сети. Для доступа к сети используется библиотека 
  * jcifs-1.2.10
  * @author Strateg
  */
@@ -44,8 +44,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     private NetFile parent;
 
     /**
-     * ������� ����� ��������� ������ NetFile ��� ��������� ����
-     * @param path ���� � ����� � ����
+     * Создает новый экземпляр класса NetFile для заданного пути
+     * @param path путь к файлу в сети
      */
     public NetFile(String path) {
         super(path);
@@ -64,8 +64,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ������� ����� ��������� ������ NetFile �� ������� <I>smbFile</I>
-     * @param smbFile ���� � ����
+     * Создает новый экземпляр класса NetFile по объекту <I>smbFile</I>
+     * @param smbFile файл в сети
      */
     public NetFile(SmbFile smbFile) {
         super(smbFile.getPath());
@@ -79,9 +79,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ���������� ���������� �����
-     * @return ������ ������, ���� ������� ������ �������� �������, �����
-     * ������������ ������, ���������� ���������� �����
+     * Возвращает расширение файла
+     * @return пустую строку, если текущим файлом является каталог, иначе
+     * возвращается строка, содержащая расширение файла
      */
     @Override
     public String getExtention() {
@@ -89,8 +89,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ������ ������, ����������� � ������ ����� � ������
-     * @return ������ ������
+     * Получить список файлов, находящихся в данной папке в архиве
+     * @return массив файлов
      */
     @Override
     public BaseFile[] getFiles() {
@@ -115,8 +115,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ������������ ����� ��� ������� �����
-     * @return ������ ������ BaseFile, �������������� ������������ ����� ������� �����
+     * Получить родительскую папку для данного файла
+     * @return объект класса BaseFile, представляющий родительскую папку данного файла
      */
     @Override
     public BaseFile getAbsoluteParent() {
@@ -125,8 +125,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ����������, �������� �� ������ ������ ������ ��� ���������
-     * @return <B>true</B>, ���� ������ ������ �������� ���������, ����� - <B>false</B>
+     * Определить, является ли данный объект файлом или каталогом
+     * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
      */
     @Override
     public boolean isDirectory() {
@@ -140,9 +140,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ������������ ������ � ����� ��������� �����. ��������, �����
-     * 12455 ����� ����� ��� 12 455
-     * @return ������ ���������� ������ ����� � ����������������� ����
+     * Представляет размер в более наглядной форме. Например, число
+     * 12455 будет иметь вид 12 455
+     * @return строка содержащая размер файла в отформатированном виде
      */
     @Override
     public String getFormatFileSize() {
@@ -159,8 +159,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ���������� ���� ���������� ����������� ����� ��� ��������
-     * @return ���� ���������� ����������� � ������� dd.MM.yyyy hh:mm
+     * Возвращает дату последеней модификации файла или каталога
+     * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
     @Override
     public String getLastModifiedDate() {
@@ -169,9 +169,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ���������� �������� ����� ��� ��������. ro - ������ ��� ������,
-     * h - �������
-     * @return ������, ���������� �������� ����� ��� ��������
+     * Возвращает атрибуты файла или каталога. ro - только для чтения,
+     * h - скрытый
+     * @return строку, содержащую атрибуты файла или каталога
      */
     @Override
     public String getAtributeString() {
@@ -193,8 +193,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ������ ������ ���� � �����
-     * @return <B>true</B>, ���� ���� ��� ������� ������, ����� - <B>false</B>
+     * Удалит данный файл с диска
+     * @return <B>true</B>, если файл был успешно удален, иначе - <B>false</B>
      */
     @Override
     public boolean delete() {
@@ -219,9 +219,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ����� ��� ������ �� �����
-     * @return ����� ��� ������ �� �����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
+     * Получить поток для чтения из файла
+     * @return поток для чтения из файла
+     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      */
     @Override
     public InputStream getInputStream() throws java.io.IOException {
@@ -229,9 +229,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ����� ��� ������ � ����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
-     * @return ����� ��� ������ � ����
+     * Получить поток для записи в файл
+     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
+     * @return поток для записи в файл
      */
     @Override
     public OutputStream getOutputStream() throws java.io.IOException {
@@ -239,9 +239,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ���� ��������� ����������� �����
-     * @return ���� ��������� ����������� ����� - ����� ����������� ��������� � 00:00:00 1 
-     * ������ 1970; ���� ���� �� ���������� ������������ 0L
+     * Получить дату последней модификации файла
+     * @return дата последней модификации файла - число миллисекунд прошедших с 00:00:00 1 
+     * января 1970; если файл не существует возвращается 0L
      */
 //    public long lastModified() {
 //        try {
@@ -253,8 +253,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 //        return 0;
 //    }
     /**
-     * ����� ��������� ����������, ���������� �� ���� ��������� �� �����
-     * @return <B>true</B>, ��� ���� ����������, <B>false</B> - �����
+     * Метод позволяет определить, существует ли файл физически на диске
+     * @return <B>true</B>, ели файл существует, <B>false</B> - иначе
      */
     @Override
     public boolean exists() {
@@ -268,8 +268,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ��������� ������������� �������
-     * @return ��������� �������������
+     * Получить строковое представление объекта
+     * @return строковое представление
      */
     @Override
     public String toString() {
@@ -277,8 +277,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ������� ����� �� ����, ������ ����� ������ ������
-     * @return <B>true</B>, ���� ����� ���� �������, ����� - <B>false</B>
+     * Создать папки на пути, котоый задан данным файлом
+     * @return <B>true</B>, если папки были созданы, иначе - <B>false</B>
      */
     @Override
     public boolean mkdirs() {
@@ -294,9 +294,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ���������� ���� ����������� ��������� �����
-     * @param time ���� ��������� ����������� - ����� �����������, ��������� � ������ �����
-     * @return <B>true</B>, ���� ���� ������� ��������, ����� - <B>false</B>
+     * Установить дату последеного изменения файла
+     * @param time дата последней модификации - число миллисекунд, прошедших с начала эпохи
+     * @return <B>true</B>, если дата успешно изменена, иначе - <B>false</B>
      */
     @Override
     public boolean setLastModified(long time) {
@@ -311,9 +311,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ���������� ���� � �����, ��� �������� - � ������������ � �����
+     * Получить абсолютный путь к файлу, для каталога - с разделителем в конце
      * ("smb://123/sad/")
-     * @return ���������� ���� � �����
+     * @return абсолютный путь к файлу
      */
     @Override
     public String getPathWithSlash() {
@@ -321,9 +321,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ������������� ������ ���� � ���� � ������, �������� <I>targetFile</I>
-     * @param targetFile ����-��������
-     * @return <B>true</B>, ���� ���� ��� �����������, ����� - <B>false</B>
+     * Переименовать данный файл в файл с именем, заданным <I>targetFile</I>
+     * @param targetFile файл-преемник
+     * @return <B>true</B>, если файл был переименовн, иначе - <B>false</B>
      */
     @Override
     public boolean renameTo(BaseFile dest) {
@@ -348,8 +348,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * �������� ����, ��������������� ��������� ����� � ���� (smb://)
-     * @return ������ ������ BaseFile - ��������� ����� � ����
+     * Получить файл, соответствующий начальной папке в сети (smb://)
+     * @return объект класса BaseFile - начальная папка в сети
      */
     @Override
     public BaseFile getRoot() {
@@ -366,8 +366,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * ���������� ������ �����
-     * @return ������ ����� � ������
+     * Определить размер файла
+     * @return размер файла в байтах
      */
     @Override
     public long length() {

@@ -19,7 +19,7 @@
 /*
  * ImageViewer.java
  *
- * Created on 25 ������ 2006 �., 17:42
+ * Created on 25 nov 2006, 17:42
  */
 package ru.narod.jcommander.editor;
 
@@ -39,7 +39,7 @@ import ru.narod.jcommander.gui.ImageArchive;
 import ru.narod.jcommander.util.LanguageBundle;
 
 /**
- * ����� ��������� ���� ��������� � �������������� ����������� ������
+ * Класс описывает окно просмотра и редактирования содержимого файлов
  * @author Pavel Ovcharov
  */
 public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, ru.narod.jcommander.prefs.PrefKeys {
@@ -50,8 +50,8 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, ru.n
 	};
 
 	/**
-	 * ������� ����� ������ ������ Editor
-	 * @param parent ������ ������ javax.swing.JFrame, ���� ������������ �� ��������� � �������
+	 * Создать новый объект класса Editor
+	 * @param parent объект класса javax.swing.JFrame, окно родительское по отношение к данному
 	 */
 	public ImageViewer(JFrame parent) {
 		initComponents();

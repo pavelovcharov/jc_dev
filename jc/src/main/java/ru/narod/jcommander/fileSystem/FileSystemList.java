@@ -26,9 +26,9 @@ import ru.narod.jcommander.gui.dialog.WarningDialog;
 import ru.narod.jcommander.util.LanguageBundle;
 
 /**
- * ����� ������������� ������ ��� ������ � ������� ��������.
- * �������� ������� �������� ������� ��������� � ������� ������
- * � ������������ � ���
+ * Класс предоставляет методы для работы с фаловой системой.
+ * Файловая система задается текущим каталогом и списком файлов
+ * и подкаталогов в нем
  * @author Programmer
  * @version 2005/04/24 1:32:27 PM
  */
@@ -41,34 +41,34 @@ public class FileSystemList {
     private BaseFile[] fsList;
     FileFilter fileFilter = null;
     /**
-     * ������ ���� � ��������� ����� ����������
+     * Задает путь к временной папке приложения
      */
     public static final String PATH_TO_TEMP =
             System.getProperty("java.io.tmpdir") + LocalFile.separator + "$jcomtemp";
 
     /**
-     * ������� ������� �������. ������� �������� ������� �������
-     * ����������
+     * Создает фаловую систему. Текущим является рабочий каталог
+     * приложения
      */
 //    public FileSystemList(){
 //        currentDir=new LocalFile(".");
 //        setFileList(currentDir);
 //    }
     /**
-     * ������� �������� ������� � ������� ��������� <b>abstractFile</b>
-     * @param file ������� ������� �������� �������
+     * Создает файловую систему с текущим каталогом <b>abstractFile</b>
+     * @param file текущий каталог файловой системы
      */
     public FileSystemList() {
         
     }
 
     /**
-     * ������ ������� �������
-     * @param file ������ ������� ������� �������� �������
+     * Задает текущий каталог
+     * @param file задает текущий каталог файловой системы
      */
-    //XXX ���������� ��� ��� ��������. ����������� � ���������� � return'���
+    //XXX посмотреть как это работает. разобраться с рекурсиями и return'ами
     public void setFileList(BaseFile file) {
-        //XXX ��������� �������� ������ � ��������� ������
+        //XXX запускать загрузку файлов в отдельном потоке
 
         if (file == null) {
             setFileList(RootFileSystem.getReadableRoot());
@@ -106,32 +106,32 @@ public class FileSystemList {
     }
 
     /**
-     * ���������� ����� ������
-     * @return ����� ������ � ������� ��������
+     * Возвращает число файлов
+     * @return число файлов в текущем каталоге
      */
     public int getFilesCount() {
         return fileList.size();
     }
 
     /**
-     * ���������� ����� ������������
-     * @return ����� ������������ � ������� ��������
+     * Возвращает число подкаталогов
+     * @return число подкаталогов в текущем каталоге
      */
     public int getDirCount() {
         return dirList.size();
     }
 
     /**
-     * ��������� �������� ������� �������
-     * @return ������� ������� �������� �������
+     * Позволяет получить текущий каталог
+     * @return текущий каталог файловой системы
      */
     public BaseFile getCurrentDir() {
         return currentDir;
     }
 
     /**
-     * ��� �������� �������� ������� ������ ������, ������������ �
-     * ��� � ������������
+     * Для текущего каталога создает список файлов, содержащихся в
+     * нем и подкаталогов
      */
     public void setList(BaseFile[] list) {
         //BaseFile [] list = currentDir.getFiles();
@@ -148,8 +148,8 @@ public class FileSystemList {
     }
 
     /**
-     * ���������� ����� ������
-     * @return ����� ������ � ������������ � ������� ��������
+     * Возвращает число файлов
+     * @return число файлов и подкаталогов в текущем каталоге
      */
     public int getTotalCount() {
         //return fsList.length;
@@ -157,8 +157,8 @@ public class FileSystemList {
     }
 
     /**
-     * ��������� ���������� �������� �� ������� ������� ��������
-     * @return <b>false</b>, ���� ������� ������� ��������, ����� -
+     * Позволяет определить является ли текущий каталог корневым
+     * @return <b>false</b>, если текущий каталог корневой, иначе -
      * <b>true</b>
      */
     public boolean hasParent() {
@@ -166,10 +166,10 @@ public class FileSystemList {
     }
 
     /**
-     * ��������� �������� ������ ����� � ������, ������������ �
-     * ������� ��������
-     * @return ������ ���� File, ���������� ������������ ������ �����
-     * � ������
+     * Позволяет получить список папок и файлов, содержащихся в
+     * текущем каталоге
+     * @return массив типа File, содержащий упоряоченный список папок
+     * и файлов
      */
     public BaseFile[] getFullList() {
         return fsList;
@@ -177,16 +177,16 @@ public class FileSystemList {
     }
 
     /**
-     * ���������� �������, ����������� �� ������� ���� ��������
-     * @return �������, ����������� �� ������� ���� ��������
+     * Определяет каталог, находящийся на уровень выше текущего
+     * @return каталог, находящийся на уровень выше текущего
      */
     public BaseFile getParent() {
         return currentDir.getAbsoluteParent();
     }
 
     /**
-     * �������� ����, ��������������� ��������� ����� ����������
-     * @return ����, ��������������� ��������� ����� ����������
+     * Получить файл, соответствующий временной папке приложения
+     * @return файл, соответствующий временной папке приложения
      */
     public static LocalFile getTempDir() {
         java.util.Date d = new java.util.Date();
@@ -197,8 +197,8 @@ public class FileSystemList {
     }
 
     /**
-     * �������� ��������� ����� ����������
-     * @return <B>true</B>, ���� ����� ������� �������, ����� - <B>false</B>
+     * Очистить временную папку приложения
+     * @return <B>true</B>, если папка успешно очищена, иначе - <B>false</B>
      */
     public static boolean clearTempDir() {
         LocalFile temp = new LocalFile(PATH_TO_TEMP);

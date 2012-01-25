@@ -19,7 +19,7 @@
 /*
  * UpperDirectory.java
  *
- * Created on 15 ������� 2006 �., 11:58
+ * Created on 15 oct 2006, 11:58
  */
 
 package ru.narod.jcommander.gui.table.tableElements;

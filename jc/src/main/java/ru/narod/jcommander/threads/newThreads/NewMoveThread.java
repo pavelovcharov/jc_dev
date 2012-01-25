@@ -32,7 +32,7 @@ import ru.narod.jcommander.util.LanguageBundle;
 import ru.narod.jcommander.util.Support;
 
 /**
- * ����� ���������� ����� ��� �����������/����������� ������.
+ * Класс определяет поток для копирования/перемещения файлов.
  *
  * @author Pavel Ovcharov
  */
@@ -45,7 +45,7 @@ public class NewMoveThread extends FileThread {
     private String tartgetPath;
 
     /**
-     * ������� ����� ��������� ������ NewMovingThread
+     * Создает новый экземпляр класса NewMovingThread
      */
     public NewMoveThread(BaseFile sourceDir, String targetPath, BaseFile[] filesToCopy, boolean toCopy) {
         this.sourceDir = sourceDir;
@@ -55,7 +55,7 @@ public class NewMoveThread extends FileThread {
     }
 
     /**
-     * �������� ����� ������. ����������� ��� ������ ������ <B>start()</B>
+     * Основной метод потока. Запускается при вызове метода <B>start()</B>
      */
     @Override
     public void run() {
@@ -111,7 +111,7 @@ public class NewMoveThread extends FileThread {
             }
             try {
                 if (newFile.exists()) {
-                    if (newFile.equals(temp)) { //�������� ���� ��� � ����
+                    if (newFile.equals(temp)) { //копируем файл сам в себя
                         if (queryError(String.format(LanguageBundle.getInstance().getString("StrCopyToItself"), newFile.getFilename()))) {
                             if (resultError.equals(ErrorAction.Retry)) { // try again
                                 i--;
@@ -122,7 +122,7 @@ public class NewMoveThread extends FileThread {
                         }
 
                     } else {
-                        //XXX �� �������� ��������� ��� ��� ����� Retry
+                        //XXX не выдавать сообщение еще раз после Retry
                         if (queryReplace(temp, newFile)) {
                             switch (replaceResult) {
                                 case REPLACE:
@@ -159,7 +159,7 @@ public class NewMoveThread extends FileThread {
             }
             filesReady += temp.length();
         }
-        if (!toCopy) {//������� ����������
+        if (!toCopy) {//удаляем директории
             for (int i = files.size() - 1; i >= 0; i--) {
                 BaseFile file = (BaseFile) files.get(i);
                 if (file.isDirectory()) {
@@ -188,7 +188,7 @@ public class NewMoveThread extends FileThread {
             if (interrupt == true) {
                 fis.close();
                 fos.close();
-                //������� ���������������� ����
+                //удаляем недокопированный файл
                 target.delete();
                 throw new InterruptedException();
             }
@@ -205,9 +205,9 @@ public class NewMoveThread extends FileThread {
         currentProgress = 0;
         currentFileSize = source.length();
 
-        //XXX �������� ����������� ������������ � ������
-        //XXX ���� ����� rename � NetFile
-        //XXX ��� �������� �����������
+        //XXX заменить перемещение копированием в архиве
+        //XXX есть метод rename у NetFile
+        //XXX как отменить перемещение
         boolean result = true;
         if ((source instanceof NetFile) || (target instanceof NetFile)) {
             jCopy(source, target);

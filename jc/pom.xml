@@ -35,9 +35,9 @@
                             <classpathPrefix>./lib/</classpathPrefix>
                             <mainClass>ru.narod.jcommander.Launcher</mainClass>
                         </manifest>
-                        <manifestEntries>
+<!--                        <manifestEntries>
                             <Version>${buildNumber}</Version>
-                        </manifestEntries>
+                        </manifestEntries>-->
                     </archive>
                 </configuration>
             </plugin>

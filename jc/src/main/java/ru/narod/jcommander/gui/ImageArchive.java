@@ -19,7 +19,7 @@
 /*
  * ResourceArchive.java
  *
- * Created on 30 ���� 2006 �., 9:55
+ * Created on 30 mar 2006, 9:55
  *
  */
 package ru.narod.jcommander.gui;

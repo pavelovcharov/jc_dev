@@ -19,7 +19,7 @@
 /*
  * NameInterface.java
  *
- * Created on 15 ������� 2006 �., 11:42
+ * Created on 15 oct 2006, 11:42
  */
 
 package ru.narod.jcommander.gui.table.tableElements;

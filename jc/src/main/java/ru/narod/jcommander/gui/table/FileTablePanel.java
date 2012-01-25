@@ -19,7 +19,7 @@
 /*
  * FileTablePanel.java
  *
- * Created on 8 ������� 2007 �., 15:43
+ * Created on 8 oct 2007., 15:43
  */
 
 package ru.narod.jcommander.gui.table;

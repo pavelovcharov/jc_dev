@@ -19,7 +19,7 @@
 /*
  * MessageID.java
  *
- * Created on 25 ������ 2007 �., 14:16
+ * Created on 25 apr 2007, 14:16
  *
  */
 package ru.narod.jcommander.gui.message;

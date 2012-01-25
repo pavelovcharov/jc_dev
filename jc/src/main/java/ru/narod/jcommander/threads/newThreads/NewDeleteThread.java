@@ -41,7 +41,7 @@ public class NewDeleteThread extends FileThread {
     }
 
     /**
-     * �������� ����� ������. ����������� ��� ������ ������ <B>start()</B>
+     * Основной метод потока. Запускается при вызове метода <B>start()</B>
      */
     @Override
     public void run() {

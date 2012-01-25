@@ -46,7 +46,7 @@ public abstract class FileThread extends BaseThread {
 
 	protected boolean applyToAll = false;
 	/**
-	 * ���������� true ���� ����� ���������� �����
+	 * Возвращает true если можно продолжать поток
 	 */
 	protected boolean queryReplace(BaseFile source, BaseFile target) {
 		
@@ -93,7 +93,7 @@ public abstract class FileThread extends BaseThread {
 	}
 
 	/**
-	 * ���������� true ���� ����� ���������� �����
+	 * Возвращает true если можно продолжать поток
 	 */
 	protected boolean queryError(String errorText) {
 		if (resultError.equals(ErrorAction.SkipAll)) {

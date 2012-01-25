@@ -19,7 +19,7 @@
 /*
  * MainFrameFocusListener.java
  *
- * Created on 20 ��� 2005 �., 17:27
+ * Created on 20 may 2005, 17:27
  */
 
 package ru.narod.jcommander.gui.listeners;
@@ -31,22 +31,22 @@ import ru.narod.jcommander.gui.MainFrame;
 //import ru.narod.jcommander.gui.table.FileTable;
 
 /**
- * ����� ��������� ��������, ����������� ��� ��������� ������
- * ��������� ���� ����������
+ * Класс описывает действия, выполняемые при изменении фокуса
+ * основного окна приложения
  * @author Sniper
  * @version 2005/05/20 17:27
  */
 public class MainFrameFocusListener implements FocusListener{
     //private FileTable left,right;
     /**
-     * ������� ������ ������ MainFrameFocusListener
+     * Создает объект класса MainFrameFocusListener
      */
     public MainFrameFocusListener(/*FileTable left, FileTable right*/) {
         //this.left=left;
         //this.right=right;
     }
     /**
-     * ����� �����������, ����� ���� �������� �����
+     * Метод выполняется, когда окно получает фокус
      */
     public void focusGained(FocusEvent fe){
         
@@ -71,7 +71,7 @@ public class MainFrameFocusListener implements FocusListener{
          */
     }
     /**
-     * ����� �����������, ����� ���� ������ �����
+     * Метод выполняется, когда окно теряет фокус
      */
     public void focusLost(FocusEvent fe){
     }

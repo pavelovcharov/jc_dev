@@ -19,7 +19,7 @@
 /*
  * Editor.java
  *
- * Created on 25 ������ 2006 �., 17:42
+ * Created on 25 nov 2006, 17:42
  */
 
 package ru.narod.jcommander.editor;
@@ -44,7 +44,7 @@ import ru.narod.jcommander.gui.dialog.WarningDialog;
 import ru.narod.jcommander.util.LanguageBundle;
 
 /**
- * ����� ��������� ���� ��������� � �������������� ����������� ������
+ * Класс описывает окно просмотра и редактирования содержимого файлов
  * @author Pavel Ovcharov
  */
 public class Editor extends javax.swing.JFrame implements EditorPrefs, ru.narod.jcommander.prefs.PrefKeys {
@@ -52,8 +52,8 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, ru.narod.
 	private LanguageBundle lb = LanguageBundle.getInstance();
     
     /**
-     * ������� ����� ������ ������ Editor
-     * @param parent ������ ������ javax.swing.JFrame, ���� ������������ �� ��������� � �������
+     * Создать новый объект класса Editor
+     * @param parent объект класса javax.swing.JFrame, окно родительское по отношение к данному
      */
     public Editor(JFrame parent) {
         initComponents();
@@ -84,9 +84,9 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, ru.narod.
     }
     
     /**
-     * ������� ���� � ���� ���������
-     * @param file ����������� ����
-     * @param isEditable <B>true</B>, ���� ���� ����������� ��� ��������������, ����� - <B>false</B>
+     * Открыть файл в окне просмотра
+     * @param file открываемый файл
+     * @param isEditable <B>true</B>, если файл открывается для редактирования, иначе - <B>false</B>
      */
     public void openFile(BaseFile file, boolean isEditable) {
         jPanel2.setVisible(false);

@@ -40,11 +40,11 @@ public class MyTgzFile extends MyTarFile {
 //    protected BaseFile parent;
 //    protected TarEntry entry = null;
 
-	//XXX � ���� ����� � ����?
+	//XXX а если архив в сети?
 	/**
-	 * ������� ������ ������ MyTarFile � ������� ����� <I>parent</I>
+	 * Создать объект класса MyTarFile с помощью файла <I>parent</I>
 	 *
-	 * @param parent ������ ������ LocalFile, �������� ��������� ������
+	 * @param parent объект класса LocalFile, задающий положение архива
 	 */
 	public MyTgzFile(LocalFile parent) {
 		super(parent);
@@ -56,8 +56,8 @@ public class MyTgzFile extends MyTarFile {
 	}
 
 	/**
-	 * ������� ������ ������ MyTarFile � ������� ����� <I>parent</I>
-	 * @param parent ������ ������ BaseFile
+	 * Создать объект класса MyTarFile с помощью файла <I>parent</I>
+	 * @param parent объект класса BaseFile
 	 */
 	public MyTgzFile(BaseFile parent) {
 		super(parent);
@@ -65,10 +65,10 @@ public class MyTgzFile extends MyTarFile {
 	}
 
 	/**
-	 * ������� ������ ������ MyTarFile � ������� ����� <I>parent</I> � ����� �����
+	 * Создать объект класса MyTarFile с помощью файла <I>parent</I> и имени файла
 	 * <I>child</I>
-	 * @param parent ������ ���������� ���� � �����
-	 * @param child ��� ����������� �����
+	 * @param parent задает абсолютный путь к файлу
+	 * @param child имя создавемого файла
 	 */
 	public MyTgzFile(MyTgzFile parent, String child) {
 		super(parent, child);
@@ -91,11 +91,11 @@ public class MyTgzFile extends MyTarFile {
 	}
 
 	/**
-	 * ������� ������ ������ MyTgzFile. ������������ ��� ���������� ���������
-	 * ����������� ������, ������������ ������ ������� ������.
-	 * @param parent ������ ������ MyTgzFile, �������������� ����� �����, ���������� �������� �����
-	 * �����������
-	 * @param archive ������ ���� � ������ �� ����� (��������, �� ��������� �����)
+	 * Создать объект класса MyTgzFile. Используется для реализации просмотра
+	 * содержимого архива, находящегося внутри другого архива.
+	 * @param parent объект класса MyTgzFile, представляющий собой архив, содержимое которого нужно
+	 * просмотреть
+	 * @param archive задает путь к архиву на диске (например, во временной папке)
 	 */
 //	public MyTgzFile(MyTgzFile parent, LocalFile archive) {
 //		super(parent, archive);
@@ -104,11 +104,11 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 	/**
-	 * ������� ������ ������ MyTgzFile. ������������ ��� ���������� ���������
-	 * ����������� ������, ������������ ������ ������� ������.
-	 * @param parent ������ ������ ArchiveFile, �������������� ����� �����, ���������� �������� �����
-	 * �����������
-	 * @param archive ������ ���� � ������ �� ����� (��������, �� ��������� �����)
+	 * Создать объект класса MyTgzFile. Используется для реализации просмотра
+	 * содержимого архива, находящегося внутри другого архива.
+	 * @param parent объект класса ArchiveFile, представляющий собой архив, содержимое которого нужно
+	 * просмотреть
+	 * @param archive задает путь к архиву на диске (например, во временной папке)
 	 */
 	public MyTgzFile(ArchiveFile parent, LocalFile archive) {
 		this(archive);
@@ -116,9 +116,9 @@ public class MyTgzFile extends MyTarFile {
 	}
 
 	/**
-	 * �������� ����� ��� ������ �� �����
-	 * @return ����� ��� ������ �� �����
-	 * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
+	 * Получить поток для чтения из файла
+	 * @return поток для чтения из файла
+	 * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
 	 */
 	@Override
 	public java.io.InputStream getInputStream() throws java.io.IOException {
@@ -167,15 +167,15 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * �������� ������ ���� ������, ����������� � ������ ����� � ������
-//	 * @return ������ ���� ������
+//	 * Получить список имен файлов, находящихся в данной папке в архиве
+//	 * @return массив имен файлов
 //	 */
 //	@Override
 //	public String[] list() {
 //		ArrayList names = new ArrayList();
 //		Set keys = archiveMap.keySet();
 //		if (keys != null) {
-//			if (null == entry) {//������ ������
+//			if (null == entry) {//корень архива
 //				// search through all available archive entries
 //				Iterator iter = keys.iterator();
 //				while (iter.hasNext()) {
@@ -221,8 +221,8 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * �������� ������ ������, ����������� � ������ ����� � ������
-//	 * @return ������ ������
+//	 * Получить список файлов, находящихся в данной папке в архиве
+//	 * @return массив файлов
 //	 */
 //	@Override
 //	public BaseFile[] getFiles(FileFilter filter) {
@@ -249,8 +249,8 @@ public class MyTgzFile extends MyTarFile {
 	}
 
 //	/**
-//	 * ����������, �������� �� ������ ������ ������ ��� ���������
-//	 * @return <B>true</B>, ���� ������ ������ �������� ���������, ����� - <B>false</B>
+//	 * Определить, является ли данный объект файлом или каталогом
+//	 * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
 //	 */
 //	@Override
 //	public boolean isDirectory() {
@@ -258,8 +258,8 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * �������� ������������ ����� ��� ������� �����
-//	 * @return ������ ������ BaseFile, �������������� ������������ ����� ������� �����
+//	 * Получить родительскую папку для данного файла
+//	 * @return объект класса BaseFile, представляющий родительскую папку данного файла
 //	 */
 //	@Override
 //	public BaseFile getAbsoluteParent() {
@@ -268,9 +268,9 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * ������������ ������ � ����� ��������� �����. ��������, �����
-//	 * 12455 ����� ����� ��� 12 455
-//	 * @return ������ ���������� ������ ����� � ����������������� ����
+//	 * Представляет размер в более наглядной форме. Например, число
+//	 * 12455 будет иметь вид 12 455
+//	 * @return строка содержащая размер файла в отформатированном виде
 //	 */
 //	@Override
 //	public String getFormatFileSize() {
@@ -284,8 +284,8 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * ���������� ���� ���������� ����������� ����� ��� ��������
-//	 * @return ���� ���������� ����������� � ������� dd.MM.yyyy hh:mm
+//	 * Возвращает дату последеней модификации файла или каталога
+//	 * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
 //	 */
 //	@Override
 //	public String getLastModifiedDate() {
@@ -301,9 +301,9 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * ���������� �������� ����� ��� ��������. ro - ������ ��� ������,
-//	 * h - �������
-//	 * @return ������, ���������� �������� ����� ��� ��������
+//	 * Возвращает атрибуты файла или каталога. ro - только для чтения,
+//	 * h - скрытый
+//	 * @return строку, содержащую атрибуты файла или каталога
 //	 */
 //	@Override
 //	public String getAtributeString() {
@@ -314,9 +314,9 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * �������� ����� ��� ������ � ����
-//	 * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
-//	 * @return ����� ��� ������ � ����
+//	 * Получить поток для записи в файл
+//	 * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
+//	 * @return поток для записи в файл
 //	 */
 //	@Override
 //	public java.io.OutputStream getOutputStream() throws java.io.IOException {
@@ -327,8 +327,8 @@ public class MyTgzFile extends MyTarFile {
 //	}
 
 //	/**
-//	 * �������� ��������� ������������� �������
-//	 * @return ��������� �������������
+//	 * Получить строковое представление объекта
+//	 * @return строковое представление
 //	 */
 //	@Override
 //	public String toString() {

@@ -19,7 +19,7 @@
 /*
  * PrefKeys.java
  *
- * Created on 10 ������ 2007 �., 10:42
+ * Created on 10 jan 2007, 10:42
  *
  */
 package ru.narod.jcommander.prefs;
@@ -51,7 +51,7 @@ public interface PrefKeys {
     public final String PK_ARRANGEMENT = "PK_ARRANGEMENT";
     public final String PK_USE_SYSTEM_ICONS = "PK_USE_SYSTEM_ICONS";
     public final String PK_QUICK_SEARCH_MODE = "PK_QUICK_SEARCH_MODE";
-    public final String PATH_TO_LANGUAGE = "ru.narod.jcommander/resources/lang";
+    public final String PATH_TO_LANGUAGE = "ru/narod/jcommander/resources/lang";
     
     public final String PK_LEFT_SORT = "LEFT_SORT";
     public final String PK_RIGHT_SORT = "RIGHT_SORT";

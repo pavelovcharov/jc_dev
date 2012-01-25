@@ -19,7 +19,7 @@
 /*
  * Element.java
  *
- * Created on 15 ������� 2006 �., 11:28
+ * Created on 15 oct 2006 г., 11:28
  */
 
 package ru.narod.jcommander.gui.table.tableElements;
@@ -27,7 +27,7 @@ package ru.narod.jcommander.gui.table.tableElements;
 import java.awt.Color;
 
 /**
- * ����� �������� ���� � ������, ����� ��� ���� ��������� �������
+ * Класс содержит поля и методы, общие для всех элементов таблицы
  * @author Pavel Ovcharov
  */
 public abstract class Element implements Comparable{
@@ -39,39 +39,39 @@ public abstract class Element implements Comparable{
     public Element() {
     }
     /**
-     * ������� ����� ��������� ������ Element � �������� ������ ���� � ������
-     * @param fontColor ���� ������
-     * @param bgColor ���� ����
+     * Создать новый экземпляр класса Element с заданным цветом фона и шрифта
+     * @param fontColor цыет шрифта
+     * @param bgColor цвет фона
      */
     public Element(Color fontColor, Color bgColor) {
         this.fontColor = fontColor;
         this.bgColor = bgColor;
     }
     /**
-     * �������� ���� ������ ��� �������� �������
-     * @return ���� ������
+     * Получить цвет шрифта для элемента таблицы
+     * @return цвет шрифта
      */
     public Color getFontColor() {
         return fontColor;
     }
     /**
-     * �������� ���� ���� ��� �������� �������
-     * @return ���� ����
+     * Получить цвет фона для элемента таблицы
+     * @return цвет фона
      */
     public Color getBackgroundColor() {
         return bgColor;
     }
     /**
-     * ���������, �������� �� ������ ������� ����������
-     * @return <B>true</B>, ���� ������� �������� ����������, ����� - 
+     * Проверить, является ли данный элемент выделенным
+     * @return <B>true</B>, если элемент является выделенным, иначе - 
      * <B>false</B>
      */
     public boolean isSelected() {
         return isSelected;
     }
     /**
-     * �������� ������� ��� ����� ���������
-     * @param isSelected <B>true</B> ��� ��������� ��������, <B>false</B>
+     * Выделить элемент или снять выделение
+     * @param isSelected <B>true</B> для выделения элемента, <B>false</B>
      */
     public void setSelected(boolean isSelected) {
         this.isSelected = isSelected;

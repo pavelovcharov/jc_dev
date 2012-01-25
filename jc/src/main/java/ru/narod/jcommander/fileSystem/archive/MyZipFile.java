@@ -19,12 +19,11 @@
 /*
  * MyZipFile.java
  *
- * Created on 23 ������ 2006 �., 21:54
+ * Created on 23 nov 2006, 21:54
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.fileSystem.archive;
 
 import ru.narod.jcommander.fileSystem.*;
@@ -39,60 +38,64 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-//XXX ���������� ��� ��� ��������
-
+//XXX посмотреть как это работает
 /**
- * ����� ������ ���� � zip ��� jar-������. ��������� ������������� ����������
- * �������, ��� ������� ����� �� �����
+ * Класс задает файл в zip или jar-архиве. Позволяет просматривать содержимое
+ * архивов, как обычные папки на диске
+ *
  * @author Pavel Ovcharov
  */
 public class MyZipFile extends LocalFile implements ArchiveFile {
-    
+
     private HashMap archiveMap;
     private LocalFile archive;
     private BaseFile parent;
     private ZipEntry entry = null;
 
-	//XXX � ���� ����� � ����?
+    //XXX а если архив в сети?
     /**
-     * ������� ������ ������ MyZipFile � ������� ����� <I>parent</I>
-     * 
-     * @param parent ������ ������ LocalFile, �������� ��������� ������
+     * Создать объект класса MyZipFile с помощью файла <I>parent</I>
+     *
+     * @param parent объект класса LocalFile, задающий положение архива
      */
     public MyZipFile(LocalFile parent) {
         super(parent);
-        if (false == exists()) throw new IllegalArgumentException("ArchiveFile " + parent + " doesn't exists!");
+        if (false == exists()) {
+            throw new IllegalArgumentException("ArchiveFile " + parent + " doesn't exists!");
+        }
         this.archive = parent;
         this.parent = parent.getAbsoluteParent();
         archiveMap = new HashMap();
         getArchiveContent();
     }
-    
+
     /**
-     * ������� ������ ������ MyZipFile � ������� ����� <I>parent</I>
-     * @param parent ������ ������ BaseFile
+     * Создать объект класса MyZipFile с помощью файла <I>parent</I>
+     *
+     * @param parent объект класса BaseFile
      */
     public MyZipFile(BaseFile parent) {
         this(new LocalFile(parent));
     }
-    
+
     /**
-     * ������� ������ ������ MyZipFile � ������� ����� <I>parent</I> � ����� �����
-     * <I>child</I>
-     * @param parent ������ ���������� ���� � �����
-     * @param child ��� ����������� �����
+     * Создать объект класса MyZipFile с помощью файла <I>parent</I> и имени
+     * файла <I>child</I>
+     *
+     * @param parent задает абсолютный путь к файлу
+     * @param child имя создавемого файла
      */
     public MyZipFile(MyZipFile parent, String child) {
         super(parent, child);
         this.parent = parent;
         archive = parent.archive;
         archiveMap = parent.archiveMap;
-        entry = new ZipEntry(parent.entry+ARCHIVE_SEPARATOR+child);
-        
+        entry = new ZipEntry(parent.entry + ARCHIVE_SEPARATOR + child);
+
     }
-    
+
     private MyZipFile(LocalFile parent, ZipEntry zipEntry) {
-        super(((MyZipFile)parent).archive, zipEntry.getName());
+        super(((MyZipFile) parent).archive, zipEntry.getName());
         this.entry = zipEntry;
         this.parent = parent;
         if (parent instanceof MyZipFile) {
@@ -100,31 +103,34 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
             archive = ((MyZipFile) parent).archive;
         }
     }
-    
+
     /**
-     * ������� ������ ������ MyZipFile. ������������ ��� ���������� ���������
-     * ����������� ������, ������������ ������ ������� ������.
-     * @param parent ������ ������ MyZipFile, �������������� ����� �����, ���������� �������� �����
-     * �����������
-     * @param archive ������ ���� � ������ �� ����� (��������, �� ��������� �����)
+     * Создать объект класса MyZipFile. Используется для реализации просмотра
+     * содержимого архива, находящегося внутри другого архива.
+     *
+     * @param parent объект класса MyZipFile, представляющий собой архив,
+     * содержимое которого нужно просмотреть
+     * @param archive задает путь к архиву на диске (например, во временной
+     * папке)
      */
 //    public MyZipFile(MyZipFile parent, LocalFile archive) {
 //        this(archive);
 //        this.parent = parent;
 //    }
-
-	/**
-     * ������� ������ ������ MyZipFile. ������������ ��� ���������� ���������
-     * ����������� ������, ������������ ������ ������� ������.
-     * @param parent ������ ������ ArchiveFile, �������������� ����� �����, ���������� �������� �����
-     * �����������
-     * @param archive ������ ���� � ������ �� ����� (��������, �� ��������� �����)
+    /**
+     * Создать объект класса MyZipFile. Используется для реализации просмотра
+     * содержимого архива, находящегося внутри другого архива.
+     *
+     * @param parent объект класса ArchiveFile, представляющий собой архив,
+     * содержимое которого нужно просмотреть
+     * @param archive задает путь к архиву на диске (например, во временной
+     * папке)
      */
-	public MyZipFile(ArchiveFile parent, LocalFile archive) {
-		this(archive);
-		this.parent = parent;
-	}
-    
+    public MyZipFile(ArchiveFile parent, LocalFile archive) {
+        this(archive);
+        this.parent = parent;
+    }
+
     private boolean getArchiveContent() {
         boolean success = true;
         archiveMap.clear();
@@ -138,17 +144,16 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
                 if (object instanceof ZipEntry) {
 //                    ZipEntry ze = (ZipEntry) object;
 //                    name = ze.getName();
-					name = ((ZipEntry) object).getName();
+                    name = ((ZipEntry) object).getName();
                     if (name.endsWith(ARCHIVE_SEPARATOR)) {
                         name = name.substring(0,
-                            name.lastIndexOf(ARCHIVE_SEPARATOR));
+                                name.lastIndexOf(ARCHIVE_SEPARATOR));
                     }
 
                     archiveMap.put(name, object);
                 }
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             success = false;
         }
 
@@ -158,17 +163,17 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
 //	private void setArchiveMap(HashMap archiveMap) {
 //        this.archiveMap = archiveMap;
 //    }
-
     /**
-     * �������� ������ ���� ������, ����������� � ������ ����� � ������
-     * @return ������ ���� ������
+     * Получить список имен файлов, находящихся в данной папке в архиве
+     *
+     * @return массив имен файлов
      */
-	@Override
+    @Override
     public String[] list() {
         ArrayList names = new ArrayList();
         Set keys = archiveMap.keySet();
         if (keys != null) {
-            if (null == entry) {//������ ������
+            if (null == entry) {//корень архива
                 // search through all available archive entries
                 Iterator iter = keys.iterator();
                 while (iter.hasNext()) {
@@ -183,8 +188,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
                         names.add(key);
                     }
                 }
-            }
-            else {
+            } else {
                 final String name = entry.getName();
 
                 // search through all available archive entries
@@ -207,20 +211,21 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
                 }
             }
         }
-        String [] list = new String[names.size()];
-        for (int i=0; i<list.length; i++) {
+        String[] list = new String[names.size()];
+        for (int i = 0; i < list.length; i++) {
             list[i] = names.get(i).toString();
         }
         return list;
     }
-    
+
     /**
-     * �������� ������ ������, ����������� � ������ ����� � ������
-     * @return ������ ������
+     * Получить список файлов, находящихся в данной папке в архиве
+     *
+     * @return массив файлов
      */
-	@Override
+    @Override
     public BaseFile[] getFiles(FileFilter filter) {
-		return getFiles();
+        return getFiles();
 //        final String[] names = list();
 //        MyZipFile[] files = null;
 //        if (names != null) {
@@ -239,7 +244,8 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
 //        }
 //        return files;
     }
-	@Override
+
+    @Override
     public BaseFile[] getFiles() {
         final String[] names = list();
         MyZipFile[] files = null;
@@ -248,10 +254,9 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
             String name;
             for (int i = 0; i < names.length; ++i) {
 
-                if (null != entry){
+                if (null != entry) {
                     name = entry.getName() + names[i];
-                }
-                else {
+                } else {
                     name = names[i];
                 }
                 files[i] = new MyZipFile(this, (ZipEntry) archiveMap.get(name));
@@ -261,128 +266,152 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ����������, �������� �� ������ ������ ������ ��� ���������
-     * @return <B>true</B>, ���� ������ ������ �������� ���������, ����� - <B>false</B>
+     * Определить, является ли данный объект файлом или каталогом
+     *
+     * @return <B>true</B>, если данный объект является каталогом, иначе -
+     * <B>false</B>
      */
-	@Override
+    @Override
     public boolean isDirectory() {
         return (null == entry) ? archive.isDirectory() : entry.isDirectory();
     }
-    
+
     /**
-     * �������� ������������ ����� ��� ������� �����
-     * @return ������ ������ BaseFile, �������������� ������������ ����� ������� �����
+     * Получить родительскую папку для данного файла
+     *
+     * @return объект класса BaseFile, представляющий родительскую папку данного
+     * файла
      */
-	@Override
+    @Override
     public BaseFile getAbsoluteParent() {
         return parent;
         //return getAbstractParent();
     }
-    
+
     /**
-     * ������������ ������ � ����� ��������� �����. ��������, �����
-     * 12455 ����� ����� ��� 12 455
-     * @return ������ ���������� ������ ����� � ����������������� ����
+     * Представляет размер в более наглядной форме. Например, число 12455 будет
+     * иметь вид 12 455
+     *
+     * @return строка содержащая размер файла в отформатированном виде
      */
-	@Override
+    @Override
     public String getFormatFileSize() {
-        if (null == entry) return getFormatFileSize(archive.length());
-        if (true == entry.isDirectory()) return DEFAULT_DIR_SIZE;
+        if (null == entry) {
+            return getFormatFileSize(archive.length());
+        }
+        if (true == entry.isDirectory()) {
+            return DEFAULT_DIR_SIZE;
+        }
         return getFormatFileSize(entry.getSize());
     }
-    
+
     /**
-     * ���������� ���� ���������� ����������� ����� ��� ��������
-     * @return ���� ���������� ����������� � ������� dd.MM.yyyy hh:mm
+     * Возвращает дату последеней модификации файла или каталога
+     *
+     * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
-	@Override
+    @Override
     public String getLastModifiedDate() {
-        Date date=new Date();
-        SimpleDateFormat sdate=new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-        if (null == entry)
-            date.setTime(((LocalFile)parent).lastModified());
-        else 
+        Date date = new Date();
+        SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+        if (null == entry) {
+            date.setTime(((LocalFile) parent).lastModified());
+        } else {
             date.setTime(entry.getTime());
+        }
         return sdate.format(date);
 
     }
-    
+
     /**
-     * ���������� �������� ����� ��� ��������. ro - ������ ��� ������,
-     * h - �������
-     * @return ������, ���������� �������� ����� ��� ��������
+     * Возвращает атрибуты файла или каталога. ro - только для чтения, h -
+     * скрытый
+     *
+     * @return строку, содержащую атрибуты файла или каталога
      */
-	@Override
+    @Override
     public String getAtributeString() {
-        if (null == entry) return ((LocalFile)parent).getAtributeString();
+        if (null == entry) {
+            return ((LocalFile) parent).getAtributeString();
+        }
         return "ro";
     }
-    
+
     /**
-     * �������� ����� ��� ������ �� �����
-     * @return ����� ��� ������ �� �����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
+     * Получить поток для чтения из файла
+     *
+     * @return поток для чтения из файла
+     * @throws java.lang.Exception вызывается, если при создании потока
+     * произошла ошибка
      */
-	@Override
+    @Override
     public java.io.InputStream getInputStream() throws java.io.IOException {
-        if (null == entry)
+        if (null == entry) {
             return parent.getInputStream();
+        }
         return new ZipFile(archive).getInputStream(entry);
     }
-    
+
     /**
-     * �������� ����� ��� ������ � ����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
-     * @return ����� ��� ������ � ����
+     * Получить поток для записи в файл
+     *
+     * @throws java.lang.Exception вызывается, если при создании потока
+     * произошла ошибка
+     * @return поток для записи в файл
      */
-	@Override
+    @Override
     public java.io.OutputStream getOutputStream() throws java.io.IOException {
-        if (null == entry)
+        if (null == entry) {
             return parent.getOutputStream();
+        }
         return null;
     }
-    
+
     /**
-     * �������� ���� ��������� ����������� �����
-     * @return ���� ��������� ����������� ����� - ����� ����������� ��������� � 00:00:00 1 
-     * ������ 1970; ���� ���� �� ���������� ������������ 0L
+     * Получить дату последней модификации файла
+     *
+     * @return дата последней модификации файла - число миллисекунд прошедших с
+     * 00:00:00 1 января 1970; если файл не существует возвращается 0L
      */
 //    public long lastModified() {
 //        if (null == zipEntry) return parent.lastModified();
 //        return zipEntry.getTime();
 //    }
-    
     /**
-     * �������� ��������� ������������� �������
-     * @return ��������� �������������
+     * Получить строковое представление объекта
+     *
+     * @return строковое представление
      */
-	@Override
+    @Override
     public String toString() {
-        if (false == parent.hasParent()) return parent + getFilename();
+        if (false == parent.hasParent()) {
+            return parent + getFilename();
+        }
         return parent + separator + getFilename();
     }
 
-	@Override
+    @Override
     public long getLastModifiedTime() {
-        if (null == entry)
+        if (null == entry) {
             return parent.getLastModifiedTime();
-        else 
+        } else {
             return entry.getTime();
+        }
     }
-    
-	@Override
-    public long length() {
-        if (null == entry)
-            return archive.length();
-        else
-            return entry.getSize();
-    }
-    
-	@Override
-     public String getPathWithSlash() {
-         String path = getAbsolutePath();
-         //if (false == isDirectory() ) return super.getAbsolutePath();
-         return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
-     }
 
+    @Override
+    public long length() {
+        if (null == entry) {
+            return archive.length();
+        } else {
+            return entry.getSize();
+        }
+    }
+
+    @Override
+    public String getPathWithSlash() {
+        String path = getAbsolutePath();
+        //if (false == isDirectory() ) return super.getAbsolutePath();
+        return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
+    }
 }

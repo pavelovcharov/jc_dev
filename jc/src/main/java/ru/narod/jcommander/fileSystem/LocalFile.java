@@ -19,7 +19,7 @@
 /*
  * LocalFile.java
  *
- * Created on 27 ���� 2006 �., 10:16
+ * Created on 27 mar 2006, 10:16
  *
  */
 package ru.narod.jcommander.fileSystem;
@@ -31,7 +31,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 /**
- * ����� ������ ���� ��� ������� �������� �������
+ * Класс задает файл или каталог файловой системы
  * @author Pavel Ovcharov
  */
 public class LocalFile extends File implements BaseFile {
@@ -40,26 +40,26 @@ public class LocalFile extends File implements BaseFile {
     static protected String DEFAULT_DIR_SIZE = "<DIR>";
 
     /**
-     * ������� ��������� ������ LocalFile. �� ��������� ��� ������� �������
-     * �������� �������
+     * Создать экземпляр класса LocalFile. По умолчанию это текущий каталог
+     * файловой системы
      */
     public LocalFile() {
         super(RootFileSystem.getReadableRoot().getAbsolutePath());
     }
 
     /**
-     * ������� ��������� ������ LocalFile � ������ (�����) <I>fileName</I>
+     * Создать экземпляр класса LocalFile с именем (путем) <I>fileName</I>
      * 
-     * @param fileName ���� � �����
+     * @param fileName путь к файлу
      */
     public LocalFile(String fileName) {
         super(fileName);
     }
 
     /**
-     * ������� ��������� ������ LocalFile �� ����� anotherFile
+     * Создать экземпляр класса LocalFile по файлу anotherFile
      * 
-     * @param anotherFile ������ ����� java.io.File
+     * @param anotherFile объект класс java.io.File
      * @see java.io.File
      */
     public LocalFile(File anotherFile) {
@@ -67,49 +67,49 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ������� ��������� ������ LocalFile � ������ <I>fileName</I> � �����,
-     * �������� ������ <I>parentFile</I>.
+     * Создать экземпляр класса LocalFile с именем <I>fileName</I> в папке,
+     * заданной файлом <I>parentFile</I>.
      * 
-     * @param parentFile ������ ������ java.io.File ������ ���� � ��������
-     * @param fileName ������ ��� ������������ �����
+     * @param parentFile объект класса java.io.File задает путь к каталогу
+     * @param fileName задает имя создаваемого файла
      */
     public LocalFile(File parentFile, String fileName) {
         super(parentFile, fileName);
     }
 
     /**
-     * ������� ��������� ������ LocalFile � ������ <I>fileName</I> � �����,
-     * �������� ������ <I>parentFile</I>.
+     * Создать экземпляр класса LocalFile с именем <I>fileName</I> в папке,
+     * заданной файлом <I>parentFile</I>.
      * 
-     * @param parent ������ ������ LocalFile ������ ���� � ��������
-     * @param child ������ ��� ������������ �����
+     * @param parent объект класса LocalFile задает путь к каталогу
+     * @param child задает имя создаваемого файла
      */
     public LocalFile(LocalFile parent, String child) {
         super(parent, child);
     }
 
     /**
-     * ������� ��������� ������ LocalFile ��� ����� ����� aFile
+     * Создать экземпляр класса LocalFile как копию файла aFile
      * 
-     * @param aFile ������ ������ LocalFile
+     * @param aFile объект класса LocalFile
      */
     public LocalFile(LocalFile aFile) {
         super(aFile.getAbsolutePath());
     }
 
     /**
-     * ������� ��������� ������ LocalFile ��� ����� ����� aFile
+     * Создать экземпляр класса LocalFile как копию файла aFile
      * 
-     * @param aFile ������ ������ BaseFile
+     * @param aFile объект класса BaseFile
      */
     public LocalFile(BaseFile aFile) {
         super(aFile.getAbsolutePath());
     }
 
     /**
-     * ���������� ���������� �����
-     * @return ������ ������, ���� ������� ������ �������� �������, �����
-     * ������������ ������, ���������� ���������� �����
+     * Возвращает расширение файла
+     * @return пустую строку, если текущим файлом является каталог, иначе
+     * возвращается строка, содержащая расширение файла
      */
     public String getExtention() {
         if (super.isDirectory()) {
@@ -126,8 +126,8 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ��������� �������� ��� ����� ��� ��������
-     * @return ��� �������� ����� (��� ����������) ��� ��������
+     * Позволяет получить имя файла или каталога
+     * @return имя текущего файла (без расширения) или каталога
      */
     public String getAbstractFileName() {
         String name = super.getName();
@@ -148,9 +148,9 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * �������� ������������ ������� ������� �����
-     * @return ������������ �������; ���� ������������� �������� ���,
-     * ������������ <B>null</B>
+     * Получить родительский каталог данного файла
+     * @return родительский каталог; если родительского каталога нет,
+     * возвращается <B>null</B>
      */
     public LocalFile getAbstractParent() {
         if (super.getParentFile() != null) {
@@ -161,8 +161,8 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ����������, ���� �� ������������ ������� � ������� �����
-     * @return <B>true</B>���� ������������ ������� ����, ����� - <B>false</B>
+     * Определить, есть ли родительский каталог у данного файла
+     * @return <B>true</B>если родительский каталог есть, иначе - <B>false</B>
      */
     public boolean hasParent() {
         return (null != super.getParentFile()) ? true : false;
@@ -170,15 +170,15 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ���������� ��� ����� ��� ��������
-     * @return ��� ������� �������� ��� ����� (� �����������)
+     * Возвращает имя файла или каталога
+     * @return имя текщего каталога или файла (с расширением)
      */
     public String getFilename() {
         return super.getName();
     }
 
     /**
-     * ���������� ������������� ���� (������������� ������������ path)
+     * Возвращает относительный путь (относительный относительно path)
      * @param path
      * @return
      */
@@ -191,8 +191,8 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ���������� ���� ���������� ����������� ����� ��� ��������
-     * @return ���� ���������� ����������� � ������� dd.MM.yyyy hh:mm
+     * Возвращает дату последеней модификации файла или каталога
+     * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
     public String getLastModifiedDate() {
         return getLastModifiedDate(lastModified());
@@ -206,17 +206,17 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ��������� ������ �����
-     * @return ������������, ���������� ���� ���������� ������
+     * Возващает размер файла
+     * @return возвращается, количество байт занимаемых файлом
      */
     public long getSize() {
         return length();
     }
 
     /**
-     * ������������ ������ � ����� ��������� �����. ��������, �����
-     * 12455 ����� ����� ��� 12 455
-     * @return ������ ���������� ������ ����� � ����������������� ����
+     * Представляет размер в более наглядной форме. Например, число
+     * 12455 будет иметь вид 12 455
+     * @return строка содержащая размер файла в отформатированном виде
      */
     public String getFormatFileSize() {
         String str = new String("");
@@ -237,9 +237,9 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ���������� �������� ����� ��� ��������. ro - ������ ��� ������,
-     * h - �������
-     * @return ������, ���������� �������� ����� ��� ��������
+     * Возвращает атрибуты файла или каталога. ro - только для чтения,
+     * h - скрытый
+     * @return строку, содержащую атрибуты файла или каталога
      */
     public String getAtributeString() {
         String atr = "";
@@ -264,11 +264,11 @@ public class LocalFile extends File implements BaseFile {
      */
 
     /**
-     * ���������� ��������� �� ���� ������
+     * Определяет совпадают ли пути файлов
      * 
-     * @param aFile ������ ������ LocalFile
-     * @return <B>true</B>, ���� ���� ������� ����� � ����� aFile ���������,
-     * ����� - <B>false</B>
+     * @param aFile объект класса LocalFile
+     * @return <B>true</B>, если пути данного файла и файла aFile совпадают,
+     * иначе - <B>false</B>
      */
     public boolean equals(LocalFile aFile) {
         return this.getAbsolutePath().equals(aFile.getAbsolutePath());
@@ -296,9 +296,9 @@ public class LocalFile extends File implements BaseFile {
 //        target.setLastModified(lastModified());
 //    }
     /**
-     * �������� ����, ������������� ����� ����� ('C:\', 'D:\' � �.�.
-     * ��� Windows, '/' ��� Linux)
-     * @return ������ ������ BaseFile - ������ �����
+     * Получить файл, соответсвущий корню диска ('C:\', 'D:\' и т.д.
+     * для Windows, '/' для Linux)
+     * @return объект класса BaseFile - корень диска
      */
     public BaseFile getRoot() {
         LocalFile root = this;
@@ -309,36 +309,36 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * �������� ������������ ������� ������� �����
-     * @return ������������ ������� - ������ ������ BaseFile; ����
-     * ������������� �������� ���, ������������ <B>null</B>
+     * Получить родительский каталог данного файла
+     * @return родительский каталог - объект класса BaseFile; если
+     * родительского каталога нет, возвращается <B>null</B>
      */
     public BaseFile getAbsoluteParent() {
         return getAbstractParent();
     }
 
     /**
-     * �������� ����� ��� ������ �� �����
-     * @return ����� ��� ������ �� �����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
+     * Получить поток для чтения из файла
+     * @return поток для чтения из файла
+     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      */
     public java.io.InputStream getInputStream() throws java.io.IOException {
         return new FileInputStream(this);
     }
 
     /**
-     * �������� ����� ��� ������ � ����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
-     * @return ����� ��� ������ � ����
+     * Получить поток для записи в файл
+     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
+     * @return поток для записи в файл
      */
     public java.io.OutputStream getOutputStream() throws java.io.IOException {
         return new FileOutputStream(this);
     }
 
     /**
-     * �������� ���������� ���� � ����� � ������������ � �����
+     * Получить абсолютный путь к файлу с разделителем в конце
      * ("C:\123\", "C:\123\1.zip\", "/home/user/")
-     * @return ���������� ���� � �����
+     * @return абсолютный путь к файлу
      */
     public String getPathWithSlash() {
         String path = super.getAbsolutePath();
@@ -349,9 +349,9 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * ��������� ��������������� ������ ���� � ����, �������� ������ <I>targetFile</I>
-     * @param targetFile ������ ���� � ������ �����
-     * @return <B>true</B>,���� �������������� ������ �������; ����� - <B>false</B>
+     * Физически переименовывает данный файл в файл, заданный файлом <I>targetFile</I>
+     * @param targetFile задает путь к новому файлу
+     * @return <B>true</B>,если переименование прошло успешно; иначе - <B>false</B>
      */
     public boolean renameTo(BaseFile targetFile) {
         return super.renameTo((File) targetFile);
@@ -362,8 +362,8 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * �������� ������ ������ � ������ ��������
-     * @return ������ ������ � ������ ��������
+     * Получить список файлов в данном каталоге
+     * @return массив файлов в данном каталоге
      */
     public BaseFile[] getFiles(FileFilter filter) {
         File[] list = super.listFiles(filter);
@@ -378,8 +378,8 @@ public class LocalFile extends File implements BaseFile {
     }
 
     /**
-     * �������� ������ ������ � ������ ��������
-     * @return ������ ������ � ������ ��������
+     * Получить список файлов в данном каталоге
+     * @return массив файлов в данном каталоге
      */
     public BaseFile[] getFiles() {
         File[] list = super.listFiles();

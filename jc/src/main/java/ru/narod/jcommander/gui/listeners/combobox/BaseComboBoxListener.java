@@ -19,7 +19,7 @@
 /*
  * BaseComboBoxListener.java
  *
- * Created on 21 ��� 2007 �., 13:06
+ * Created on 21 may 2007, 13:06
  *
  */
 

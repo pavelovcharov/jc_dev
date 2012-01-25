@@ -19,7 +19,7 @@
 /*
  * SplashFrame.java
  *
- * Created on 16 ��� 2006 �., 16:26
+ * Created on 16 may 2006, 16:26
  */
 
 package ru.narod.jcommander.gui.splash;

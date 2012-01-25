@@ -46,7 +46,7 @@ public class PackDialog implements PrefKeys {
 	public static String DEFAULT_ARCHIVE_NAME = "archive";
 
 	public PackDialog(MainFrame parent, BaseFile sourceDir, BaseFile targerDir, BaseFile[] filesToPack) {
-		//XXX ����� ��� sourceDir � filesToCopy ������ ���������� ����� ������, � ������� ��� ��� ���� �� � �������
+		//XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
 
 		LanguageBundle lb = LanguageBundle.getInstance();
 

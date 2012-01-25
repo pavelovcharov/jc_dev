@@ -19,7 +19,7 @@
 /*
  * Filename.java
  *
- * Created on 15 ������� 2006 �., 11:47
+ * Created on 15 oct 2006, 11:47
  */
 package ru.narod.jcommander.gui.table.tableElements;
 
