@@ -156,7 +156,7 @@ public class RewriteDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        jLabel2.setText("������������: ");
+        jLabel2.setText("Существующий: ");
         jPanel2.add(jLabel2);
 
         getContentPane().add(jPanel2);
@@ -183,7 +183,7 @@ public class RewriteDialog extends javax.swing.JDialog {
 
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        jLabel3.setText("�����:");
+        jLabel3.setText("Новый:");
         jPanel3.add(jLabel3);
 
         getContentPane().add(jPanel3);
@@ -210,23 +210,23 @@ public class RewriteDialog extends javax.swing.JDialog {
 
         jPanelCheckBox.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 30, 15));
 
-        jCheckBoxApplyToAll.setText("��������� �� ����");
+        jCheckBoxApplyToAll.setText("Применить ко всем");
         jPanelCheckBox.add(jCheckBoxApplyToAll);
 
-        jCheckBoxApplyToOlder.setText("��������� � ����������");
+        jCheckBoxApplyToOlder.setText("Применить к устаревшим");
         jPanelCheckBox.add(jCheckBoxApplyToOlder);
 
         getContentPane().add(jPanelCheckBox);
 
-        jButtonYes.setText("��");
+        jButtonYes.setText("Да");
         jButtonYes.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanelButtons.add(jButtonYes);
 
-        jButtonNo.setText("����������");
+        jButtonNo.setText("Пропустить");
         jButtonNo.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanelButtons.add(jButtonNo);
 
-        jButtonCancel.setText("������");
+        jButtonCancel.setText("Отмена");
         jButtonCancel.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanelButtons.add(jButtonCancel);
 

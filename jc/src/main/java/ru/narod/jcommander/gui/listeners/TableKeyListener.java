@@ -19,7 +19,7 @@
 /*
  * TableKeyListener.java
  *
- * Created on 19 ������ 2007 �., 9:09
+ * Created on 19 apr 2007, 9:09
  *
  */
 package ru.narod.jcommander.gui.listeners;
@@ -44,23 +44,23 @@ public class TableKeyListener implements KeyListener, MessageID {
     private MainFrame parent;
 
     /**
-     * ������� ����� ������ ������ TableKeyListener
+     * Создает новый объект класса TableKeyListener
      *
-     * @param parent ������� ���� ����������
+     * @param parent главное окно приложения
      */
     public TableKeyListener(MainFrame parent) {
         this.parent = parent;
     }
 
     /**
-     * ����� ����������� ��� ������� �������
+     * Метод выполняется при нажатии клавишы
      */
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
     /**
-     * ����� �����������, ���� ������� ���� ������
+     * Метод выполняется, если клавиша была зажата
      */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -265,7 +265,7 @@ public class TableKeyListener implements KeyListener, MessageID {
     }
 
     /**
-     * ����� �����������, ����� ������� ���� ��������
+     * Метод выполняется, когда клавиша была отпущена
      */
     @Override
     public void keyReleased(KeyEvent e) {

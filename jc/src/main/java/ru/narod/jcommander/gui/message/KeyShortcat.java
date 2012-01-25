@@ -19,7 +19,7 @@
 /*
  * KeyShortcat.java
  *
- * Created on 19 ������ 2007 �., 10:34
+ * Created on 19 apr 2007, 10:34
  *
  */
 

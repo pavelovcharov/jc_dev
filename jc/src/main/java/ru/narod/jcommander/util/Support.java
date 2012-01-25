@@ -19,7 +19,7 @@
 /*
  * Support.java
  *
- * Created on 5 ������� 2006 �., 12:37
+ * Created on 5 dec 2006, 12:37
  *
  */
 package ru.narod.jcommander.util;

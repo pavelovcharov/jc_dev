@@ -19,7 +19,7 @@
 /*
  * Directory.java
  *
- * Created on 15 ������� 2006 �., 11:39
+ * Created on 15 oct 2006, 11:39
  */
 
 package ru.narod.jcommander.gui.table.tableElements;
@@ -28,7 +28,7 @@ import java.awt.Color;
 import ru.narod.jcommander.fileSystem.BaseFile;
 
 /**
- * ����� ����������� ������� ������� FileTable - ������� �������� �������
+ * Класс определеяет элемент таблицы FileTable - каталог файловой системы
  * @author Pavel Ovcharov
  */
 public class Directory extends Name {
@@ -40,12 +40,12 @@ public class Directory extends Name {
     private String DIR_CHARACTER_RIGHT = "";
     
     /**
-     * ������� ����� ��������� ������ Directory ��� �������� aFile. ������� ����� 
-     * ������������ � ������� � ����������� � ��������� ������� <I>fontColor</I> � 
+     * Создать новый экземпляр класса Directory для каталога aFile. Каталог будет 
+     * отображаться в таблице в соответсвии с заданными цветами <I>fontColor</I> и 
      * <I>bgColor</I>
-     * @param aFile ������� �������� �������
-     * @param fontColor ���� ������
-     * @param bgColor ���� ����
+     * @param aFile каталог файловой системы
+     * @param fontColor цвет шрифта
+     * @param bgColor цвет фона
      */
     public Directory(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
@@ -54,10 +54,10 @@ public class Directory extends Name {
     }
     
     /**
-     * ������� ����� ��������� ������ Directory ��� �������� aFile. ������� ����� 
-     * ������������ � ������� � ����������� � ��������� ������� <I>fontColor</I> � 
+     * Создать новый экземпляр класса Directory для каталога aFile. Каталог будет 
+     * отображаться в таблице в соответсвии с заданными цветами <I>fontColor</I> и 
      * <I>bgColor</I>
-     * @param aFile ������� �������� �������
+     * @param aFile каталог файловой системы
      */
     public Directory(BaseFile aFile) {
         super(aFile);
@@ -65,8 +65,8 @@ public class Directory extends Name {
         //this.aFile = aFile;
     }
     /**
-     * �������� ��������� ������������� �������
-     * @return ��������� �������������
+     * Получить строковое представление объекта
+     * @return строковое представление
      */
 	@Override
     public String toString() {
@@ -74,9 +74,9 @@ public class Directory extends Name {
     }
 
     /**
-     * ���������� ��������� �� ��� ������� - ������ � <I>obj</I>
-     * @param obj ������������ ������
-     * @return <B>true</B>, ���� ������� ���������, ����� - <B>false</B>
+     * Определить одинаковы ли два объекта - данный и <I>obj</I>
+     * @param obj сравниваемый объект
+     * @return <B>true</B>, если объекты одинаковы, иначе - <B>false</B>
      */
 	@Override
     public boolean equals(Object obj) {

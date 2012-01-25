@@ -19,7 +19,7 @@
 /*
  * ColumnNumbers.java
  *
- * Created on 30 ������ 2008 �., 11:17
+ * Created on 30 apr 2008, 11:17
  *
  */
 

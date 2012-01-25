@@ -56,7 +56,7 @@ public class ActionView extends AbstractAction {
             list.add(currentFile);
             LocalFile tempDir = FileSystemList.getTempDir();
             if (null == tempDir) {
-                //XXX query error ��� ������������ �����-�� ������ ����, ����. C:
+                //XXX query error или использовать какой-то другой путь, напр. C:
                 return;
             }
 //			if (CopyDialog.STATUS_OK != CopyDialog.showDialog(parent, activeTable.getCurrentDir(), tempDir, list, true))

@@ -19,7 +19,7 @@
 /*
  * MainFrame.java
  *
- * Created on 26 ������ 2005 �., 9:27
+ * Created on 26 apr 2005, 9:27
  */
 package ru.narod.jcommander.gui;
 
@@ -81,8 +81,8 @@ import ru.narod.jcommander.util.LanguageBundle;
 import ru.narod.jcommander.util.LocaleWrapper;
 
 /**
- * ����� ���������� �� JFrame � ��������� �������� ���� 
- * ����������
+ * Класс наследован от JFrame и описывает основное окно 
+ * приложения
  * @author Pavel Ovcharov
  * @version 2005/04/26 9:27
  */
@@ -138,9 +138,9 @@ public class MainFrame extends javax.swing.JFrame {
     // </editor-fold>
 
     /**
-     * ������� ����� ������ ������ MainFrame
-     * @param version ������ ����������
-     * @param title ��������� ����
+     * Создает новый объект класса MainFrame
+     * @param version версия приложения
+     * @param title заголовок окна
      */
     public MainFrame(String title, String version) {
         initComponents();
@@ -649,7 +649,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * �������� ������� ���� ����������
+     * Обновить главное окно приложения
      */
     public void updateMainWindow() {
         updatePanel(true);
@@ -683,7 +683,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * �������� �������� ������ ����������
+     * Обновить активную панель приложения
      */
     public void updateActivePanel() {
         if (currentLeftTable.isActive()) {
@@ -702,43 +702,43 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * � ����������� �� ����������� ��������� ���������� ����� ���
-     * ������ �������
-     * @param left <b>true</b> ��� ��������� ����� �������, <b>false</b> -
-     * ��� ��������� ������
-     * @return ������ ������ FileTable
+     * В зависимости от переданного параметра возвращает левую или
+     * правую таблицу
+     * @param left <b>true</b> для получения левой таблицы, <b>false</b> -
+     * для получения правой
+     * @return объект класса FileTable
      */
     public FileTable getTable(boolean left) {
         return left ? currentLeftTable : currentRightTable;
     }
 
     /**
-     * � ����������� �� ����������� ��������� ���������� ����� ���
-     * ������ ����� �������
-     * @param left <b>true</b> ��� ��������� ����� �����, <b>false</b> -
-     * ��� ��������� ������
+     * В зависимости от переданного параметра возвращает левую или
+     * правую метку статуса
+     * @param left <b>true</b> для получения левой метки, <b>false</b> -
+     * для получения правой
      *
-     * @return ������ ������ JLabel
+     * @return объект класса JLabel
      */
     public JLabel getStatusLabel(boolean left) {
         return left ? jLabelStatusLeft : jLabelStatusRight;
     }
 
     /**
-     * � ����������� �� ����������� ��������� ���������� ����� ���
-     * ������ ����� ����
-     * @param left <b>true</b> ��� ��������� ����� �����, <b>false</b> -
-     * ��� ��������� ������
-     * @return ������ ������ JTextField
+     * В зависимости от переданного параметра возвращает левую или
+     * правую метку пути
+     * @param left <b>true</b> для получения левой метки, <b>false</b> -
+     * для получения правой
+     * @return объект класса JTextField
      */
     public JTextField getDirLabel(boolean left) {
         return left ? jTextField1 : jTextField2;
     }
 
     /**
-     * ������� � cb ������ �������� File roots[]
-     * @param cb ���������� ������, ���� ��������� �������
-     * @param roots ������ ��������� ��������
+     * Заносит в cb список разделов File roots[]
+     * @param cb выпадающий список, куда заносятся разделы
+     * @param roots список доступных разделов
      */
     protected void initDriveComboBox(final JComboBox cb, BaseFile[] roots) {
         setDriveComboBox(cb, roots);
@@ -754,19 +754,19 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * � ����������� �� ����������� ��������� ���������� ����� ���
-     * ������ ������ ������
-     * @param left <b>true</b> ��� ��������� ������ ������, <b>false</b> -
-     * ��� ��������� �������
-     * @return ������ ������ JComboBox
+     * В зависимости от переданного параметра возвращает левый или
+     * правый список дисков
+     * @param left <b>true</b> для получения левого списка, <b>false</b> -
+     * для получения правого
+     * @return объект класса JComboBox
      */
     public JComboBox getComboBox(boolean left) {
         return left ? jComboBoxLeft : jComboBoxRight;
     }
 
     /**
-     * �������� �������� �������
-     * @return ������ ������ FileTable
+     * Получить активную таблицу
+     * @return объект класса FileTable
      */
     public FileTable getActiveTable() {
         return currentRightTable.isActive() ? currentRightTable : currentLeftTable;
@@ -839,9 +839,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * ������ ��� ������� �� ����� ������
-     * @param visible <b>true</b> ��� ������ ������� �� �����, <b>false</b> -
-     * ��� �������
+     * Скрыть или вывести на экран панели
+     * @param visible <b>true</b> для вывода панелей на экран, <b>false</b> -
+     * для скрытия
      */
     public void setPanelsVisible(boolean visible) {
         jSplitPane1.setVisible(visible);
@@ -849,8 +849,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * ���������� ������ �� ������
-     * @return <b>true</b>, ���� ������ ������, <b>false</b> - �����
+     * Определить видимы ли панели
+     * @return <b>true</b>, если панели видимы, <b>false</b> - иначе
      */
     public boolean isPanelsVisible() {
         return jSplitPane1.isVisible();
@@ -1533,10 +1533,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanelPrefConsole.setBorder(javax.swing.BorderFactory.createTitledBorder("�������"));
+        jPanelPrefConsole.setBorder(javax.swing.BorderFactory.createTitledBorder("Консоль"));
         jPanelPrefConsole.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        jLabelPrefCharset.setText("���������");
+        jLabelPrefCharset.setText("Кодировка");
         jPanelPrefConsole.add(jLabelPrefCharset);
 
         jComboBoxCharset.setPreferredSize(new java.awt.Dimension(150, 20));
@@ -1546,16 +1546,16 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel21.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        jLabelPrefLang.setText("����");
+        jLabelPrefLang.setText("Язык");
         jPanel21.add(jLabelPrefLang);
         jPanel21.add(jComboBoxLang);
 
         jPanel12.add(jPanel21);
 
-        jPanelEditor.setBorder(javax.swing.BorderFactory.createTitledBorder("������� ��������"));
+        jPanelEditor.setBorder(javax.swing.BorderFactory.createTitledBorder("Внешний редактор"));
         jPanelEditor.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        jCheckBoxEditor.setText("������������ ������� ��������");
+        jCheckBoxEditor.setText("Использовать внешний редактор");
         jCheckBoxEditor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxEditorActionPerformed(evt);
@@ -1565,13 +1565,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel23.setEnabled(false);
 
-        jLabelEditor.setText("��������:");
+        jLabelEditor.setText("Редактор:");
         jPanel23.add(jLabelEditor);
 
         jTextFieldEditor.setPreferredSize(new java.awt.Dimension(240, 25));
         jPanel23.add(jTextFieldEditor);
 
-        jButtonEditor.setText("�����...");
+        jButtonEditor.setText("Обзор...");
         jButtonEditor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditorActionPerformed(evt);
@@ -1584,7 +1584,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel12.add(jPanelEditor);
         jPanel12.add(jPanel22);
 
-        jTabbedPanePrefs.addTab("�������", jPanel12);
+        jTabbedPanePrefs.addTab("Главное", jPanel12);
 
         jPanel24.setLayout(new java.awt.BorderLayout());
 
@@ -1604,7 +1604,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel24.add(jPanelPrefTheme, java.awt.BorderLayout.NORTH);
 
-        jPanelPrefView.setBorder(javax.swing.BorderFactory.createTitledBorder("�����������"));
+        jPanelPrefView.setBorder(javax.swing.BorderFactory.createTitledBorder("Отображение"));
         jPanelPrefView.setPreferredSize(new java.awt.Dimension(100, 50));
         jPanelPrefView.setLayout(new java.awt.GridLayout(4, 2));
 
@@ -1625,7 +1625,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel26.setPreferredSize(new java.awt.Dimension(10, 50));
         jPanel24.add(jPanel26, java.awt.BorderLayout.PAGE_END);
 
-        jTabbedPanePrefs.addTab("������� ���", jPanel24);
+        jTabbedPanePrefs.addTab("Внешний вид", jPanel24);
 
         jPanel14.setLayout(new java.awt.BorderLayout());
         jPanel14.add(jScrollPanePrefHK, java.awt.BorderLayout.CENTER);
@@ -1640,13 +1640,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel14.add(jScrollPane1, java.awt.BorderLayout.SOUTH);
 
-        jTabbedPanePrefs.addTab("������� �������", jPanel14);
+        jTabbedPanePrefs.addTab("Горячие клавиши", jPanel14);
 
         jPanel15.add(jTabbedPanePrefs, java.awt.BorderLayout.CENTER);
 
         jPanel9.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonPrefOk.setText("��");
+        jButtonPrefOk.setText("ОК");
         jButtonPrefOk.setPreferredSize(new java.awt.Dimension(100, 25));
         jButtonPrefOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1655,7 +1655,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel9.add(jButtonPrefOk);
 
-        jButtonPrefCancel.setText("������");
+        jButtonPrefCancel.setText("Отмена");
         jButtonPrefCancel.setPreferredSize(new java.awt.Dimension(100, 25));
         jButtonPrefCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1664,7 +1664,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel9.add(jButtonPrefCancel);
 
-        jButtonPrefApply.setText("���������");
+        jButtonPrefApply.setText("Применить");
         jButtonPrefApply.setPreferredSize(new java.awt.Dimension(100, 25));
         jButtonPrefApply.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1708,7 +1708,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel20.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButtonDeleteFavorite.setText("�������");
+        jButtonDeleteFavorite.setText("Удалить");
         jButtonDeleteFavorite.setPreferredSize(new java.awt.Dimension(90, 25));
         jButtonDeleteFavorite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1717,7 +1717,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel20.add(jButtonDeleteFavorite);
 
-        jButtonHideDeleteFavoriteDialog.setText("�������");
+        jButtonHideDeleteFavoriteDialog.setText("Закрыть");
         jButtonHideDeleteFavoriteDialog.setPreferredSize(new java.awt.Dimension(90, 25));
         jButtonHideDeleteFavoriteDialog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1816,7 +1816,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel19.setLayout(new javax.swing.BoxLayout(jPanel19, javax.swing.BoxLayout.LINE_AXIS));
 
         jButtonFavorities1.setText("*");
-        jButtonFavorities1.setToolTipText("��������");
+        jButtonFavorities1.setToolTipText("Закладки");
         jButtonFavorities1.setFocusable(false);
         jButtonFavorities1.setMaximumSize(new java.awt.Dimension(23, 25));
         jButtonFavorities1.setMinimumSize(new java.awt.Dimension(23, 25));
@@ -1905,7 +1905,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel6.add(jPanel11);
 
         jButtonFavorities2.setText("*");
-        jButtonFavorities2.setToolTipText("��������");
+        jButtonFavorities2.setToolTipText("Закладки");
         jButtonFavorities2.setFocusable(false);
         jButtonFavorities2.setMaximumSize(new java.awt.Dimension(23, 25));
         jButtonFavorities2.setMinimumSize(new java.awt.Dimension(23, 25));

@@ -19,7 +19,7 @@
 /*
  * BaseDialog.java
  *
- * Created on 8 ���� 2007 �., 13:59
+ * Created on 8 jun 2007, 13:59
  */
 package ru.narod.jcommander.gui.dialog;
 

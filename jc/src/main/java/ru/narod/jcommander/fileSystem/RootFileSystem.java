@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import ru.narod.jcommander.fileSystem.net.NetFile;
 
 /**
- * ����� ������������� ������ ��� ����������� ������ �������� �
- * ������� ��������� (�������� CD-ROM, ����������)
+ * Класс предоставляет методы для определения списка разделов и
+ * сменных устройств (приводов CD-ROM, дисководов)
  * @author Sniper
  * @version 2005/04/24 1:12:37 PM
  */
@@ -34,8 +34,8 @@ abstract public class RootFileSystem {
     static public String FDD_2 = "b:" + java.io.File.separator;
 
     /**
-     * ���������� ������ ��������
-     * @return ������ ������ File, ���������� ����� ��������
+     * Возвращает список разделов
+     * @return массив класса File, содержащий файлы разделов
      */
     public static BaseFile[] getRoots() {
         java.io.File[] roots = java.io.File.listRoots();
@@ -55,10 +55,10 @@ abstract public class RootFileSystem {
     }
 
     /**
-     * ��������� �������� �� ���� ������ �������
-     * @return <b>true, ���� <i>file</i> �������� ������ �������, ����� - 
+     * Проверяет является ли файл файлом раздела
+     * @return <b>true, если <i>file</i> является файлом раздела, иначе - 
      * <b>false</b>
-     * @param file ����
+     * @param file файл
      */
     public static boolean isRoot(LocalFile file) {
         //File [] roots = new LocalFile().listRoots();

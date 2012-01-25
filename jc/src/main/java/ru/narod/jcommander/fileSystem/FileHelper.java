@@ -19,7 +19,7 @@
 /*
  * FileHelper.java
  *
- * Created on 24 ������ 2006 �., 20:41
+ * Created on 24 nov 2006, 20:41
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -30,26 +30,26 @@ import ru.narod.jcommander.fileSystem.archive.*;
 import ru.narod.jcommander.fileSystem.net.NetFile;
 
 /**
- * ����������� �����, �������������� �� java.io.File, ��������� ����� ������,
- * ����������� ���� ����� ������
+ * Абстрактный класс, унаследованный от java.io.File, реализует общие методы,
+ * необходимые всем типам файлов
  * @author Strateg
  */
 public abstract class FileHelper {
 
     /**
-     * �������� ���� (���������, ���� � ������, ����) �� ����� <I>parent</I>  � �����
-     * ����� <I>child</I>
-     * @param parent ������ ���� � �����
-     * @param child ������ ��� �����
-     * @return ������� ����
+     * Получить файл (локальный, файл в архиве, сети) по папке <I>parent</I>  и имени
+     * файла <I>child</I>
+     * @param parent задает путь к файлу
+     * @param child задает имя файла
+     * @return искомый файл
      */
-    //XXX ���� ���� � ������?
+    //XXX если файл в архиве?
     public static BaseFile getRealFile(BaseFile parent, String child) {
         if (parent instanceof NetFile) {
             return new NetFile(((NetFile) parent).getPathWithSlash() + child);
         }
         if (parent instanceof MyZipFile) {
-            //XXX ����� ���� ������
+            //XXX здесь была строка
             //af = new MyZipFile((MyZipFile) parent, child);
             return new MyZipFile((MyZipFile) parent, child);
         }
@@ -60,9 +60,9 @@ public abstract class FileHelper {
     }
 
     /**
-     * �������� ���� (���������, ���� � ������, ����) �� ���� <I>path</I>
-     * @param path ���� � �����
-     * @return ������� ����
+     * Получить файл (локальный, файл в архиве, сети) по пути <I>path</I>
+     * @param path путь к файлу
+     * @return искомый файл
      */
     public static BaseFile getRealFile(String path) {
         if (path.toLowerCase().startsWith("smb://")) {

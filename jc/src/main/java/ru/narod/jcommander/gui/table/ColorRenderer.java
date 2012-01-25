@@ -19,7 +19,7 @@
 /*
  * ColorRenderer.java
  *
- * Created on 6 ������� 2006 �., 9:01
+ * Created on 6 dec 2006, 9:01
  *
  */
 package ru.narod.jcommander.gui.table;
@@ -32,14 +32,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import ru.narod.jcommander.gui.table.tableElements.Element;
 
 /**
- * ����� ������������ ��� ����������� ����������� ������� ���������� ������� 
- * � ����������� �� �������� ��������
+ * Класс предназначен для отображения содержимого таблицы различными цветами 
+ * в зависимости от текущего значения
  * @author Pavel Ovcharov
  */
 public class ColorRenderer extends DefaultTableCellRenderer {
 
     /**
-     * ������� ����� ��������� ������ ColorRenderer
+     * Создать новый экземпляр класса ColorRenderer
      */
     public ColorRenderer() {
         super();

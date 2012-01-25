@@ -1,7 +1,7 @@
 /*
  * FileTransferHandler.java
  *
- * Created on 26 ���� 2007 �., 8:31
+ * Created on 26 jun 2007 г., 8:31
  *
  */
 package ru.narod.jcommander.gui.table.dragdrop;

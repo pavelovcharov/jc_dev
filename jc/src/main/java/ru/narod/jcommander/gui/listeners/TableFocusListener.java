@@ -26,7 +26,7 @@ import ru.narod.jcommander.gui.MainFrame;
 import ru.narod.jcommander.gui.table.FileTable;
 
 /**
- * ����� ��������� ��������, ����������� ��� ��������� ������ �������
+ * Класс описывает действия, выполняемые при изменении фокуса таблицы
  * @author  Sniper
  * @version 2005/05/02 8:36:04 PM
  */
@@ -37,7 +37,7 @@ public class TableFocusListener implements FocusListener{
     Color activeColor = Color.GRAY;
     Color passiveColor = Color.LIGHT_GRAY;
     /*
-     * ������� ������ ������ TableFocusListener
+     * Создает объект класса TableFocusListener
      */
     public TableFocusListener(MainFrame parent){
         //this.left=left;
@@ -45,7 +45,7 @@ public class TableFocusListener implements FocusListener{
         this.parent = parent;
     }
     /**
-     * ����� �����������, ����� ������� �������� �����
+     * Метод выполняется, когда таблица получает фокус
      */
     public void focusGained(FocusEvent e) {
         this.left = parent.getTable(true);
@@ -74,7 +74,7 @@ public class TableFocusListener implements FocusListener{
 */
     }
     /**
-     * ����� �����������, ����� ������� ������ �����
+     * Метод выполняется, когда таблица теряет фокус
      */
     public void focusLost(FocusEvent e) {
   /*      FileTable table = (FileTable)(e.getSource());

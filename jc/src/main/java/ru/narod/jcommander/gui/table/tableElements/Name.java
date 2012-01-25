@@ -19,7 +19,7 @@
 /*
  * Name.java
  *
- * Created on 25 ���� 2007 �., 8:44
+ * Created on 25 jun 2007, 8:44
  *
  */
 
@@ -38,11 +38,11 @@ abstract public class Name extends Element implements NameInterface{
     
     protected BaseFile aFile;
     /**
-     * ��� ����� (��� ����������)
+     * Имя файла (без расширения)
      */
     protected String name;  
     /**
-     * ������ ��� �����
+     * Полное имя файла
      */
     protected String fileName;
     protected String extention;
@@ -61,8 +61,8 @@ abstract public class Name extends Element implements NameInterface{
     }
     
     /**
-     * �������� ����, ��������� � ������ ��������
-     * @return ���� ��������� � ������ ��������
+     * Получить файл, связанный с данным объектом
+     * @return файл связанный с данным объектом
      */
     public BaseFile getFile() {
         return aFile;
@@ -76,8 +76,8 @@ abstract public class Name extends Element implements NameInterface{
         return fileName;
     }
     /**
-     * �������� ��� ��������
-     * @return ��� ��������, ���������������� ������� �������
+     * Получить имя каталога
+     * @return имя каталога, соответствующего данному объекту
      */
     public String getName() {
         return name;

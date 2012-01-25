@@ -19,7 +19,7 @@
 /*
  * Size.java
  *
- * Created on 25 ���� 2007 �., 9:59
+ * Created on 25 jun 2007, 9:59
  *
  */
 

@@ -37,7 +37,7 @@ import ru.narod.jcommander.tarlib.TarArchive;
 import ru.narod.jcommander.tarlib.TarEntry;
 
 
-//XXX ���������� ��� ��� ��������
+//XXX посмотреть как это работает
 
 /**
  *
@@ -50,11 +50,11 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     protected BaseFile parent;
     protected TarEntry entry = null;
 
-	//XXX � ���� ����� � ����?
+	//XXX а если архив в сети?
     /**
-     * ������� ������ ������ MyTarFile � ������� ����� <I>parent</I>
+     * Создать объект класса MyTarFile с помощью файла <I>parent</I>
      *
-     * @param parent ������ ������ LocalFile, �������� ��������� ������
+     * @param parent объект класса LocalFile, задающий положение архива
      */
     public MyTarFile(LocalFile parent) {
         super(parent);
@@ -66,18 +66,18 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ������� ������ ������ MyTarFile � ������� ����� <I>parent</I>
-     * @param parent ������ ������ BaseFile
+     * Создать объект класса MyTarFile с помощью файла <I>parent</I>
+     * @param parent объект класса BaseFile
      */
     public MyTarFile(BaseFile parent) {
         this(new LocalFile(parent));
     }
 
     /**
-     * ������� ������ ������ MyTarFile � ������� ����� <I>parent</I> � ����� �����
+     * Создать объект класса MyTarFile с помощью файла <I>parent</I> и имени файла
      * <I>child</I>
-     * @param parent ������ ���������� ���� � �����
-     * @param child ��� ����������� �����
+     * @param parent задает абсолютный путь к файлу
+     * @param child имя создавемого файла
      */
     public MyTarFile(MyTarFile parent, String child) {
         super(parent, child);
@@ -99,22 +99,22 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ������� ������ ������ MyTarFile. ������������ ��� ���������� ���������
-     * ����������� ������, ������������ ������ ������� ������.
-     * @param parent ������ ������ MyTarFile, �������������� ����� �����, ���������� �������� �����
-     * �����������
-     * @param archive ������ ���� � ������ �� ����� (��������, �� ��������� �����)
+     * Создать объект класса MyTarFile. Используется для реализации просмотра
+     * содержимого архива, находящегося внутри другого архива.
+     * @param parent объект класса MyTarFile, представляющий собой архив, содержимое которого нужно
+     * просмотреть
+     * @param archive задает путь к архиву на диске (например, во временной папке)
      */
 //    public MyTarFile(MyTarFile parent, LocalFile archive) {
 //        this(archive);
 //        this.parent = parent;
 //    }
 /**
-     * ������� ������ ������ MyTarFile. ������������ ��� ���������� ���������
-     * ����������� ������, ������������ ������ ������� ������.
-     * @param parent ������ ������ ArchiveFile, �������������� ����� �����, ���������� �������� �����
-     * �����������
-     * @param archive ������ ���� � ������ �� ����� (��������, �� ��������� �����)
+     * Создать объект класса MyTarFile. Используется для реализации просмотра
+     * содержимого архива, находящегося внутри другого архива.
+     * @param parent объект класса ArchiveFile, представляющий собой архив, содержимое которого нужно
+     * просмотреть
+     * @param archive задает путь к архиву на диске (например, во временной папке)
      */
 	public MyTarFile(ArchiveFile parent, LocalFile archive) {
 		this(archive);
@@ -154,15 +154,15 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
 //    }
 	
     /**
-     * �������� ������ ���� ������, ����������� � ������ ����� � ������
-     * @return ������ ���� ������
+     * Получить список имен файлов, находящихся в данной папке в архиве
+     * @return массив имен файлов
      */
 	@Override
     public String[] list() {
         ArrayList names = new ArrayList();
         Set keys = archiveMap.keySet();
         if (keys != null) {
-            if (null == entry) {//������ ������
+            if (null == entry) {//корень архива
                 // search through all available archive entries
                 Iterator iter = keys.iterator();
                 while (iter.hasNext()) {
@@ -209,8 +209,8 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * �������� ������ ������, ����������� � ������ ����� � ������
-     * @return ������ ������
+     * Получить список файлов, находящихся в данной папке в архиве
+     * @return массив файлов
      */
 	@Override
     public BaseFile[] getFiles(FileFilter filter) {
@@ -255,8 +255,8 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ����������, �������� �� ������ ������ ������ ��� ���������
-     * @return <B>true</B>, ���� ������ ������ �������� ���������, ����� - <B>false</B>
+     * Определить, является ли данный объект файлом или каталогом
+     * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
      */
 	@Override
     public boolean isDirectory() {
@@ -264,8 +264,8 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * �������� ������������ ����� ��� ������� �����
-     * @return ������ ������ BaseFile, �������������� ������������ ����� ������� �����
+     * Получить родительскую папку для данного файла
+     * @return объект класса BaseFile, представляющий родительскую папку данного файла
      */
 	@Override
     public BaseFile getAbsoluteParent() {
@@ -274,9 +274,9 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ������������ ������ � ����� ��������� �����. ��������, �����
-     * 12455 ����� ����� ��� 12 455
-     * @return ������ ���������� ������ ����� � ����������������� ����
+     * Представляет размер в более наглядной форме. Например, число
+     * 12455 будет иметь вид 12 455
+     * @return строка содержащая размер файла в отформатированном виде
      */
 	@Override
     public String getFormatFileSize() {
@@ -286,8 +286,8 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ���������� ���� ���������� ����������� ����� ��� ��������
-     * @return ���� ���������� ����������� � ������� dd.MM.yyyy hh:mm
+     * Возвращает дату последеней модификации файла или каталога
+     * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
 	@Override
     public String getLastModifiedDate() {
@@ -302,9 +302,9 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * ���������� �������� ����� ��� ��������. ro - ������ ��� ������,
-     * h - �������
-     * @return ������, ���������� �������� ����� ��� ��������
+     * Возвращает атрибуты файла или каталога. ro - только для чтения,
+     * h - скрытый
+     * @return строку, содержащую атрибуты файла или каталога
      */
 	@Override
     public String getAtributeString() {
@@ -313,9 +313,9 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * �������� ����� ��� ������ �� �����
-     * @return ����� ��� ������ �� �����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
+     * Получить поток для чтения из файла
+     * @return поток для чтения из файла
+     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
      */
 	@Override
     public java.io.InputStream getInputStream() throws java.io.IOException {
@@ -326,9 +326,9 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * �������� ����� ��� ������ � ����
-     * @throws java.lang.Exception ����������, ���� ��� �������� ������ ��������� ������
-     * @return ����� ��� ������ � ����
+     * Получить поток для записи в файл
+     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
+     * @return поток для записи в файл
      */
 	@Override
     public java.io.OutputStream getOutputStream() throws java.io.IOException {
@@ -338,9 +338,9 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * �������� ���� ��������� ����������� �����
-     * @return ���� ��������� ����������� ����� - ����� ����������� ��������� � 00:00:00 1
-     * ������ 1970; ���� ���� �� ���������� ������������ 0L
+     * Получить дату последней модификации файла
+     * @return дата последней модификации файла - число миллисекунд прошедших с 00:00:00 1
+     * января 1970; если файл не существует возвращается 0L
      */
 //    public long lastModified() {
 //        if (null == zipEntry) return parent.lastModified();
@@ -348,8 +348,8 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
 //    }
 
     /**
-     * �������� ��������� ������������� �������
-     * @return ��������� �������������
+     * Получить строковое представление объекта
+     * @return строковое представление
      */
 	@Override
     public String toString() {

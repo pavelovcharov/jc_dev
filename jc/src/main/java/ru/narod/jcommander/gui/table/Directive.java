@@ -19,7 +19,7 @@
 /*
  * Directive.java
  *
- * Created on 28 ���� 2007 �., 10:15
+ * Created on 28 jun 2007, 10:15
  *
  */
 

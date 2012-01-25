@@ -40,7 +40,7 @@ public class CopyDialog implements PrefKeys {
 //    private BaseFile newTarget;
 
     public CopyDialog(MainFrame parent, BaseFile sourceDir, BaseFile targerDir, BaseFile[] filesToCopy, boolean toCopy) {
-        //XXX ����� ��� sourceDir � filesToCopy ������ ���������� ����� ������, � ������� ��� ��� ���� �� � �������
+        //XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
         this.toCopy = toCopy;
 
         LanguageBundle lb = LanguageBundle.getInstance();

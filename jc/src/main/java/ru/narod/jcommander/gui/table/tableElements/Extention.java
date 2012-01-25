@@ -19,7 +19,7 @@
 /*
  * Extention.java
  *
- * Created on 25 ���� 2007 �., 9:54
+ * Created on 25 jun 2007, 9:54
  *
  */
 

@@ -19,7 +19,7 @@
 /*
  * EditorPrefs.java
  *
- * Created on 12 ��� 2007 �., 19:11
+ * Created on 12 may 2007, 19:11
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.

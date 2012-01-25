@@ -19,7 +19,7 @@
 /*
  * TableHeader.java
  *
- * Created on 9 ������ 2007 �., 10:02
+ * Created on 9 jan 2007, 10:02
  *
  */
 package ru.narod.jcommander.gui.table.tableHeader;
@@ -32,7 +32,7 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class TableHeader implements ru.narod.jcommander.prefs.PrefKeys, ColumnNumbers {
 
-	public static String[] TITLE;// = {"", "���","���","������","����","��������"};
+	public static String[] TITLE;// = {"", "Имя","Тип","Размер","Дата","Атрибуты"};
 
 	static {
 		try {

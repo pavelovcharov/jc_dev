@@ -19,7 +19,7 @@
 /*
  * TableMouseListener.java
  *
- * Created on 23 ��� 2005 �., 17:47
+ * Created on 23 may 2005, 17:47
  */
 package ru.narod.jcommander.gui.listeners;
 
@@ -30,11 +30,11 @@ import ru.narod.jcommander.gui.table.FileTable;
 import ru.narod.jcommander.gui.MainFrame;
 
 /**
- * ����� ��� ��������� ��������� ������ FileTable ��� ������� ������
- * ����. ���� ������� ������ �������� �� �������� � ������� ����� ��������
- * ���������� ����� ��������. ���� ������� ������ �������� �� �����, ������
- * ���� ����� �������. ������, ��������� ������� ���������� ��������� 
- * ������ ������� � ����.
+ * Класс для изменения состояния таблиц FileTable при двойном щелчке
+ * мыши. Если двойной щелчок выполнен на каталоге в таблицу будет выведено
+ * содержимое этого каталога. Если двойной щелчок выполнен на файле, данный
+ * файл будет запущен. Помимо, состояния таблицы изменяется состояние 
+ * строки статуса и пути.
  * 
  * @author Programmer
  * @version 2005/05/23 17:47
@@ -46,10 +46,10 @@ public class TableMouseListener extends MouseInputAdapter {
 	private int prevRow = -1;
 
 	/**
-	 * ������� ����� ������ ������ TableMouseListener
-	 * @param table �������, ��������� ������� ����������
-	 * @param path ������ ����
-	 * @param status ������ �������
+	 * Создает новый объект класса TableMouseListener
+	 * @param table таблица, состояние которой изменяется
+	 * @param path строка пути
+	 * @param status строка статуса
 	 */
 	/*
 	public TableMouseListener(MainFrame parent, FileTable table) {
@@ -62,7 +62,7 @@ public class TableMouseListener extends MouseInputAdapter {
 	}
 
 	/**
-	 * ����� ����������� ��� ������ ���� � �������
+	 * Метод выполняется при щелчке мыши в таблице
 	 */
 	@Override
 	public void mouseClicked(MouseEvent evt) {
