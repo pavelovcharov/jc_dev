@@ -20,11 +20,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
+import java.util.ArrayList;
 import ru.narod.jcommander.fileSystem.BaseFile;
+import ru.narod.jcommander.fileSystem.FileHelper;
+import ru.narod.jcommander.fileSystem.FileSystemList;
+import ru.narod.jcommander.fileSystem.LocalFile;
+import ru.narod.jcommander.fileSystem.archive.MyZipFile;
 import ru.narod.jcommander.gui.MainFrame;
+import ru.narod.jcommander.gui.dialog.ProgressDialog;
+import ru.narod.jcommander.gui.table.FileTable;
+import ru.narod.jcommander.threads.newThreads.NewMoveThread;
+import ru.narod.jcommander.threads.newThreads.ProgressThread;
 
 /**
  *
@@ -32,30 +40,49 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionEdit extends AbstractAction {
 
-	public ActionEdit(MainFrame parent) {
-		super(parent);
-	}
+    public ActionEdit(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		BaseFile currentFile = parent.getActiveTable().getFileAtCursor();
-		if (currentFile.isDirectory()) {
-			return;
-		}
-//		if (parent.getExternEditor()) {
-//			String externEditorString = parent.getExternEditorString();
-//			if (!externEditorString.trim().equals("")) {
-//				try {
-//					Runtime.getRuntime().exec(externEditorString + " " + currentFile);
-//				} catch (IOException exc) {
-//					System.out.println("Can't execute " + externEditorString + " " + currentFile);
-//				}
-//			}
-//		}
-//		else {
-//			ru.narod.jcommander.editor.Editor editor = new ru.narod.jcommander.editor.Editor(parent);
-//			editor.openFile(currentFile, true);
-//		}
-		parent.runFileInEditor(currentFile);
-	}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        BaseFile currentFile = activeTable.getFileAtCursor();
+        if (currentFile.isDirectory()) {
+            return;
+        }
+        if (currentFile instanceof MyZipFile) {
+            ArrayList list = new ArrayList();
+            list.add(currentFile);
+            LocalFile tempDir = FileSystemList.getTempDir();
+            if (null == tempDir) {
+                //XXX query error или использовать какой-то другой путь, напр. C:
+                return;
+            }
+            BaseFile[] filesToCopy = new BaseFile[]{currentFile};
+            if (null != filesToCopy) {
+                ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
+                //XXX maybe use any function
+                String targetPath = cd.getNewTargetString();
+                if (null != targetPath && !targetPath.isEmpty()) {
+                    NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, true);
+                    ProgressDialog pd = new ProgressDialog(parent, nmt, true);
+                    ProgressThread pt = new ProgressThread(nmt, pd);
+                    nmt.setFrameParent(pd.getDialog());
+                    nmt.start();
+                    pt.start();
+                    pd.show();
 
+                    BaseFile target = FileHelper.getRealFile(targetPath);
+                    if (target.isDirectory()) {
+                        target = FileHelper.getRealFile(target, currentFile.getFilename());
+                    }
+                    currentFile = target;
+
+                } else {
+                    return;
+                }
+            }
+        }
+        parent.runFileInEditor(currentFile);
+    }
 }
