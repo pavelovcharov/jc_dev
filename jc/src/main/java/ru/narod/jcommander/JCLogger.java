@@ -56,14 +56,14 @@ public class JCLogger {
      * <code>java.util.logging.Logger</code> instance used by this class to log
      * records.
      *
-     * @return the Logger instance that this class uses to log
+     * @return The Logger instance that this class uses to log
      */
     public static Logger getLogger() {
         return logger;
     }
 
     /**
-     * Log a message, with no arguments. If the logger is currently enabled for
+     * Log a message, with associated Throwable information. If the logger is currently enabled for
      * the SEVERE message level then the given message is forwarded to all the
      * registered output Handler objects.
      *
