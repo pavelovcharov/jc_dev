@@ -32,7 +32,9 @@ import ru.narod.jcommander.fileSystem.BaseFile;
  */
 public class Filename extends Name {
 
-    /** Creates a new instance of Filename */
+    /**
+     * Creates a new instance of Filename
+     */
     public Filename(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
     }

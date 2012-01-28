@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -30,14 +29,16 @@ import ru.narod.jcommander.gui.MainFrame;
  * @author Programmer
  */
 public class ActionShowComboBox extends AbstractAction {
-	private boolean left;
-	public ActionShowComboBox(MainFrame parent, boolean left) {
-		super(parent);
-		this.left = left;
-	}
 
-	public void execute() {
-		parent.getComboBox(left).showPopup();
-		parent.getComboBox(left).requestFocus();
-	}
+    private boolean left;
+
+    public ActionShowComboBox(MainFrame parent, boolean left) {
+        super(parent);
+        this.left = left;
+    }
+
+    public void execute() {
+        parent.getComboBox(left).showPopup();
+        parent.getComboBox(left).requestFocus();
+    }
 }

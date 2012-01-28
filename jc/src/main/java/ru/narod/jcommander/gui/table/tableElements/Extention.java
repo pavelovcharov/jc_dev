@@ -22,7 +22,6 @@
  * Created on 25 jun 2007, 9:54
  *
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 /**
@@ -30,31 +29,34 @@ package ru.narod.jcommander.gui.table.tableElements;
  * @author Programmer
  * @version
  */
-public class Extention extends Element{
-    
+public class Extention extends Element {
+
     private String extention;
-    /** Creates a new instance of Extention */
+
+    /**
+     * Creates a new instance of Extention
+     */
     public Extention() {
     }
-    
+
     public Extention(String extention) {
         this.extention = extention;
     }
-    
-	@Override
+
+    @Override
     public String toString() {
         return extention;
     }
-    
+
     public String getExtention() {
         return extention;
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Extention)) return 1;
-        Extention e = (Extention)o;
-//        return extention.compareTo(e.extention);
+        if (false == (o instanceof Extention)) {
+            return 1;
+        }
+        Extention e = (Extention) o;
         return extention.toUpperCase().compareTo(e.extention.toUpperCase());
     }
-    
 }

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ru.narod.jcommander.gui.search;
 
 import java.util.List;
@@ -25,13 +24,18 @@ import java.util.List;
  * @author master
  */
 public interface SearchStatusListener {
-    /** Method called before search started
+
+    /**
+     * Method called before search started
      */
     public void onSearchStart();
+
     /**
      */
     public void onSearchProgressChange(List found);
-    /** Method called after search finished
+
+    /**
+     * Method called after search finished
      */
     public void onSearchEnd(List found);
 }

@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 /**
@@ -28,5 +27,6 @@ package ru.narod.jcommander.actions;
  * @author Programmer
  */
 public interface Action {
-	void execute();
+
+    void execute();
 }

@@ -41,110 +41,109 @@ import ru.narod.jcommander.util.Support;
  */
 public class NewPackThread extends BaseThread {
 
-	private BaseFile sourceDir;
-	private BaseFile targetFile;
-	private BaseFile[] filesToPack;
-	private int packLevel;
-	private ArrayList list = new ArrayList();
+    private BaseFile sourceDir;
+    private BaseFile targetFile;
+    private BaseFile[] filesToPack;
+    private int packLevel;
+    private ArrayList list = new ArrayList();
 
-	public NewPackThread(BaseFile sourceDir, BaseFile targetFile, BaseFile[] filesToPack, int packLevel) {
-		this.sourceDir = sourceDir;
-		this.targetFile = targetFile;
-		this.filesToPack = filesToPack;
-		this.packLevel = chooseCompressionLevel(packLevel);
-	}
+    public NewPackThread(BaseFile sourceDir, BaseFile targetFile, BaseFile[] filesToPack, int packLevel) {
+        this.sourceDir = sourceDir;
+        this.targetFile = targetFile;
+        this.filesToPack = filesToPack;
+        this.packLevel = chooseCompressionLevel(packLevel);
+    }
 
-	/**
-	 * Returns Deflater's constant correponding to the given packLevel value.
-	 */
-	private static int chooseCompressionLevel(int packLevel) {
-		final int defaultLevel = Deflater.DEFAULT_COMPRESSION;
-		final int[] options = {
-			Deflater.NO_COMPRESSION, Deflater.BEST_SPEED, defaultLevel, Deflater.BEST_COMPRESSION
-		};
+    /**
+     * Returns Deflater's constant correponding to the given packLevel value.
+     */
+    private static int chooseCompressionLevel(int packLevel) {
+        final int defaultLevel = Deflater.DEFAULT_COMPRESSION;
+        final int[] options = {
+            Deflater.NO_COMPRESSION, Deflater.BEST_SPEED, defaultLevel, Deflater.BEST_COMPRESSION
+        };
 
-		return (packLevel < options.length)? options[packLevel] : defaultLevel;
-	}
+        return (packLevel < options.length) ? options[packLevel] : defaultLevel;
+    }
 
-	@Override
-	public void run() {
-		for (int i = 0; i < filesToPack.length; i++) {
-			list.addAll(SubDirectoriesList.getList(filesToPack[i]));
-		}
-		totalFiles = list.size();
-		action();
-	}
+    @Override
+    public void run() {
+        for (int i = 0; i < filesToPack.length; i++) {
+            list.addAll(SubDirectoriesList.getList(filesToPack[i]));
+        }
+        totalFiles = list.size();
+        action();
+    }
 
-	private void action() {
+    private void action() {
 
-		BaseFile targetDir = targetFile.getAbsoluteParent();
-		targetDir.mkdirs();
+        BaseFile targetDir = targetFile.getAbsoluteParent();
+        targetDir.mkdirs();
 
-		LanguageBundle lb = LanguageBundle.getInstance();
-		if (targetFile.exists()) {
-			int res = WarningDialog.showMessage(parent, lb.getString("StrReplace") + " " + targetFile.getAbsolutePath(), lb.getString("StrJC"),
-					new String[]{lb.getString("StrOk"), lb.getString("StrCancel")}, WarningDialog.MESSAGE_WARNING, 0);
-			if (0 != res) {
-				return;
-			}
-		}
+        LanguageBundle lb = LanguageBundle.getInstance();
+        if (targetFile.exists()) {
+            int res = WarningDialog.showMessage(parent, lb.getString("StrReplace") + " " + targetFile.getAbsolutePath(), lb.getString("StrJC"),
+                    new String[]{lb.getString("StrOk"), lb.getString("StrCancel")}, WarningDialog.MESSAGE_WARNING, 0);
+            if (0 != res) {
+                return;
+            }
+        }
 
-		ZipOutputStream zos = null;
-		try {
-			zos = new ZipOutputStream(targetFile.getOutputStream());
-			zos.setLevel(packLevel);
-		} catch (Exception ex) {
-			WarningDialog.showMessage(parent, lb.getString("StrFileNotAccessible") + " \n " + targetDir.getAbsolutePath(),
-					lb.getString("StrJC"), new String[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
-			return;
-		}
+        ZipOutputStream zos;
+        try {
+            zos = new ZipOutputStream(targetFile.getOutputStream());
+            zos.setLevel(packLevel);
+        } catch (Exception ex) {
+            WarningDialog.showMessage(parent, lb.getString("StrFileNotAccessible") + " \n " + targetDir.getAbsolutePath(),
+                    lb.getString("StrJC"), new String[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
+            return;
+        }
 
-		ZipEntry ze;
-		for (int i = 0; i < list.size(); i++) {
-			BaseFile temp = (BaseFile) list.get(i);
-			try {
-				String relativePath = Support.getStringRelativeTo(temp.getPathWithSlash(), sourceDir.getPathWithSlash());
-				currentAction = lb.getString("StrArchiving") + " " + temp.getFilename();
-				ze = new ZipEntry(relativePath.replace(File.separatorChar, '/'));
-				zos.putNextEntry(ze);
-				if (false == temp.isDirectory()) {
-					InputStream fis = temp.getInputStream();
+        ZipEntry ze;
+        for (int i = 0; i < list.size(); i++) {
+            BaseFile temp = (BaseFile) list.get(i);
+            try {
+                String relativePath = Support.getStringRelativeTo(temp.getPathWithSlash(), sourceDir.getPathWithSlash());
+                currentAction = lb.getString("StrArchiving") + " " + temp.getFilename();
+                ze = new ZipEntry(relativePath.replace(File.separatorChar, '/'));
+                zos.putNextEntry(ze);
+                if (false == temp.isDirectory()) {
+                    InputStream fis = temp.getInputStream();
 
-					currentFileSize = temp.length();
-					currentProgress = 0;
-					byte[] buf = new byte[8000];
-					int nLength;
-					while (true) {
-						nLength = fis.read(buf);
-						if (nLength < 0) {
-							break;
-						}
-						currentProgress += nLength;
-						zos.write(buf, 0, nLength);
-						if (interrupt) {
-							throw new InterruptedException();
-						}
-					}
-					fis.close();
-					currentProgress = currentFileSize;
-				}
-				zos.closeEntry();
-			} catch (InterruptedException e) {
-				break;
-			} catch (Exception e) {
-				targetFile.delete();
-				WarningDialog.showMessage(parent, lb.getString("StrFileNotAccessible") + " \n " + temp.getAbsolutePath(),
-						lb.getString("StrJC"), new String[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
-				break;
-			}
-			filesReady++;
-		}
-		try {
-			zos.close();
-		} catch (Exception ex) {
-//			targetFile.delete();
-			WarningDialog.showMessage(parent, lb.getString("StrFileNotAccessible") + " \n " + targetFile.getAbsolutePath(),
-					lb.getString("StrJC"), new String[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
-		}
-	}
+                    currentFileSize = temp.length();
+                    currentProgress = 0;
+                    byte[] buf = new byte[8000];
+                    int nLength;
+                    while (true) {
+                        nLength = fis.read(buf);
+                        if (nLength < 0) {
+                            break;
+                        }
+                        currentProgress += nLength;
+                        zos.write(buf, 0, nLength);
+                        if (interrupt) {
+                            throw new InterruptedException();
+                        }
+                    }
+                    fis.close();
+                    currentProgress = currentFileSize;
+                }
+                zos.closeEntry();
+            } catch (InterruptedException e) {
+                break;
+            } catch (Exception e) {
+                targetFile.delete();
+                WarningDialog.showMessage(parent, lb.getString("StrFileNotAccessible") + " \n " + temp.getAbsolutePath(),
+                        lb.getString("StrJC"), new String[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
+                break;
+            }
+            filesReady++;
+        }
+        try {
+            zos.close();
+        } catch (Exception ex) {
+            WarningDialog.showMessage(parent, lb.getString("StrFileNotAccessible") + " \n " + targetFile.getAbsolutePath(),
+                    lb.getString("StrJC"), new String[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
+        }
+    }
 }

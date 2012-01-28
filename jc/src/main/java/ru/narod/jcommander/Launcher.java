@@ -32,6 +32,7 @@ import ru.narod.jcommander.gui.MainFrame;
 
 /**
  * jc start class
+ *
  * @author Pavel Ovcharov
  * @version 2005/04/26 9:26
  */
@@ -39,6 +40,7 @@ public class Launcher {
 
     /**
      * Launch application main window
+     *
      * @param args Command line parameters. Not used for now.
      * @see MainFrame
      */

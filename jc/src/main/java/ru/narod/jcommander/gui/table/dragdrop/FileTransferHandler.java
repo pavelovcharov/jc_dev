@@ -1,4 +1,21 @@
 /*
+ * This file is part of jc, http://www.jcommander.narod.ru
+ * Copyright (C) 2005-2010 Pavel Ovcharov
+ *
+ * jc is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * FileTransferHandler.java
  *
  * Created on 26 jun 2007 г., 8:31
@@ -12,6 +29,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
@@ -134,52 +153,9 @@ public class FileTransferHandler extends TransferHandler {
         try {
             files = (java.util.List) t.getTransferData(fileFlavor);
             files.add(new File("c:/1.txt"));
-        } catch (UnsupportedFlavorException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(FileTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        /*
-        source = (JTextArea)c;
-        int start = source.getSelectionStart();
-        int end = source.getSelectionEnd();
-        Document doc = source.getDocument();
-        if (start == end) {
-        return null;
-        }
-        try {
-        p0 = doc.createPosition(start);
-        p1 = doc.createPosition(end);
-        } catch (BadLocationException e) {
-        System.out.println(
-        "Can't create position - unable to remove text from source.");
-        }
-        shouldRemove = true;
-        String data = source.getSelectedText();
-
-        return new StringSelection(data);
-         */
-        //return null;
-        /*
-        Transferable t = DataFlavor.javaFileListFlavor;
-        java.util.List files =
-        (java.util.List)t.getTransferData(fileFlavor);
-        files.add(new File("c:/1.txt"));
-         */
-        /*
-        Transferable t = new Transferable() {
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException,IOException {
-        DataFlavor.javaFileListFlavor.
-        }
-        public DataFlavor[] getTransferDataFlavors() {
-        }
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
-        }
-        }SeleDataFlavor.javaFileListFlavor
-        return t;
-         */
-
         return null;
     }
 
@@ -189,36 +165,10 @@ public class FileTransferHandler extends TransferHandler {
         return COPY | MOVE | LINK;
     }
 
-    //Remove the old text if the action is a MOVE.
-    //However, we do not allow dropping on top of the selected text,
-    //so in that case do nothing.
     @Override
     protected void exportDone(JComponent c, Transferable data, int action) {
-//        if (shouldRemove && (action == MOVE)) {
-//            if ((p0 != null) && (p1 != null)
-//                    && (p0.getOffset() != p1.getOffset())) {
-//                try {
-//                    JTextComponent tc = (JTextComponent) c;
-//                    tc.getDocument().remove(
-//                            p0.getOffset(), p1.getOffset() - p0.getOffset());
-//                } catch (BadLocationException e) {
-//                    System.out.println("Can't remove text from source.");
-//                }
-//            }
-//        }
-//        source = null;
     }
 
-//    @Override
-//    public boolean canImport(JComponent c, DataFlavor[] flavors) {
-//        if (hasFileFlavor(flavors)) {
-//            return true;
-//        }
-//        if (hasStringFlavor(flavors)) {
-//            return true;
-//        }
-//        return false;
-//    }
     private boolean hasFileFlavor(DataFlavor[] flavors) {
         for (int i = 0; i < flavors.length; i++) {
             if (fileFlavor.equals(flavors[i])) {

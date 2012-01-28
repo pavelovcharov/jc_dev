@@ -116,6 +116,5 @@ public class ProgressDialog implements PrefKeys, BaseDialog.BaseDialogActionEven
         while (bt.isAlive()) {
         }
         parent.updateMainWindow();
-//        parent.requestFocus();
     }
 }

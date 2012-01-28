@@ -21,25 +21,27 @@
  *
  * Created on 15 oct 2006 г., 11:28
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 import java.awt.Color;
 
 /**
  * Класс содержит поля и методы, общие для всех элементов таблицы
+ *
  * @author Pavel Ovcharov
  */
-public abstract class Element implements Comparable{
-    
+public abstract class Element implements Comparable {
+
     protected Color fontColor;
     protected Color bgColor;
     protected boolean isSelected = false;
-    
+
     public Element() {
     }
+
     /**
      * Создать новый экземпляр класса Element с заданным цветом фона и шрифта
+     *
      * @param fontColor цыет шрифта
      * @param bgColor цвет фона
      */
@@ -47,30 +49,38 @@ public abstract class Element implements Comparable{
         this.fontColor = fontColor;
         this.bgColor = bgColor;
     }
+
     /**
      * Получить цвет шрифта для элемента таблицы
+     *
      * @return цвет шрифта
      */
     public Color getFontColor() {
         return fontColor;
     }
+
     /**
      * Получить цвет фона для элемента таблицы
+     *
      * @return цвет фона
      */
     public Color getBackgroundColor() {
         return bgColor;
     }
+
     /**
      * Проверить, является ли данный элемент выделенным
-     * @return <B>true</B>, если элемент является выделенным, иначе - 
+     *
+     * @return <B>true</B>, если элемент является выделенным, иначе -
      * <B>false</B>
      */
     public boolean isSelected() {
         return isSelected;
     }
+
     /**
      * Выделить элемент или снять выделение
+     *
      * @param isSelected <B>true</B> для выделения элемента, <B>false</B>
      */
     public void setSelected(boolean isSelected) {

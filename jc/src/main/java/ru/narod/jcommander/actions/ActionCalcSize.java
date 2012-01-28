@@ -35,34 +35,33 @@ import ru.narod.jcommander.gui.table.tableElements.UpperDirectory;
  */
 public class ActionCalcSize extends AbstractAction {
 
-	public ActionCalcSize(MainFrame parent) {
-		super(parent);
-	}
+    public ActionCalcSize(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		Cursor c = parent.getCursor();
-		parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		
-		FileTable activeTable = parent.getActiveTable();
-		Name name = (Name) activeTable.getElementAtCursor();
-		BaseFile currentFile;
-		if (null != name) {
-			currentFile = name.getFile();
-		} else {
-			currentFile = null;
-		}
-		if (null == currentFile) {
-			return;
-		}
-		if ((name instanceof UpperDirectory) == false) {
-			if (false == name.isSelected()) {
-				activeTable.showFileSize();
-			}
-			//activeTable.addFileToSelectedList((LocalFile) name.getFile());
-			activeTable.selectFileAt(activeTable.getCurrentPosition());
-			activeTable.repaint();
-			parent.updateActiveStatusLabel();
-		}
-		parent.setCursor(c);
-	}
+    public void execute() {
+        Cursor c = parent.getCursor();
+        parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+        FileTable activeTable = parent.getActiveTable();
+        Name name = (Name) activeTable.getElementAtCursor();
+        BaseFile currentFile;
+        if (null != name) {
+            currentFile = name.getFile();
+        } else {
+            currentFile = null;
+        }
+        if (null == currentFile) {
+            return;
+        }
+        if ((name instanceof UpperDirectory) == false) {
+            if (false == name.isSelected()) {
+                activeTable.showFileSize();
+            }
+            activeTable.selectFileAt(activeTable.getCurrentPosition());
+            activeTable.repaint();
+            parent.updateActiveStatusLabel();
+        }
+        parent.setCursor(c);
+    }
 }

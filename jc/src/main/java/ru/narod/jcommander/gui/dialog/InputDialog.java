@@ -33,43 +33,28 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class InputDialog implements PrefKeys {
 
-	//
-	static public String showInputDialog(MainFrame parent, String msgText, String initialString) {
+    //
+    static public String showInputDialog(MainFrame parent, String msgText, String initialString) {
 
-		JTextField jTextFieldInput = new JTextField(initialString);
-		jTextFieldInput.selectAll();
-		
-		Object message[] = new Object[]{
-			msgText,
-			jTextFieldInput,};
-		
-		LanguageBundle lb = LanguageBundle.getInstance();
+        JTextField jTextFieldInput = new JTextField(initialString);
+        jTextFieldInput.selectAll();
 
-		Object options[] = new Object[]{lb.getString("StrOk"), lb.getString("StrCancel")};
+        Object message[] = new Object[]{
+            msgText,
+            jTextFieldInput,};
 
-		BaseDialog bd = new BaseDialog(parent, lb.getString("StrJC"), message, options, 0);
-//		bd.setSize(300, 110);
+        LanguageBundle lb = LanguageBundle.getInstance();
 
-//		bd.setIcon(new JLabel(ImageArchive.getLogo()));
+        Object options[] = new Object[]{lb.getString("StrOk"), lb.getString("StrCancel")};
 
-		jTextFieldInput.requestFocus();
-		bd.setVisible(true);
+        BaseDialog bd = new BaseDialog(parent, lb.getString("StrJC"), message, options, 0);
 
-		if (0 == bd.getResult())
-			return jTextFieldInput.getText();
-		return null;
+        jTextFieldInput.requestFocus();
+        bd.setVisible(true);
 
-//		String newPath = jTextFieldPath.getText();
-
-
-//		ru.narod.jcommander.threads.MovingThread mt =
-//				new ru.narod.jcommander.threads.MovingThread(sourceDir, sourceList, toCopy);
-//		mt.setTargetDirString(targetDir.getAbsolutePath());
-//
-//		okButton.addActionListener(new CopyButtonListener(mt, okButton, parent, this));
-//		okButton.addKeyListener(new ButtonKeyListener(okButton, mt));
-//		jTextFieldPath.addKeyListener(new PathFieldKeyListener(this, okButton));
-//		addWindowListener(new DialogListener(parent, mt));
-	}
-
+        if (0 == bd.getResult()) {
+            return jTextFieldInput.getText();
+        }
+        return null;
+    }
 }

@@ -38,10 +38,13 @@ public class Message {
     private KeyShortcat defaultKey;
     private KeyShortcat userKey;
 
-    /** Creates a new instance of Message */
+    /**
+     * Creates a new instance of Message
+     */
     public Message(int messageID, MessageList.MessageDescriptor descriptor) {
         this(messageID, descriptor.name, descriptor.description);
     }
+
     public Message(int messageID, String messageText) {
         this(messageID, messageText, messageText);
     }
@@ -120,5 +123,4 @@ public class Message {
     public KeyShortcat getDefaultKey() {
         return defaultKey;
     }
-
 }

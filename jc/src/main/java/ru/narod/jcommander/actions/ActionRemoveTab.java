@@ -20,7 +20,6 @@
  * ActionRemoveTab.java
  * Created on 11.01.2009 12:02:34
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -31,11 +30,11 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionRemoveTab extends AbstractAction {
 
-	public ActionRemoveTab(MainFrame parent) {
-		super(parent);
-	}
+    public ActionRemoveTab(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		parent.removeTab(parent.getActive());
-	}
+    public void execute() {
+        parent.removeTab(parent.getActive());
+    }
 }

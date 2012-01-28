@@ -22,7 +22,6 @@
  * Created on 30 apr 2008, 11:17
  *
  */
-
 package ru.narod.jcommander.gui.table.tableHeader;
 
 /**
@@ -30,5 +29,6 @@ package ru.narod.jcommander.gui.table.tableHeader;
  * @author Programmer
  */
 public interface ColumnNumbers {
-    public static final int ICON = 0, NAME = 1, EXT = 2, SIZE = 3, DATE = 4, ATR = 5;    
+
+    public static final int ICON = 0, NAME = 1, EXT = 2, SIZE = 3, DATE = 4, ATR = 5;
 }

@@ -50,22 +50,17 @@ abstract public class ImageArchive {
     private static FileSystemView fileSystemView;
 
     static {
-        try {
-            imageFolder = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/folder16x16.gif"));
-            imageFile = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/file16x16.gif"));
-            imageUp = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/up.gif"));
-            logo = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/omega.png"));
-            splash = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/omega.png"));
-            archive = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/archive.png"));
-            arrowBack = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/arrowBack.png"));
-            arrowForward = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/arrowForward.png"));
+        imageFolder = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/folder16x16.gif"));
+        imageFile = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/file16x16.gif"));
+        imageUp = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/up.gif"));
+        logo = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/omega.png"));
+        splash = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/omega.png"));
+        archive = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/archive.png"));
+        arrowBack = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/arrowBack.png"));
+        arrowForward = new ImageIcon(ImageArchive.class.getResource("/ru/narod/jcommander/resources/arrowForward.png"));
 
-            fileSystemView = FileSystemView.getFileSystemView();
-            systemFolderIcon = getSystemFolderIcon();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        fileSystemView = FileSystemView.getFileSystemView();
+        systemFolderIcon = getSystemFolderIcon();
     }
 
     static Icon getSystemFolderIcon() {

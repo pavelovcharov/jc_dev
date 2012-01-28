@@ -21,58 +21,41 @@
  *
  * Created on 20 may 2005, 17:27
  */
-
 package ru.narod.jcommander.gui.listeners;
 
-import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
-
+import java.awt.event.FocusListener;
 import ru.narod.jcommander.gui.MainFrame;
-//import ru.narod.jcommander.gui.table.FileTable;
 
 /**
- * Класс описывает действия, выполняемые при изменении фокуса
- * основного окна приложения
+ * Класс описывает действия, выполняемые при изменении фокуса основного окна
+ * приложения
+ *
  * @author Sniper
  * @version 2005/05/20 17:27
  */
-public class MainFrameFocusListener implements FocusListener{
-    //private FileTable left,right;
+public class MainFrameFocusListener implements FocusListener {
+
     /**
      * Создает объект класса MainFrameFocusListener
      */
-    public MainFrameFocusListener(/*FileTable left, FileTable right*/) {
-        //this.left=left;
-        //this.right=right;
+    public MainFrameFocusListener() {
     }
+
     /**
      * Метод выполняется, когда окно получает фокус
      */
-    public void focusGained(FocusEvent fe){
-        
+    public void focusGained(FocusEvent fe) {
+
         if (fe.getSource() instanceof MainFrame) {
-            MainFrame parent = (MainFrame)(fe.getSource());
+            MainFrame parent = (MainFrame) (fe.getSource());
             parent.getActiveTable().requestFocus();
-            //left = parent.getTable(true);
-            //right = parent.getTable(false);
         }
-        //else 
-        //    return;
-        
-        
-        /*
-        if(left.isActive()){
-            left.requestFocus();
-            return;
-        }
-        if (right.isActive()){
-            right.requestFocus();
-        }
-         */
     }
+
     /**
      * Метод выполняется, когда окно теряет фокус
      */
-    public void focusLost(FocusEvent fe){
+    public void focusLost(FocusEvent fe) {
     }
 }

@@ -19,7 +19,7 @@
 /*
  * FileTableSorter.java
  *
- * Created on 26 ���� 2007 �., 11:25
+ * Created on 26 jun 2007, 11:25
  *
  */
 package ru.narod.jcommander.gui.table;
@@ -30,18 +30,10 @@ import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
-
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.FileSystemList;
 import ru.narod.jcommander.gui.ImageArchive;
-import ru.narod.jcommander.gui.table.tableElements.Attribute;
-import ru.narod.jcommander.gui.table.tableElements.Date;
-import ru.narod.jcommander.gui.table.tableElements.Directory;
-import ru.narod.jcommander.gui.table.tableElements.Element;
-import ru.narod.jcommander.gui.table.tableElements.Extention;
-import ru.narod.jcommander.gui.table.tableElements.Filename;
-import ru.narod.jcommander.gui.table.tableElements.Size;
-import ru.narod.jcommander.gui.table.tableElements.UpperDirectory;
+import ru.narod.jcommander.gui.table.tableElements.*;
 import ru.narod.jcommander.gui.table.tableHeader.ColumnNumbers;
 import ru.narod.jcommander.gui.table.tableHeader.TableHeader;
 import ru.narod.jcommander.prefs.JCPreferenses;
@@ -53,10 +45,7 @@ import ru.narod.jcommander.prefs.JCPreferenses;
  */
 public class FileTableSorter extends AbstractTableModel implements ColumnNumbers {
 
-//    private static ImageIcon imageFolder = ImageArchive.getImageFolder();
-//    private static ImageIcon imageFile = ImageArchive.getImageFile();
     private static ImageIcon imageUp = ImageArchive.getImageUp();
-//    private static ImageIcon imageArchive = ImageArchive.getImageArchive();
     private FileSystemList fsl;
     public static final int DESCENDING = -1;
     public static final int NOSORT = 0;
@@ -69,8 +58,9 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     public ArrayList sortingColumns;
 
     /**
-     * ������� ����� ��������� ������ FileTableModel �� ������ <I>fsl</I>
-     * @param fsl ������ ������ - ������ ������ FileSystemList
+     * Создать новый экземпляр класса FileTableModel на основе <I>fsl</I>
+     *
+     * @param fsl список файлов - объект класса FileSystemList
      */
     public FileTableSorter(FileSystemList fsl, ArrayList sortingColumns) {
         this.fsl = fsl;
@@ -89,7 +79,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
             Arrays.sort(folders);
             dirRows = new Row[folders.length];
             for (int i = 0; i < folders.length; i++) {
-                Row r = new Row(folders[i]/*, false*/);
+                Row r = new Row(folders[i]);
                 dirRows[i] = r;
             }
         }
@@ -97,7 +87,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
         if (null != files) {
             fileRows = new Row[files.length];
             for (int i = 0; i < files.length; i++) {
-                Row r = new Row(files[i]/*, false*/);
+                Row r = new Row(files[i]);
                 fileRows[i] = r;
             }
             sortData();
@@ -119,25 +109,28 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     }
 
     /**
-     * �������� ���������� �����
-     * @return ���������� ����� � ������ (���������� ������ � ������)
+     * Получить количество строк
+     *
+     * @return количество строк в модели (количество файлов в списке)
      */
     public int getRowCount() {
         return fsl.hasParent() ? fsl.getTotalCount() + 1 : fsl.getTotalCount();
     }
 
     /**
-     * �������� ����� �������� � �������
-     * @return ����� ������� � �������
+     * Получить число столбцов в таблице
+     *
+     * @return число колонок в таблице
      */
     public int getColumnCount() {
         return TableHeader.TITLE.length;
     }
 
     /**
-     * �������� ��� �������
-     * @param column ����� �������
-     * @return ��� �������
+     * Получить имя столбца
+     *
+     * @param column номер столбца
+     * @return имя столбца
      */
     @Override
     public String getColumnName(int column) {
@@ -145,11 +138,12 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     }
 
     /**
-     * ��������� �������� �� ������ ������� ��� ��������������
-     * @param row ����� ������
-     * @param column ����� �������
-     * @return <b>true</b>, ���� �������� ������ �������� ��� ��������������,
-     * <b>false</b> - ����� 
+     * Проверить доступна ли ячейка таблицы для редактирования
+     *
+     * @param row номер строки
+     * @param column номер столбца
+     * @return <b>true</b>, если заданная ячейка доступна для редактирования,
+     * <b>false</b> - иначе
      */
     @Override
     public boolean isCellEditable(int row, int column) {
@@ -157,9 +151,10 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     }
 
     /**
-     * �������� ����� ������� � �������� �������
-     * @param c ����� �������
-     * @return ����� ������� - ������ ������ <B>Class</B>
+     * Получить класс объекта в заданном столбце
+     *
+     * @param c номер столбца
+     * @return класс объекта - объект класса <B>Class</B>
      */
     @Override
     public Class getColumnClass(int c) {
@@ -168,10 +163,11 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     }
 
     /**
-     * �������� �������� � �������� ������ �������
-     * @param aRow ����� ������
-     * @param aColumn ����� �������
-     * @return ������ � �������� ������
+     * Получить значение в заданной ячейке таблицы
+     *
+     * @param aRow номер строки
+     * @param aColumn номер колонки
+     * @return объект в заданной ячейке
      */
     public Object getValueAt(int aRow, int aColumn) {
         if (0 == getRowCount()) {
@@ -182,10 +178,11 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     }
 
     /**
-     * ���������� �������� � �������� ������
-     * @param value ����� ��������
-     * @param row ����� ������
-     * @param column ����� �������
+     * Установить значение в заданной ячейке
+     *
+     * @param value новое значение
+     * @param row номер строки
+     * @param column номер колонки
      */
     @Override
     public void setValueAt(Object value, int row, int column) {

@@ -36,7 +36,7 @@ public class SearchStatusThread extends Thread {
     private final static String name = "SearchStatusThread";
 
     /** Creates a new instance of SearchStatusThread */
-    public SearchStatusThread(NewSearchThread nst/*, JLabel label, JList list, JButton button*/) {
+    public SearchStatusThread(NewSearchThread nst) {
         super(name);
         this.nst = nst;
     }

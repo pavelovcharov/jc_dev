@@ -24,13 +24,13 @@ package ru.narod.jcommander.actions;
 
 import java.awt.Cursor;
 import ru.narod.jcommander.fileSystem.BaseFile;
-import ru.narod.jcommander.fileSystem.archive.ArchiveFile;
-import ru.narod.jcommander.fileSystem.archive.MyZipFile;
+import ru.narod.jcommander.fileSystem.FileHelper;
 import ru.narod.jcommander.fileSystem.FileSystemList;
 import ru.narod.jcommander.fileSystem.LocalFile;
-import ru.narod.jcommander.fileSystem.FileHelper;
+import ru.narod.jcommander.fileSystem.archive.ArchiveFile;
 import ru.narod.jcommander.fileSystem.archive.MyTarFile;
 import ru.narod.jcommander.fileSystem.archive.MyTgzFile;
+import ru.narod.jcommander.fileSystem.archive.MyZipFile;
 import ru.narod.jcommander.gui.MainFrame;
 import ru.narod.jcommander.gui.dialog.ProgressDialog;
 import ru.narod.jcommander.gui.dialog.WarningDialog;
@@ -106,8 +106,9 @@ public class ActionEnter extends AbstractAction {
                 }
             }
         }
-        if(activeTable.getCurrentDir() == currentFile)
+        if (activeTable.getCurrentDir() == currentFile) {
             activeTable.setCurrentPosition(index);
+        }
         activeTable.clearSelectedList();
         parent.updateActivePanel();
 

@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -39,5 +38,4 @@ public class ActionChangeArrangement extends AbstractAction {
     public void execute() {
         parent.changeArrangement();
     }
-
 }

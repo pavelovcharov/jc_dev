@@ -28,14 +28,17 @@ import java.io.FileFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.LocalFile;
 
 /**
- * Класс задает файл в сети. Для доступа к сети используется библиотека 
+ * Класс задает файл в сети. Для доступа к сети используется библиотека
  * jcifs-1.2.10
+ *
  * @author Strateg
  */
 public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.PrefKeys {
@@ -45,6 +48,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Создает новый экземпляр класса NetFile для заданного пути
+     *
      * @param path путь к файлу в сети
      */
     public NetFile(String path) {
@@ -54,17 +58,14 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         }
         try {
             smbFile = new SmbFile(path);
-            //System.out.println(smbFile.getParent());
-            //parent = new NetFile(new SmbFile(smbFile.getParent()));
         } catch (MalformedURLException ex) {
-            //ex.printStackTrace();
-            //System.out.println(ex);
-            ex.printStackTrace();
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
      * Создает новый экземпляр класса NetFile по объекту <I>smbFile</I>
+     *
      * @param smbFile файл в сети
      */
     public NetFile(SmbFile smbFile) {
@@ -80,6 +81,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Возвращает расширение файла
+     *
      * @return пустую строку, если текущим файлом является каталог, иначе
      * возвращается строка, содержащая расширение файла
      */
@@ -90,6 +92,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Получить список файлов, находящихся в данной папке в архиве
+     *
      * @return массив файлов
      */
     @Override
@@ -102,9 +105,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             }
             return list;
         } catch (SmbException ex) {
-//			LanguageBundle lb = LanguageBundle.getInstance();
-//            String [] opt = {lb.getString("StrOk")};
-//			WarningDialog.showMessage(lb.getString("StrNoRes"), lb.getString("StrJC"), opt, WarningDialog.MESSAGE_ERROR, 0);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -116,32 +117,35 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Получить родительскую папку для данного файла
-     * @return объект класса BaseFile, представляющий родительскую папку данного файла
+     *
+     * @return объект класса BaseFile, представляющий родительскую папку данного
+     * файла
      */
     @Override
     public BaseFile getAbsoluteParent() {
-        //return new NetFile(smbFile.getParent());
         return parent;
     }
 
     /**
      * Определить, является ли данный объект файлом или каталогом
-     * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
+     *
+     * @return <B>true</B>, если данный объект является каталогом, иначе -
+     * <B>false</B>
      */
     @Override
     public boolean isDirectory() {
         try {
             return smbFile.isDirectory();
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
     /**
-     * Представляет размер в более наглядной форме. Например, число
-     * 12455 будет иметь вид 12 455
+     * Представляет размер в более наглядной форме. Например, число 12455 будет
+     * иметь вид 12 455
+     *
      * @return строка содержащая размер файла в отформатированном виде
      */
     @Override
@@ -152,14 +156,14 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return getFormatFileSize(smbFile.length());
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "" + 0;
     }
 
     /**
      * Возвращает дату последеней модификации файла или каталога
+     *
      * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
      */
     @Override
@@ -169,8 +173,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * Возвращает атрибуты файла или каталога. ro - только для чтения,
-     * h - скрытый
+     * Возвращает атрибуты файла или каталога. ro - только для чтения, h -
+     * скрытый
+     *
      * @return строку, содержащую атрибуты файла или каталога
      */
     @Override
@@ -184,16 +189,15 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
                 atr += "h";
             }
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return atr;
-
     }
 
     /**
      * Удалит данный файл с диска
+     *
      * @return <B>true</B>, если файл был успешно удален, иначе - <B>false</B>
      */
     @Override
@@ -202,26 +206,26 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             smbFile.delete();
             return true;
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String getAbsolutePath() {
-        //return ""+parent+smbFile.getName();
         return smbFile.getPath();
     }
 
     /**
      * Получить поток для чтения из файла
+     *
      * @return поток для чтения из файла
-     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
+     * @throws java.lang.Exception вызывается, если при создании потока
+     * произошла ошибка
      */
     @Override
     public InputStream getInputStream() throws java.io.IOException {
@@ -230,7 +234,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Получить поток для записи в файл
-     * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
+     *
+     * @throws java.lang.Exception вызывается, если при создании потока
+     * произошла ошибка
      * @return поток для записи в файл
      */
     @Override
@@ -239,21 +245,8 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     }
 
     /**
-     * Получить дату последней модификации файла
-     * @return дата последней модификации файла - число миллисекунд прошедших с 00:00:00 1 
-     * января 1970; если файл не существует возвращается 0L
-     */
-//    public long lastModified() {
-//        try {
-//            return smbFile.lastModified();
-//        } catch (SmbException ex) {
-//            //ex.printStackTrace();
-//            System.out.println(ex);
-//        }
-//        return 0;
-//    }
-    /**
      * Метод позволяет определить, существует ли файл физически на диске
+     *
      * @return <B>true</B>, ели файл существует, <B>false</B> - иначе
      */
     @Override
@@ -261,14 +254,14 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.exists();
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
     /**
      * Получить строковое представление объекта
+     *
      * @return строковое представление
      */
     @Override
@@ -278,6 +271,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Создать папки на пути, котоый задан данным файлом
+     *
      * @return <B>true</B>, если папки были созданы, иначе - <B>false</B>
      */
     @Override
@@ -286,8 +280,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             smbFile.mkdirs();
             return true;
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
 
@@ -295,7 +288,9 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Установить дату последеного изменения файла
-     * @param time дата последней модификации - число миллисекунд, прошедших с начала эпохи
+     *
+     * @param time дата последней модификации - число миллисекунд, прошедших с
+     * начала эпохи
      * @return <B>true</B>, если дата успешно изменена, иначе - <B>false</B>
      */
     @Override
@@ -304,8 +299,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             smbFile.setLastModified(time);
             return true;
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -313,6 +307,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     /**
      * Получить абсолютный путь к файлу, для каталога - с разделителем в конце
      * ("smb://123/sad/")
+     *
      * @return абсолютный путь к файлу
      */
     @Override
@@ -322,6 +317,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
 
     /**
      * Переименовать данный файл в файл с именем, заданным <I>targetFile</I>
+     *
      * @param targetFile файл-преемник
      * @return <B>true</B>, если файл был переименовн, иначе - <B>false</B>
      */
@@ -334,39 +330,30 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
                 smbFile.renameTo(new SmbFile(dest.getPathWithSlash()));
             }
             return true;
-        } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
     /**
      * Получить файл, соответствующий начальной папке в сети (smb://)
+     *
      * @return объект класса BaseFile - начальная папка в сети
      */
     @Override
     public BaseFile getRoot() {
         return new NetFile("smb://");
         /*
-        NetFile root = this;
-        root.smbFile.
-        while(root.hasParent()) {
-        root = (NetFile) root.getAbsoluteParent();
-        if (null == root) break;
-        }
-        return root;
+         * NetFile root = this; root.smbFile. while(root.hasParent()) { root =
+         * (NetFile) root.getAbsoluteParent(); if (null == root) break; } return
+         * root;
          */
     }
 
     /**
      * Определить размер файла
+     *
      * @return размер файла в байтах
      */
     @Override
@@ -374,8 +361,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.length();
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -389,8 +375,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.lastModified();
         } catch (SmbException ex) {
-            ex.printStackTrace();
-            //System.out.println(ex);
+            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }

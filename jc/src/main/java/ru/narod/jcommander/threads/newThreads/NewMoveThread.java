@@ -24,10 +24,10 @@ package ru.narod.jcommander.threads.newThreads;
 
 import java.util.ArrayList;
 import ru.narod.jcommander.fileSystem.BaseFile;
-import ru.narod.jcommander.fileSystem.FileSystemList;
-import ru.narod.jcommander.fileSystem.net.NetFile;
-import ru.narod.jcommander.fileSystem.SubDirectoriesList;
 import ru.narod.jcommander.fileSystem.FileHelper;
+import ru.narod.jcommander.fileSystem.FileSystemList;
+import ru.narod.jcommander.fileSystem.SubDirectoriesList;
+import ru.narod.jcommander.fileSystem.net.NetFile;
 import ru.narod.jcommander.util.LanguageBundle;
 import ru.narod.jcommander.util.Support;
 
@@ -126,7 +126,6 @@ public class NewMoveThread extends FileThread {
                         if (queryReplace(temp, newFile)) {
                             switch (replaceResult) {
                                 case REPLACE:
-                                    //action(temp, newFile);
                                     break;
                                 case REPLACE_OLD:
                                     if (temp.getLastModifiedTime() < newFile.getLastModifiedTime()) {
@@ -180,7 +179,7 @@ public class NewMoveThread extends FileThread {
         java.io.InputStream fis = source.getInputStream();
         java.io.OutputStream fos = target.getOutputStream();
         byte[] buf = new byte[2048];
-        int readCount = 0;
+        int readCount;
         while ((readCount = fis.read(buf)) != -1) {
             fos.write(buf, 0, readCount);
             currentProgress += readCount;

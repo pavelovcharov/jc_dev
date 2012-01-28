@@ -24,7 +24,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.editor;
 
 /**
@@ -32,18 +31,18 @@ package ru.narod.jcommander.editor;
  * @author Pavel Ovcharov
  */
 interface EditorPrefs {
+
     public static String P_POS_X = "POS_X";
     public static String P_POS_Y = "POS_Y";
     public static String P_WIDTH = "WIDTH";
     public static String P_HEIGHT = "HEIGHT";
     public static String P_STATE = "STATE";
     public static String P_CHARSET = "CHARSET";
-	public static String P_SCALE = "SCALE";
+    public static String P_SCALE = "SCALE";
     public static int p_POS_X = 0;
     public static int p_POS_Y = 0;
     public static int p_WIDTH = 300;
     public static int p_HEIGHT = 500;
     public static int p_STATE = 0;
-	public static int p_SCALE = 1;
-    //public static String p_CHARSET = "windows-1251";
+    public static int p_SCALE = 1;
 }

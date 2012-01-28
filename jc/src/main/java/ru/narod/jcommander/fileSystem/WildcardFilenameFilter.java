@@ -20,13 +20,11 @@
  * WildcardFilenameFilter.java
  * Created on 02.07.2009 14:21:18
  */
-
 package ru.narod.jcommander.fileSystem;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.StringTokenizer;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
@@ -36,46 +34,30 @@ import org.apache.commons.io.IOCase;
  */
 public class WildcardFilenameFilter implements FileFilter {
 
-    String [] wildcards;
-	IOCase caseSensitivity;
-	
-	/**
-	 *
-	 * @param wildcard
-	 * @param caseSensitivity
-	 */
-	public WildcardFilenameFilter(String wildcard, IOCase caseSensitivity) {
-		StringTokenizer stringTokenizer = new StringTokenizer(wildcard, ";");
-		wildcards = new String[stringTokenizer.countTokens()];
-//		String s;
-//		for (int i=0; i<wildcards.length; i++) {
-//			wildcards[i] = stringTokenizer.nextToken();
-//
-//		}
-		for (int i=0; stringTokenizer.hasMoreTokens(); i++) {
-			String token = stringTokenizer.nextToken();
-			wildcards[i] = token;
-		}
+    String[] wildcards;
+    IOCase caseSensitivity;
 
-		this.caseSensitivity = caseSensitivity;
-	}
+    public WildcardFilenameFilter(String wildcard, IOCase caseSensitivity) {
+        StringTokenizer stringTokenizer = new StringTokenizer(wildcard, ";");
+        wildcards = new String[stringTokenizer.countTokens()];
+        for (int i = 0; stringTokenizer.hasMoreTokens(); i++) {
+            String token = stringTokenizer.nextToken();
+            wildcards[i] = token;
+        }
 
-	
-	/**
-	 *
-	 * @param name
-	 * @return
-	 */
-	public boolean accept(String name) {
-		 for (int i = 0; i < wildcards.length; i++) {
+        this.caseSensitivity = caseSensitivity;
+    }
+
+    public boolean accept(String name) {
+        for (int i = 0; i < wildcards.length; i++) {
             if (FilenameUtils.wildcardMatch(name, wildcards[i], caseSensitivity)) {
                 return true;
             }
         }
         return false;
-	}
+    }
 
-	public boolean accept(File pathname) {
-		return accept(pathname.getName());
-	}
+    public boolean accept(File pathname) {
+        return accept(pathname.getName());
+    }
 }

@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -31,14 +30,13 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionSelectAll extends AbstractAction {
 
-	public ActionSelectAll(MainFrame parent) {
-		super(parent);
-	}
+    public ActionSelectAll(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		parent.getActiveTable().selectAllFiles();
-		parent.getActiveTable().repaint();
-		parent.updateActiveStatusLabel();
-	}
-
+    public void execute() {
+        parent.getActiveTable().selectAllFiles();
+        parent.getActiveTable().repaint();
+        parent.updateActiveStatusLabel();
+    }
 }

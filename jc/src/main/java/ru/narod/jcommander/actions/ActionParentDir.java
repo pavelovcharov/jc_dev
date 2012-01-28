@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
@@ -33,20 +32,18 @@ import ru.narod.jcommander.gui.table.FileTable;
  */
 public class ActionParentDir extends AbstractAction {
 
-	public ActionParentDir(MainFrame parent) {
-		super(parent);
-	}
+    public ActionParentDir(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		BaseFile file = activeTable.getCurrentDir();
-		if (file.hasParent()) {
-			activeTable.setCurrentDir(file.getAbsoluteParent());
-			activeTable.refreshTable();
-			activeTable.setCurrentPosition(activeTable.getFilePosition(file));
-			parent.updateActivePanel();
-		}
-	}
-
-
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        BaseFile file = activeTable.getCurrentDir();
+        if (file.hasParent()) {
+            activeTable.setCurrentDir(file.getAbsoluteParent());
+            activeTable.refreshTable();
+            activeTable.setCurrentPosition(activeTable.getFilePosition(file));
+            parent.updateActivePanel();
+        }
+    }
 }

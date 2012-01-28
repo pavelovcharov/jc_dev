@@ -24,14 +24,13 @@ package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.gui.MainFrame;
-//import ru.narod.jcommander.gui.actions.DeleteDialog;
 import ru.narod.jcommander.gui.dialog.DeleteDialog;
+import ru.narod.jcommander.gui.dialog.ProgressDialog;
 import ru.narod.jcommander.gui.table.FileTable;
 import ru.narod.jcommander.gui.table.tableElements.NameInterface;
 import ru.narod.jcommander.gui.table.tableElements.UpperDirectory;
 import ru.narod.jcommander.threads.newThreads.NewDeleteThread;
 import ru.narod.jcommander.threads.newThreads.ProgressThread;
-import ru.narod.jcommander.gui.dialog.ProgressDialog;
 
 /**
  *

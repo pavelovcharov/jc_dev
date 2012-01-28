@@ -20,7 +20,6 @@
  * ActionPrevTab.java
  * Created on 11.01.2009 12:04:52
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -30,11 +29,12 @@ import ru.narod.jcommander.gui.MainFrame;
  * @author Programmer
  */
 public class ActionPrevTab extends AbstractAction {
-	public ActionPrevTab(MainFrame parent) {
-		super(parent);
-	}
 
-	public void execute() {
-		parent.selectPrevTab();
-	}
+    public ActionPrevTab(MainFrame parent) {
+        super(parent);
+    }
+
+    public void execute() {
+        parent.selectPrevTab();
+    }
 }

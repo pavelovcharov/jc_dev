@@ -26,17 +26,13 @@
  */
 package ru.narod.jcommander.fileSystem.archive;
 
-import ru.narod.jcommander.fileSystem.*;
 import java.io.FileFilter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import ru.narod.jcommander.fileSystem.BaseFile;
+import ru.narod.jcommander.fileSystem.LocalFile;
 
 //XXX посмотреть как это работает
 /**
@@ -108,19 +104,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
      * Создать объект класса MyZipFile. Используется для реализации просмотра
      * содержимого архива, находящегося внутри другого архива.
      *
-     * @param parent объект класса MyZipFile, представляющий собой архив,
-     * содержимое которого нужно просмотреть
-     * @param archive задает путь к архиву на диске (например, во временной
-     * папке)
-     */
-//    public MyZipFile(MyZipFile parent, LocalFile archive) {
-//        this(archive);
-//        this.parent = parent;
-//    }
-    /**
-     * Создать объект класса MyZipFile. Используется для реализации просмотра
-     * содержимого архива, находящегося внутри другого архива.
-     *
      * @param parent объект класса ArchiveFile, представляющий собой архив,
      * содержимое которого нужно просмотреть
      * @param archive задает путь к архиву на диске (например, во временной
@@ -142,8 +125,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
             while (entries.hasMoreElements()) {
                 final Object object = entries.nextElement();
                 if (object instanceof ZipEntry) {
-//                    ZipEntry ze = (ZipEntry) object;
-//                    name = ze.getName();
                     name = ((ZipEntry) object).getName();
                     if (name.endsWith(ARCHIVE_SEPARATOR)) {
                         name = name.substring(0,
@@ -160,9 +141,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
         return success;
     }
 
-//	private void setArchiveMap(HashMap archiveMap) {
-//        this.archiveMap = archiveMap;
-//    }
     /**
      * Получить список имен файлов, находящихся в данной папке в архиве
      *
@@ -226,23 +204,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     @Override
     public BaseFile[] getFiles(FileFilter filter) {
         return getFiles();
-//        final String[] names = list();
-//        MyZipFile[] files = null;
-//        if (names != null) {
-//            files = new MyZipFile[names.length];
-//            String name;
-//            for (int i = 0; i < names.length; ++i) {
-//
-//                if (null != zipEntry){
-//                    name = zipEntry.getName() + names[i];
-//                }
-//                else {
-//                    name = names[i];
-//                }
-//                files[i] = new MyZipFile(this, (ZipEntry) archiveMap.get(name));
-//            }
-//        }
-//        return files;
     }
 
     @Override
@@ -285,7 +246,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     @Override
     public BaseFile getAbsoluteParent() {
         return parent;
-        //return getAbstractParent();
     }
 
     /**
@@ -368,16 +328,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     }
 
     /**
-     * Получить дату последней модификации файла
-     *
-     * @return дата последней модификации файла - число миллисекунд прошедших с
-     * 00:00:00 1 января 1970; если файл не существует возвращается 0L
-     */
-//    public long lastModified() {
-//        if (null == zipEntry) return parent.lastModified();
-//        return zipEntry.getTime();
-//    }
-    /**
      * Получить строковое представление объекта
      *
      * @return строковое представление
@@ -411,7 +361,6 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     @Override
     public String getPathWithSlash() {
         String path = getAbsolutePath();
-        //if (false == isDirectory() ) return super.getAbsolutePath();
         return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
     }
 }

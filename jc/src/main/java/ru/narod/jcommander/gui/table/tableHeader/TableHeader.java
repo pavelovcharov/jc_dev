@@ -32,44 +32,40 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class TableHeader implements ru.narod.jcommander.prefs.PrefKeys, ColumnNumbers {
 
-	public static String[] TITLE;// = {"", "Имя","Тип","Размер","Дата","Атрибуты"};
+    public static String[] TITLE;// = {"", "Имя","Тип","Размер","Дата","Атрибуты"};
 
-	static {
-		try {
-			LanguageBundle lb = LanguageBundle.getInstance();
-			TITLE = new String[]{lb.getString("StrIcon"), lb.getString("StrName"), lb.getString("StrExtention"),
-						lb.getString("StrSize"), lb.getString("StrDate"), lb.getString("StrAttribute")
-					};
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    static {
+        LanguageBundle lb = LanguageBundle.getInstance();
+            TITLE = new String[]{lb.getString("StrIcon"), lb.getString("StrName"), lb.getString("StrExtention"),
+                lb.getString("StrSize"), lb.getString("StrDate"), lb.getString("StrAttribute")
+            };
+    }
 
-	public static String getColumnName(int column) {
-		LanguageBundle lb = LanguageBundle.getInstance();
-		String result;
-		switch (column) {
-			case ICON:
-				result = lb.getString("StrIcon");
-				break;
-			case NAME:
-				result = lb.getString("StrName");
-				break;
-			case EXT:
-				result = lb.getString("StrExtention");
-				break;
-			case SIZE:
-				result = lb.getString("StrSize");
-				break;
-			case DATE:
-				result = lb.getString("StrDate");
-				break;
-			case ATR:
-				result = lb.getString("StrAttribute");
-				break;
-			default:
-				result = "";
-		}
-		return result;
-	}
+    public static String getColumnName(int column) {
+        LanguageBundle lb = LanguageBundle.getInstance();
+        String result;
+        switch (column) {
+            case ICON:
+                result = lb.getString("StrIcon");
+                break;
+            case NAME:
+                result = lb.getString("StrName");
+                break;
+            case EXT:
+                result = lb.getString("StrExtention");
+                break;
+            case SIZE:
+                result = lb.getString("StrSize");
+                break;
+            case DATE:
+                result = lb.getString("StrDate");
+                break;
+            case ATR:
+                result = lb.getString("StrAttribute");
+                break;
+            default:
+                result = "";
+        }
+        return result;
+    }
 }

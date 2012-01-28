@@ -25,7 +25,6 @@ package ru.narod.jcommander.actions;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.FileHelper;
 import ru.narod.jcommander.gui.MainFrame;
-//import ru.narod.jcommander.gui.actions.NewDialog;
 import ru.narod.jcommander.gui.dialog.InputDialog;
 import ru.narod.jcommander.gui.dialog.WarningDialog;
 import ru.narod.jcommander.gui.table.FileTable;
@@ -39,42 +38,42 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class ActionRename extends AbstractAction {
 
-	public ActionRename(MainFrame parent) {
-		super(parent);
-	}
+    public ActionRename(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		NameInterface name = activeTable.getElementAtCursor();
-		BaseFile currentFile;
-		if (null != name) {
-			currentFile = name.getFile();
-		} else {
-			currentFile = null;
-		}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        NameInterface name = activeTable.getElementAtCursor();
+        BaseFile currentFile;
+        if (null != name) {
+            currentFile = name.getFile();
+        } else {
+            currentFile = null;
+        }
 
-		if (null == currentFile) {
-			return;
-		}
-		if (true == (name instanceof UpperDirectory)) {
-			return;
-		}
-		
-		LanguageBundle lb = LanguageBundle.getInstance();
+        if (null == currentFile) {
+            return;
+        }
+        if (true == (name instanceof UpperDirectory)) {
+            return;
+        }
 
-		String newName = InputDialog.showInputDialog(parent, lb.getString("StrRename"), currentFile.getFilename());
-		if (null == newName) //cancel pressed
-		{
-			return;
-		}
-		BaseFile result = FileHelper.getRealFile(activeTable.getCurrentDir(), newName);
-		if (!currentFile.renameTo(result)) {
-			WarningDialog.showMessage(parent, lb.getString("StrRenameError") + " " + result,
-					lb.getString("StrError"), new Object[] {lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
-				//XXX return from this
-		}
+        LanguageBundle lb = LanguageBundle.getInstance();
 
-		parent.updateMainWindow();
-		parent.getActiveTable().moveToFile(result);
-	}
+        String newName = InputDialog.showInputDialog(parent, lb.getString("StrRename"), currentFile.getFilename());
+        if (null == newName) //cancel pressed
+        {
+            return;
+        }
+        BaseFile result = FileHelper.getRealFile(activeTable.getCurrentDir(), newName);
+        if (!currentFile.renameTo(result)) {
+            WarningDialog.showMessage(parent, lb.getString("StrRenameError") + " " + result,
+                    lb.getString("StrError"), new Object[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
+            //XXX return from this
+        }
+
+        parent.updateMainWindow();
+        parent.getActiveTable().moveToFile(result);
+    }
 }

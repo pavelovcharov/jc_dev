@@ -22,7 +22,6 @@
  * Created on 25 jun 2007, 9:59
  *
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
@@ -33,42 +32,49 @@ import ru.narod.jcommander.fileSystem.FileSystemList;
  * @author Programmer
  * @version
  */
-public class Size extends Element{
-    
+public class Size extends Element {
+
     private String sizeStr;
     long size = 0;
     static protected String DEFAULT_DIR_SIZE = "<DIR>";
-    
-    /** Creates a new instance of Size */
+
+    /**
+     * Creates a new instance of Size
+     */
     public Size(BaseFile aFile) {
-        if (aFile.isDirectory())
+        if (aFile.isDirectory()) {
             sizeStr = DEFAULT_DIR_SIZE;
-        else {
+        } else {
             size = aFile.length();
             sizeStr = FileSystemList.getFormatedSize(size);
         }
     }
-    
+
     public Size(long size) {
         this.size = size;
         sizeStr = FileSystemList.getFormatedSize(size);
     }
-    
-	@Override
+
+    @Override
     public String toString() {
         return sizeStr;
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Size)) return 1;
-        Size s = (Size)o;
-        if (size> s.size) return 1;
-        if (size == s.size) return 0;
+        if (false == (o instanceof Size)) {
+            return 1;
+        }
+        Size s = (Size) o;
+        if (size > s.size) {
+            return 1;
+        }
+        if (size == s.size) {
+            return 0;
+        }
         return -1;
     }
-    
+
     public long getSize() {
         return size;
     }
-    
 }

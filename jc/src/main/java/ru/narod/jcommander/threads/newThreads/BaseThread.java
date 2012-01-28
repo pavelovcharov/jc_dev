@@ -22,9 +22,6 @@
  */
 package ru.narod.jcommander.threads.newThreads;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import javax.swing.JDialog;
 
 /**
@@ -40,7 +37,6 @@ public class BaseThread extends Thread {
     protected long currentProgress = 0;
     protected long currentFileSize = 1;
     protected JDialog parent = null;
-//	protected JComponent parent = null;
 
     public BaseThread() {
     }
@@ -48,7 +44,7 @@ public class BaseThread extends Thread {
     public BaseThread(String name) {
         super(name);
     }
-    
+
     public void setInterrupt(boolean interrupt) {
         this.interrupt = interrupt;
     }

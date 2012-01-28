@@ -21,7 +21,6 @@
  *
  * Created on 15 oct 2006, 11:39
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 import java.awt.Color;
@@ -29,58 +28,56 @@ import ru.narod.jcommander.fileSystem.BaseFile;
 
 /**
  * Класс определеяет элемент таблицы FileTable - каталог файловой системы
+ *
  * @author Pavel Ovcharov
  */
 public class Directory extends Name {
- 
-    //private BaseFile aFile;
-    //private String dirName;
 
     private String DIR_CHARACTER_LEFT = "";
     private String DIR_CHARACTER_RIGHT = "";
-    
+
     /**
-     * Создать новый экземпляр класса Directory для каталога aFile. Каталог будет 
-     * отображаться в таблице в соответсвии с заданными цветами <I>fontColor</I> и 
-     * <I>bgColor</I>
+     * Создать новый экземпляр класса Directory для каталога aFile. Каталог
+     * будет отображаться в таблице в соответсвии с заданными цветами
+     * <I>fontColor</I> и <I>bgColor</I>
+     *
      * @param aFile каталог файловой системы
      * @param fontColor цвет шрифта
      * @param bgColor цвет фона
      */
     public Directory(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
-        //this.dirName = aFile.getAbstractFileName();
-        //this.aFile = aFile;
     }
-    
+
     /**
-     * Создать новый экземпляр класса Directory для каталога aFile. Каталог будет 
-     * отображаться в таблице в соответсвии с заданными цветами <I>fontColor</I> и 
-     * <I>bgColor</I>
+     * Создать новый экземпляр класса Directory для каталога aFile. Каталог
+     * будет отображаться в таблице в соответсвии с заданными цветами
+     * <I>fontColor</I> и <I>bgColor</I>
+     *
      * @param aFile каталог файловой системы
      */
     public Directory(BaseFile aFile) {
         super(aFile);
-        //this.dirName = aFile.getAbstractFileName();
-        //this.aFile = aFile;
     }
+
     /**
      * Получить строковое представление объекта
+     *
      * @return строковое представление
      */
-	@Override
+    @Override
     public String toString() {
         return DIR_CHARACTER_LEFT + name + DIR_CHARACTER_RIGHT;
     }
 
     /**
      * Определить одинаковы ли два объекта - данный и <I>obj</I>
+     *
      * @param obj сравниваемый объект
      * @return <B>true</B>, если объекты одинаковы, иначе - <B>false</B>
      */
-	@Override
+    @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Directory)?(getName().equals(((Directory)obj).getName())):false;
+        return (obj instanceof Directory) ? (getName().equals(((Directory) obj).getName())) : false;
     }
-   
 }

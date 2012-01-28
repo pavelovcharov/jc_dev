@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ru.narod.jcommander.gui.search;
 
 import java.awt.Component;
@@ -32,31 +31,31 @@ import ru.narod.jcommander.gui.ImageArchive;
  */
 class SearchResultListCellRenderer extends DefaultListCellRenderer {
 
-        @Override
-        public Component getListCellRendererComponent(
-                JList list,
-                Object value,
-                int index,
-                boolean isSelected,
-                boolean cellHasFocus) {
-            Component retValue = super.getListCellRendererComponent(
-                    list, value, index, isSelected, cellHasFocus);
-            if (value instanceof BaseFile) {
-                BaseFile file = (BaseFile) value;
-                ImageIcon icon = null;
-                switch (FileHelper.getFileType(file)) {
-                    case DIRECTORY:
-                        icon = ImageArchive.getImageFolder();
-                        break;
-                    case ARCHIVE:
-                        icon = ImageArchive.getImageArchive();
-                        break;
-                    default:
-                        icon = ImageArchive.getImageFile();
-                        break;
-                }
-                setIcon(icon);
+    @Override
+    public Component getListCellRendererComponent(
+            JList list,
+            Object value,
+            int index,
+            boolean isSelected,
+            boolean cellHasFocus) {
+        Component retValue = super.getListCellRendererComponent(
+                list, value, index, isSelected, cellHasFocus);
+        if (value instanceof BaseFile) {
+            BaseFile file = (BaseFile) value;
+            ImageIcon icon;
+            switch (FileHelper.getFileType(file)) {
+                case DIRECTORY:
+                    icon = ImageArchive.getImageFolder();
+                    break;
+                case ARCHIVE:
+                    icon = ImageArchive.getImageArchive();
+                    break;
+                default:
+                    icon = ImageArchive.getImageFile();
+                    break;
             }
-            return retValue;
+            setIcon(icon);
         }
+        return retValue;
     }
+}

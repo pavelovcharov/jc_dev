@@ -22,7 +22,6 @@
  * Created on 25 jun 2007, 10:14
  *
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 import java.text.SimpleDateFormat;
@@ -33,36 +32,43 @@ import ru.narod.jcommander.fileSystem.BaseFile;
  * @author Programmer
  * @version
  */
-public class Date extends Element{
-    
+public class Date extends Element {
+
     private long time;
     private String dateStr;
-    static private String DEFAULT_DATE_FORMAT = "dd.MM.yyyy HH:mm";
+    static private final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy HH:mm";
     static private SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-    
-    /** Creates a new instance of Date */
+
+    /**
+     * Creates a new instance of Date
+     */
     public Date(BaseFile aFile) {
         java.util.Date date = new java.util.Date();
         time = aFile.getLastModifiedTime();
-        date.setTime(time);        
-        dateStr = sdate.format(date);    
+        date.setTime(time);
+        dateStr = sdate.format(date);
     }
-    
+
     public Date(String date) {
         this.dateStr = date;
     }
-    
-	@Override
+
+    @Override
     public String toString() {
         return dateStr;
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Date)) return 1;
-        Date d = (Date)o;
-        if (time > d.time) return 1;
-        if (time < d.time) return -1;
+        if (false == (o instanceof Date)) {
+            return 1;
+        }
+        Date d = (Date) o;
+        if (time > d.time) {
+            return 1;
+        }
+        if (time < d.time) {
+            return -1;
+        }
         return 0;
     }
-    
 }

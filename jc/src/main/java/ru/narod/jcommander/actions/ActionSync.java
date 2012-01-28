@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -32,16 +31,15 @@ import ru.narod.jcommander.gui.table.FileTable;
  */
 public class ActionSync extends AbstractAction {
 
-	public ActionSync(MainFrame parent) {
-		super(parent);
-	}
+    public ActionSync(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		FileTable passiveTable = parent.getPassiveTable();
-		//passiveTable.setFileList(activeTable.getFileList());
-		passiveTable.setCurrentDir(activeTable.getCurrentDir());
-		passiveTable.setCurrentPosition(activeTable.getCurrentPosition());
-		parent.updatePassivePanel();
-	}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        FileTable passiveTable = parent.getPassiveTable();
+        passiveTable.setCurrentDir(activeTable.getCurrentDir());
+        passiveTable.setCurrentPosition(activeTable.getCurrentPosition());
+        parent.updatePassivePanel();
+    }
 }

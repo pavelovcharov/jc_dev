@@ -20,7 +20,6 @@
  * WarningDialog.java
  * Created on 14.04.2009 10:05:36
  */
-
 package ru.narod.jcommander.gui.dialog;
 
 import javax.swing.JDialog;
@@ -34,35 +33,24 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class WarningDialog {
 
-	public static final int MESSAGE_ERROR = JOptionPane.ERROR_MESSAGE;
-	public static final int MESSAGE_WARNING = JOptionPane.WARNING_MESSAGE;
-        public static  final int MESSAGE_QUESTION = JOptionPane.QUESTION_MESSAGE;
+    public static final int MESSAGE_ERROR = JOptionPane.ERROR_MESSAGE;
+    public static final int MESSAGE_WARNING = JOptionPane.WARNING_MESSAGE;
+    public static final int MESSAGE_QUESTION = JOptionPane.QUESTION_MESSAGE;
 
-	public static  int showMessage(JFrame parent, Object message, String title, int messageType) {
-		return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null,
-				new Object[]{LanguageBundle.getInstance().getString("StrOk")}, LanguageBundle.getInstance().getString("StrOk"));
-	}
+    public static int showMessage(JFrame parent, Object message, String title, int messageType) {
+        return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null,
+                new Object[]{LanguageBundle.getInstance().getString("StrOk")}, LanguageBundle.getInstance().getString("StrOk"));
+    }
 
-	/**
-	 *
-	 * @param message
-	 * @param title
-	 * @param options
-	 * @param option
-	 * @param messageType
-	 * @param index
-	 * @return
-	 */
-	public static int showMessage(Object message, String title, Object options[], int messageType, int index) {
-		return javax.swing.JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, options, options[index]);
-	}
+    public static int showMessage(Object message, String title, Object options[], int messageType, int index) {
+        return javax.swing.JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, options, options[index]);
+    }
 
-	public static int showMessage(JFrame parent, Object message, String title, Object options[], int messageType, int index) {
-		return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, options, options[index]);
-	}
-	
-	public static  int showMessage(JDialog parent, Object message, String title, Object options[], int messageType, int index) {
-		return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, options, options[index]);
-	}
+    public static int showMessage(JFrame parent, Object message, String title, Object options[], int messageType, int index) {
+        return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, options, options[index]);
+    }
 
+    public static int showMessage(JDialog parent, Object message, String title, Object options[], int messageType, int index) {
+        return javax.swing.JOptionPane.showOptionDialog(parent, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, options, options[index]);
+    }
 }

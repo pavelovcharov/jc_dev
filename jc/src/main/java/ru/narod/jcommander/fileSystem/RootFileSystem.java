@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ru.narod.jcommander.fileSystem;
 
 import java.io.File;
@@ -23,8 +22,9 @@ import java.util.ArrayList;
 import ru.narod.jcommander.fileSystem.net.NetFile;
 
 /**
- * Класс предоставляет методы для определения списка разделов и
- * сменных устройств (приводов CD-ROM, дисководов)
+ * Класс предоставляет методы для определения списка разделов и сменных
+ * устройств (приводов CD-ROM, дисководов)
+ *
  * @author Sniper
  * @version 2005/04/24 1:12:37 PM
  */
@@ -35,6 +35,7 @@ abstract public class RootFileSystem {
 
     /**
      * Возвращает список разделов
+     *
      * @return массив класса File, содержащий файлы разделов
      */
     public static BaseFile[] getRoots() {
@@ -56,12 +57,12 @@ abstract public class RootFileSystem {
 
     /**
      * Проверяет является ли файл файлом раздела
-     * @return <b>true, если <i>file</i> является файлом раздела, иначе - 
+     *
+     * @return <b>true, если <i>file</i> является файлом раздела, иначе -
      * <b>false</b>
      * @param file файл
      */
     public static boolean isRoot(LocalFile file) {
-        //File [] roots = new LocalFile().listRoots();
         File[] roots = LocalFile.listRoots();
         for (int i = 0; i < roots.length; i++) {
             if (new LocalFile(roots[i]).equals(file)) {
@@ -83,8 +84,6 @@ abstract public class RootFileSystem {
                 return new LocalFile(rootArray[i]);
             }
         }
-        System.out.println("Can't find any root. Application halted...");
-        System.exit(0xa);
         return null;
     }
 }

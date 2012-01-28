@@ -20,7 +20,6 @@
  * ActionDecodeHex.java
  * Created on 11.01.2009 14:13:45
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -33,13 +32,13 @@ import ru.narod.jcommander.util.NameCorrector;
  */
 public class ActionDecodeHex extends AbstractAction {
 
-	public ActionDecodeHex(MainFrame parent) {
-		super(parent);
-	}
+    public ActionDecodeHex(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		NameCorrector.renameFiles(activeTable.getFileAtCursor());
-		activeTable.refreshTable();
-	}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        NameCorrector.renameFiles(activeTable.getFileAtCursor());
+        activeTable.refreshTable();
+    }
 }
