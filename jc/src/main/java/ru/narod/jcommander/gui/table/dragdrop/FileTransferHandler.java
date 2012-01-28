@@ -29,11 +29,10 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.LocalFile;
 import ru.narod.jcommander.gui.MainFrame;
@@ -154,7 +153,7 @@ public class FileTransferHandler extends TransferHandler {
             files = (java.util.List) t.getTransferData(fileFlavor);
             files.add(new File("c:/1.txt"));
         } catch (Exception ex) {
-            Logger.getLogger(FileTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return null;
     }

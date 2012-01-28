@@ -23,8 +23,7 @@
 package ru.narod.jcommander.fileSystem.archive;
 
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.LocalFile;
 import ru.narod.jcommander.tarlib.TGZArchive;
@@ -100,7 +99,7 @@ public class MyTgzFile extends MyTarFile {
             final TGZArchive tarArchive = new TGZArchive(archive.getAbsolutePath());
             return tarArchive.getInputStream(entry.getName());
         } catch (Exception ex) {
-            Logger.getLogger(MyTgzFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
             return null;
         }
     }

@@ -23,11 +23,6 @@
  */
 package ru.narod.jcommander;
 
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import ru.narod.jcommander.gui.MainFrame;
 
 /**
@@ -45,22 +40,6 @@ public class Launcher {
      * @see MainFrame
      */
     public static void main(String[] args) {
-
-        Logger logger = Logger.getLogger(MainFrame.class.getName());
-        FileHandler fh;
-        try {
-            fh = new FileHandler("jc.log", Integer.MAX_VALUE, 1, true);
-            logger.addHandler(fh);
-            logger.setLevel(Level.ALL);
-            SimpleFormatter formatter = new SimpleFormatter();
-            fh.setFormatter(formatter);
-
-        } catch (IOException ex) {
-            Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         String javaVersion = System.getProperty("java.version");
         MainFrame.run("jc", "v.0.659" + " @ Java " + javaVersion);
     }
