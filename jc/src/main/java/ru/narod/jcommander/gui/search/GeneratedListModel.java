@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ru.narod.jcommander.gui.search;
 
 import java.util.Collection;
@@ -67,6 +66,7 @@ public class GeneratedListModel extends AbstractListModel {
         data.clear();
         update();
     }
+
     public BaseFile[] getList() {
         return (BaseFile[]) data.toArray(new BaseFile[0]);
     }

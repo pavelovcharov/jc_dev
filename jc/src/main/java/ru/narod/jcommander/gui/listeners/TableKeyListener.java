@@ -24,15 +24,14 @@
  */
 package ru.narod.jcommander.gui.listeners;
 
-import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedHashMap;
-
 import ru.narod.jcommander.actions.Action;
+import ru.narod.jcommander.gui.MainFrame;
 import ru.narod.jcommander.gui.message.KeyShortcat;
 import ru.narod.jcommander.gui.message.Message;
 import ru.narod.jcommander.gui.message.MessageID;
-import ru.narod.jcommander.gui.MainFrame;
 
 /**
  *
@@ -261,7 +260,6 @@ public class TableKeyListener implements KeyListener, MessageID {
         if (null != action) {
             action.execute();
         }
-
     }
 
     /**

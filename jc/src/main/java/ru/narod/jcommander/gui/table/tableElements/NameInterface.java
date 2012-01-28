@@ -21,21 +21,25 @@
  *
  * Created on 15 oct 2006, 11:42
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
-
 
 /**
  *
  * @author Pavel Ovcharov
  */
 public interface NameInterface {
-	@Override
+
+    @Override
     public String toString();
+
     public String getName();
+
     public String getExtention();
+
     public String getFileName();
-	@Override
-    public boolean equals(Object obj);    
+
+    @Override
+    public boolean equals(Object obj);
+
     public ru.narod.jcommander.fileSystem.BaseFile getFile();
 }

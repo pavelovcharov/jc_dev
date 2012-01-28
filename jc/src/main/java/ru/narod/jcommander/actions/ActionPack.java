@@ -38,55 +38,46 @@ import ru.narod.jcommander.threads.newThreads.ProgressThread;
  */
 public class ActionPack extends AbstractAction {
 
-	public ActionPack(MainFrame parent) {
-		super(parent);
-	}
+    public ActionPack(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		FileTable passiveTable = parent.getPassiveTable();
-		NameInterface name = activeTable.getElementAtCursor();
-		BaseFile currentFile;
-		if (null != name) {
-			currentFile = name.getFile();
-		} else {
-			currentFile = null;
-		}
-		if (null == currentFile) {
-			return;
-		}
-//		if (activeTable.getSelectedList().size() < 1) {
-		if (!activeTable.hasSelectedFiles()) {
-			if (true == (name instanceof UpperDirectory)) {
-				return;
-			}
-			activeTable.selectFileAt(activeTable.getCurrentPosition());
-			activeTable.repaint();
-			parent.updateActiveStatusLabel();
-		}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        FileTable passiveTable = parent.getPassiveTable();
+        NameInterface name = activeTable.getElementAtCursor();
+        BaseFile currentFile;
+        if (null != name) {
+            currentFile = name.getFile();
+        } else {
+            currentFile = null;
+        }
+        if (null == currentFile) {
+            return;
+        }
+        if (!activeTable.hasSelectedFiles()) {
+            if (true == (name instanceof UpperDirectory)) {
+                return;
+            }
+            activeTable.selectFileAt(activeTable.getCurrentPosition());
+            activeTable.repaint();
+            parent.updateActiveStatusLabel();
+        }
 
-//		int result = ArchiveDialog.showDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), (ArrayList) activeTable.getSelectedList());
-//		if (ThreadStatus.THREAD_IS_NOT_RUNNING == result) {
-//			parent.requestFocus();
-//			return;
-//		}
-
-		PackDialog pd = new PackDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), activeTable.getActiveFiles());
-		BaseFile newTarget = pd.getNewTarget();
-		if (null != newTarget) {
-			//XXX create function
-			NewPackThread npt = new NewPackThread(activeTable.getCurrentDir(), pd.getNewTarget(), activeTable.getActiveFiles(), pd.getPackLevel());
-			ProgressDialog progressDialog = new ProgressDialog(parent, npt);
-			ProgressThread pt = new ProgressThread(npt, progressDialog);
-			npt.setFrameParent(progressDialog.getDialog());
-			npt.start();
-			pt.start();
-			progressDialog.show();
-		}
-		activeTable.clearSelectedList();
-		parent.updateMainWindow();
-		parent.requestFocus();
-
-		return;
-	}
+        PackDialog pd = new PackDialog(parent, activeTable.getCurrentDir(), passiveTable.getCurrentDir(), activeTable.getActiveFiles());
+        BaseFile newTarget = pd.getNewTarget();
+        if (null != newTarget) {
+            //XXX create function
+            NewPackThread npt = new NewPackThread(activeTable.getCurrentDir(), pd.getNewTarget(), activeTable.getActiveFiles(), pd.getPackLevel());
+            ProgressDialog progressDialog = new ProgressDialog(parent, npt);
+            ProgressThread pt = new ProgressThread(npt, progressDialog);
+            npt.setFrameParent(progressDialog.getDialog());
+            npt.start();
+            pt.start();
+            progressDialog.show();
+        }
+        activeTable.clearSelectedList();
+        parent.updateMainWindow();
+        parent.requestFocus();
+    }
 }

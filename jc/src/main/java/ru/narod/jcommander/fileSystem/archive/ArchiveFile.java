@@ -20,15 +20,15 @@
  * ArchiveFile.java
  * Created on 30.04.2009 8:40:33
  */
-
 package ru.narod.jcommander.fileSystem.archive;
 
-import ru.narod.jcommander.fileSystem.*;
+import ru.narod.jcommander.fileSystem.BaseFile;
 
 /**
  *
  * @author Programmer
  */
 public interface ArchiveFile extends BaseFile {
+
     public static final String ARCHIVE_SEPARATOR = "/";
 }

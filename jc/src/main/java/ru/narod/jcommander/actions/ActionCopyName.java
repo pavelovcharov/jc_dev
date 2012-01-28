@@ -33,23 +33,23 @@ import ru.narod.jcommander.gui.table.tableElements.NameInterface;
  */
 public class ActionCopyName extends AbstractAction {
 
-	public ActionCopyName(MainFrame parent) {
-		super(parent);
-	}
+    public ActionCopyName(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		NameInterface name = parent.getActiveTable().getElementAtCursor();
-		BaseFile currentFile;
-		if (null == name) {
-			return;
-		} else {
-			currentFile = name.getFile();
-		}
-		if (null == currentFile) {
-			return;
-		}
-		JTextField cmdLine = parent.getCmdLine();
-		cmdLine.setText(cmdLine.getText() + " " + currentFile.getFilename() + " ");
+    public void execute() {
+        NameInterface name = parent.getActiveTable().getElementAtCursor();
+        BaseFile currentFile;
+        if (null == name) {
+            return;
+        } else {
+            currentFile = name.getFile();
+        }
+        if (null == currentFile) {
+            return;
+        }
+        JTextField cmdLine = parent.getCmdLine();
+        cmdLine.setText(cmdLine.getText() + " " + currentFile.getFilename() + " ");
 
-	}
+    }
 }

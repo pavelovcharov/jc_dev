@@ -36,7 +36,6 @@ public class LanguageBundle implements PrefKeys {
     public static final String LocaleDescription_RU = "Русский";
     public static final String LocaleDescription_EN = "English";
     public static final String LocaleDescription_IT = "Italiano by joe20";
-
     private ResourceBundle bundle;
     private static LanguageBundle instance = new LanguageBundle();
 
@@ -49,24 +48,14 @@ public class LanguageBundle implements PrefKeys {
     }
 
     public void generateBundle() {
-        try {
-            java.util.prefs.Preferences pref = java.util.prefs.Preferences.userNodeForPackage(ru.narod.jcommander.gui.MainFrame.class);
-            Locale locale = Locale.getDefault();
-            locale = new Locale(pref.get(PK_LOCALE, locale.getLanguage() + "_" + locale.getCountry()));
-            bundle = java.util.ResourceBundle.getBundle(PATH_TO_LANGUAGE, locale);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        java.util.prefs.Preferences pref = java.util.prefs.Preferences.userNodeForPackage(ru.narod.jcommander.gui.MainFrame.class);
+        Locale locale = Locale.getDefault();
+        locale = new Locale(pref.get(PK_LOCALE, locale.getLanguage() + "_" + locale.getCountry()));
+        bundle = java.util.ResourceBundle.getBundle(PATH_TO_LANGUAGE, locale);
     }
 
     public String getString(String key) {
-        String str = "";
-        try {
-            str = bundle.getString(key);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return str;
+        return bundle.getString(key);
     }
 
     public String format(String key, Object... args) {

@@ -20,9 +20,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.util;
-
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,21 +51,10 @@ public class NameCorrector {
         }
     }
 
-//    public static int renameAll(String path) {
-//        int counter = 0;
-//        File root = new File(path);
-//        if (root.exists()) {
-//            counter += renameFiles(root);
-//        } else {
-//            System.out.println("Bad file name: " + path);
-//        }
-//        return counter;
-//    }
-
     public static int renameFiles(BaseFile file) {
         int c = 0;
         String name = file.getFilename();
-		BaseFile newFile = file;
+        BaseFile newFile = file;
         name = decodeHex(name);
         if (name != null) {
             newFile = FileHelper.getRealFile(file.getAbsoluteParent(), name);

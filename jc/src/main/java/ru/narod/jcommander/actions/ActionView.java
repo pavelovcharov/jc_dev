@@ -24,10 +24,10 @@ package ru.narod.jcommander.actions;
 
 import java.util.ArrayList;
 import ru.narod.jcommander.fileSystem.BaseFile;
-import ru.narod.jcommander.fileSystem.archive.MyZipFile;
+import ru.narod.jcommander.fileSystem.FileHelper;
 import ru.narod.jcommander.fileSystem.FileSystemList;
 import ru.narod.jcommander.fileSystem.LocalFile;
-import ru.narod.jcommander.fileSystem.FileHelper;
+import ru.narod.jcommander.fileSystem.archive.MyZipFile;
 import ru.narod.jcommander.gui.MainFrame;
 import ru.narod.jcommander.gui.dialog.ProgressDialog;
 import ru.narod.jcommander.gui.table.FileTable;
@@ -59,8 +59,6 @@ public class ActionView extends AbstractAction {
                 //XXX query error или использовать какой-то другой путь, напр. C:
                 return;
             }
-//			if (CopyDialog.STATUS_OK != CopyDialog.showDialog(parent, activeTable.getCurrentDir(), tempDir, list, true))
-//				return;
             BaseFile[] filesToCopy = new BaseFile[]{currentFile};
             if (null != filesToCopy) {
                 ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
@@ -77,7 +75,7 @@ public class ActionView extends AbstractAction {
 
                     BaseFile target = FileHelper.getRealFile(targetPath);
                     if (target.isDirectory()) {
-                        currentFile = FileHelper.getRealFile(target, currentFile.getFilename());
+                        target = FileHelper.getRealFile(target, currentFile.getFilename());
                     }
                     currentFile = target;
 
@@ -87,8 +85,6 @@ public class ActionView extends AbstractAction {
             }
         }
         //XXX image viewer
-        //String extention = currentFile.getExtention();
-        //if (extention.equalsIgnoreCase("bmp") || extention.equalsIgnoreCase("jpg") || extention.equalsIgnoreCase("gif")) {
         if (FileHelper.getFileType(currentFile) == FileHelper.FileType.IMAGE) {
             if (null == iv) {
                 iv = new ru.narod.jcommander.editor.ImageViewer(parent);

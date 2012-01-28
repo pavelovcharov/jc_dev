@@ -26,19 +26,24 @@
  */
 package ru.narod.jcommander.fileSystem;
 
-import ru.narod.jcommander.fileSystem.archive.*;
+import ru.narod.jcommander.fileSystem.archive.ArchiveFile;
+import ru.narod.jcommander.fileSystem.archive.MyTarFile;
+import ru.narod.jcommander.fileSystem.archive.MyTgzFile;
+import ru.narod.jcommander.fileSystem.archive.MyZipFile;
 import ru.narod.jcommander.fileSystem.net.NetFile;
 
 /**
  * Абстрактный класс, унаследованный от java.io.File, реализует общие методы,
  * необходимые всем типам файлов
+ *
  * @author Strateg
  */
 public abstract class FileHelper {
 
     /**
-     * Получить файл (локальный, файл в архиве, сети) по папке <I>parent</I>  и имени
-     * файла <I>child</I>
+     * Получить файл (локальный, файл в архиве, сети) по папке <I>parent</I> и
+     * имени файла <I>child</I>
+     *
      * @param parent задает путь к файлу
      * @param child задает имя файла
      * @return искомый файл
@@ -61,6 +66,7 @@ public abstract class FileHelper {
 
     /**
      * Получить файл (локальный, файл в архиве, сети) по пути <I>path</I>
+     *
      * @param path путь к файлу
      * @return искомый файл
      */
@@ -108,15 +114,14 @@ public abstract class FileHelper {
 
     public enum FileType {
 
-        DIRECTORY, UNKNOWN_FILE, ARCHIVE, IMAGE,
-    };
+        DIRECTORY, UNKNOWN_FILE, ARCHIVE, IMAGE,};
 
     static public FileType getFileType(BaseFile file) {
         if (file.isDirectory()) {
             return FileType.DIRECTORY;
         }
         String filename = file.getFilename().toLowerCase();
-        return  getFileType(filename);
+        return getFileType(filename);
     }
 
     static public FileType getFileType(String filename) {
@@ -128,6 +133,7 @@ public abstract class FileHelper {
         }
         return FileType.UNKNOWN_FILE;
     }
+
     static public boolean isLocal(BaseFile file) {
         return file.isLocal();
     }

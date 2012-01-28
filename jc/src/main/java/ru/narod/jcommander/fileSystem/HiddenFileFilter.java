@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.fileSystem;
 
 import java.io.File;
@@ -35,5 +34,4 @@ public class HiddenFileFilter implements FileFilter {
     public boolean accept(File pathname) {
         return !pathname.isHidden();
     }
-
 }

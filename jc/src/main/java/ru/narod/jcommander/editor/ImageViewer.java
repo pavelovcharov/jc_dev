@@ -32,7 +32,6 @@ import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.FileHelper;
 import ru.narod.jcommander.gui.ImageArchive;
@@ -40,48 +39,48 @@ import ru.narod.jcommander.util.LanguageBundle;
 
 /**
  * Класс описывает окно просмотра и редактирования содержимого файлов
+ *
  * @author Pavel Ovcharov
  */
 public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, ru.narod.jcommander.prefs.PrefKeys {
 
-	protected enum Scale {
+    protected enum Scale {
 
-		SCALE_REAL, SCALE_FIT
-	};
+        SCALE_REAL, SCALE_FIT
+    };
 
-	/**
-	 * Создать новый объект класса Editor
-	 * @param parent объект класса javax.swing.JFrame, окно родительское по отношение к данному
-	 */
-	public ImageViewer(JFrame parent) {
-		initComponents();
-		loadPrefs();
-//		setupLanguage();
-		this.parent = parent;
+    /**
+     * Создать новый объект класса Editor
+     *
+     * @param parent объект класса javax.swing.JFrame, окно родительское по
+     * отношение к данному
+     */
+    public ImageViewer(JFrame parent) {
+        initComponents();
+        loadPrefs();
+        this.parent = parent;
 
-		jButtonBack.setIcon(ImageArchive.getArrowBack());
-		jButtonForward.setIcon(ImageArchive.getArrowForward());
-	}
+        jButtonBack.setIcon(ImageArchive.getArrowBack());
+        jButtonForward.setIcon(ImageArchive.getArrowForward());
+    }
 
-	private void setupLanguage() {
-		LanguageBundle lb = LanguageBundle.getInstance();
-		jMenuFile.setText(lb.getString("iv_file"));
-		jMenuItemExit.setText(lb.getString("iv_exit"));
-		jMenuScale.setText(lb.getString("iv_scale"));
+    private void setupLanguage() {
+        LanguageBundle lb = LanguageBundle.getInstance();
+        jMenuFile.setText(lb.getString("iv_file"));
+        jMenuItemExit.setText(lb.getString("iv_exit"));
+        jMenuScale.setText(lb.getString("iv_scale"));
 
         jRadioButtonMenuItemFit.setText(lb.getString("iv_scaleFit"));
         jRadioButtonMenuItemReal.setText(lb.getString("iv_scaleReal"));
 
-//		jButtonBack.setText(lb.getString("iv_prevfile"));
-//		jButtonForward.setText(lb.getString("iv_nextfile"));
-		jButtonBack.setToolTipText(lb.getString("iv_prevfile"));
-		jButtonForward.setToolTipText(lb.getString("iv_nextfile"));
-	}
+        jButtonBack.setToolTipText(lb.getString("iv_prevfile"));
+        jButtonForward.setToolTipText(lb.getString("iv_nextfile"));
+    }
 
-	public void openFile(BaseFile file) {
-		this.file = file;
-		
-		setupLanguage();
+    public void openFile(BaseFile file) {
+        this.file = file;
+
+        setupLanguage();
 
         if (scale == Scale.SCALE_FIT) {
             jRadioButtonMenuItemReal.setSelected(false);
@@ -92,150 +91,144 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, ru.n
             jRadioButtonMenuItemFit.setSelected(false);
         }
 
-		setTitle("image viewer - " + file);
-		setVisible(true);
+        setTitle("image viewer - " + file);
+        setVisible(true);
 
-		scale();
-	}
+        scale();
+    }
 
-	public void loadPrefs() {
-		setState(prefs.getInt(P_STATE, p_STATE));
-		setLocation(prefs.getInt(P_POS_X, p_POS_X), prefs.getInt(P_POS_Y, p_POS_Y));
-		setSize(prefs.getInt(P_WIDTH, p_WIDTH), prefs.getInt(P_HEIGHT, p_HEIGHT));
-		scale = Scale.values()[prefs.getInt(P_SCALE, p_SCALE)];
-	}
+    public void loadPrefs() {
+        setState(prefs.getInt(P_STATE, p_STATE));
+        setLocation(prefs.getInt(P_POS_X, p_POS_X), prefs.getInt(P_POS_Y, p_POS_Y));
+        setSize(prefs.getInt(P_WIDTH, p_WIDTH), prefs.getInt(P_HEIGHT, p_HEIGHT));
+        scale = Scale.values()[prefs.getInt(P_SCALE, p_SCALE)];
+    }
 
-	public void savePrefs() {
-		prefs.putInt(P_POS_X, getLocation().x);
-		prefs.putInt(P_POS_Y, getLocation().y);
-		prefs.putInt(P_WIDTH, getWidth());
-		prefs.putInt(P_HEIGHT, getHeight());
-		prefs.putInt(P_STATE, getExtendedState());
-		prefs.putInt(P_SCALE, scale.ordinal());
-	}
+    public void savePrefs() {
+        prefs.putInt(P_POS_X, getLocation().x);
+        prefs.putInt(P_POS_Y, getLocation().y);
+        prefs.putInt(P_WIDTH, getWidth());
+        prefs.putInt(P_HEIGHT, getHeight());
+        prefs.putInt(P_STATE, getExtendedState());
+        prefs.putInt(P_SCALE, scale.ordinal());
+    }
 
-	public void onExit() {
-		savePrefs();
-	}
+    public void onExit() {
+        savePrefs();
+    }
 
-	private void waitForImage(Image image) {
-		MediaTracker tracker = new MediaTracker(this);
-		tracker.addImage(image, 0);
-		try {
-			tracker.waitForID(0);
-		} catch (InterruptedException e) {
-		}
-		tracker.removeImage(image);
-	}
+    private void waitForImage(Image image) {
+        MediaTracker tracker = new MediaTracker(this);
+        tracker.addImage(image, 0);
+        try {
+            tracker.waitForID(0);
+        } catch (InterruptedException e) {
+        }
+        tracker.removeImage(image);
+    }
 
-	private void scale() {
-//		System.out.println("scale");
-		try {
-//			this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			Image image;
-			if (file.getFilename().toLowerCase().endsWith("bmp")) {
-				image =	ImageIO.read(file.getInputStream());
-			}
-			else {
-				int read;
-				byte buffer[] = new byte[1024];
-				ByteArrayOutputStream bout = new ByteArrayOutputStream();
-				InputStream in = file.getInputStream();
-				while ((read = in.read(buffer, 0, buffer.length)) != -1) {
-					bout.write(buffer, 0, read);
-				}
+    private void scale() {
+        try {
+            Image image;
+            if (file.getFilename().toLowerCase().endsWith("bmp")) {
+                image = ImageIO.read(file.getInputStream());
+            } else {
+                int read;
+                byte buffer[] = new byte[1024];
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                InputStream in = file.getInputStream();
+                while ((read = in.read(buffer, 0, buffer.length)) != -1) {
+                    bout.write(buffer, 0, read);
+                }
 
-				byte imageBytes[] = bout.toByteArray();
-				bout.close();
-				in.close();
+                byte imageBytes[] = bout.toByteArray();
+                bout.close();
+                in.close();
 
-				image = getToolkit().createImage(imageBytes);
+                image = getToolkit().createImage(imageBytes);
 
-				waitForImage(image);
-			}
-			int width = image.getWidth(null);
-			int height = image.getHeight(null);
+                waitForImage(image);
+            }
+            int width = image.getWidth(null);
+            int height = image.getHeight(null);
 
-//			this.setCursor(Cursor.getDefaultCursor());
+            Image scaledImage = null;
+            switch (scale) {
+                case SCALE_FIT: {
 
+                    int cWidth = jScrollPane1.getWidth() - 10;
+                    int cHeight = jScrollPane1.getHeight() - 10;
 
-			Image scaledImage = null;
-			switch (scale) {
-				case SCALE_FIT: {
+                    double coef1 = (double) width / cWidth;
+                    double coef2 = (double) height / cHeight;
 
-					int cWidth = jScrollPane1.getWidth() - 10;
-					int cHeight = jScrollPane1.getHeight() - 10;
+                    double coef = Math.max(coef1, coef2);
 
-					double coef1 = (double) width / cWidth;
-					double coef2 = (double) height / cHeight;
+                    int newWidth = (int) (width / coef);
+                    int newHeight = (int) (height / coef);
+                    scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_FAST);
+                    break;
+                }
+                case SCALE_REAL: {
+                    scaledImage = image;
+                    break;
+                }
+                default:
+                    break;
+            }
 
-					double coef = Math.max(coef1, coef2);
+            if (null == scaledImage) {
+                throw new NullPointerException();
+            }
+            jLabel1.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            // XXX querry error
+        }
+    }
 
-					int newWidth = (int) (width / coef);
-					int newHeight = (int) (height / coef);
-					scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_FAST);
-					break;
-				}
-				case SCALE_REAL: {
-					scaledImage = image;
-					break;
-				}
-				default:
-					break;
-			}
+    private void nextFile() {
+        BaseFile[] files = file.getAbsoluteParent().getFiles();
+        int index = 0;
+        for (int i = 0; i < files.length; i++) {
+            BaseFile absoluteFile = files[i];
+            if (absoluteFile.equals(file)) {
+                index = i + 1;
+            }
+        }
+        while (index < files.length) {
+            if (FileHelper.getFileType(files[index]) == FileHelper.FileType.IMAGE) {
+                file = files[index];
+                openFile(files[index]);
+                break;
+            }
+            index++;
+        }
+    }
 
-			if (null == scaledImage) {
-				throw new NullPointerException();
-			}
-			jLabel1.setIcon(new ImageIcon(scaledImage));
-		} catch (Exception e) {
-			// XXX querry error
-		}
-	}
+    private void prevFile() {
+        BaseFile[] files = file.getAbsoluteParent().getFiles();
+        int index = 0;
+        for (int i = 0; i < files.length; i++) {
+            BaseFile absoluteFile = files[i];
+            if (absoluteFile.equals(file)) {
+                index = i - 1;
+            }
+        }
+        while (index >= 0) {
+            if (FileHelper.getFileType(files[index]) == FileHelper.FileType.IMAGE) {
+                file = files[index];
+                openFile(files[index]);
+                break;
+            }
+            index--;
+        }
+    }
 
-	private void nextFile() {
-		BaseFile[] files = file.getAbsoluteParent().getFiles();
-		int index = 0;
-		for (int i = 0; i < files.length; i++) {
-			BaseFile absoluteFile = files[i];
-			if (absoluteFile.equals(file)) {
-				index = i + 1;
-			}
-		}
-		while (index < files.length) {
-			if (FileHelper.getFileType(files[index]) == FileHelper.FileType.IMAGE) {
-				file = files[index];
-				openFile(files[index]);
-				break;
-			}
-			index++;
-		}
-	}
-
-	private void prevFile() {
-		BaseFile[] files = file.getAbsoluteParent().getFiles();
-		int index = 0;
-		for (int i = 0; i < files.length; i++) {
-			BaseFile absoluteFile = files[i];
-			if (absoluteFile.equals(file)) {
-				index = i - 1;
-			}
-		}
-		while (index >= 0) {
-			if (FileHelper.getFileType(files[index]) == FileHelper.FileType.IMAGE) {
-				file = files[index];
-				openFile(files[index]);
-				break;
-			}
-			index--;
-		}
-	}
-
-	/** This method is called from within the constructor to
-	 * initialize the form.
-	 * WARNING: Do NOT modify this code. The content of this method is
-	 * always regenerated by the Form Editor.
-	 */
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -339,53 +332,51 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, ru.n
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-		onExit();
+        onExit();
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
-		onExit();
-		setVisible(false);
+        onExit();
+        setVisible(false);
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-		switch (evt.getKeyCode()) {
-			case KeyEvent.VK_ESCAPE:
-				jMenuItemExit.doClick();
-				break;
-			case KeyEvent.VK_RIGHT:
-				nextFile();
-				break;
-			case KeyEvent.VK_LEFT:
-				prevFile();
-				break;
-		}
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
+                jMenuItemExit.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                nextFile();
+                break;
+            case KeyEvent.VK_LEFT:
+                prevFile();
+                break;
+        }
     }//GEN-LAST:event_formKeyPressed
 
 private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-//	System.out.println("resize");
-	scale();
+    scale();
 }//GEN-LAST:event_formComponentResized
 
 private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
-	prevFile();
+    prevFile();
 }//GEN-LAST:event_jButtonBackActionPerformed
 
 private void jButtonForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonForwardActionPerformed
-	nextFile();
+    nextFile();
 }//GEN-LAST:event_jButtonForwardActionPerformed
 
 private void jRadioButtonMenuItemRealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItemRealActionPerformed
     jRadioButtonMenuItemFit.setSelected(false);
     scale = Scale.SCALE_REAL;
-	scale();
+    scale();
 }//GEN-LAST:event_jRadioButtonMenuItemRealActionPerformed
 
 private void jRadioButtonMenuItemFitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItemFitActionPerformed
-	jRadioButtonMenuItemReal.setSelected(false);
+    jRadioButtonMenuItemReal.setSelected(false);
     scale = Scale.SCALE_FIT;
-	scale();
+    scale();
 }//GEN-LAST:event_jRadioButtonMenuItemFitActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonForward;
@@ -399,8 +390,8 @@ private void jRadioButtonMenuItemFitActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-	private JFrame parent;
-	private BaseFile file = null;
-	private Scale scale;
-	private Preferences prefs = Preferences.userNodeForPackage(this.getClass());
+    private JFrame parent;
+    private BaseFile file = null;
+    private Scale scale;
+    private Preferences prefs = Preferences.userNodeForPackage(this.getClass());
 }

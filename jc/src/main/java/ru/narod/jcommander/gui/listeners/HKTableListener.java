@@ -27,7 +27,6 @@ package ru.narod.jcommander.gui.listeners;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JTable;
-
 import ru.narod.jcommander.gui.MainFrame;
 import ru.narod.jcommander.gui.dialog.WarningDialog;
 import ru.narod.jcommander.gui.message.KeyShortcat;
@@ -46,7 +45,9 @@ public class HKTableListener implements KeyListener, ru.narod.jcommander.prefs.P
     private KeyShortcat oldKs;
     private KeyShortcat newKs;
 
-    /** Creates a new instance of HKTableListener */
+    /**
+     * Creates a new instance of HKTableListener
+     */
     public HKTableListener(MainFrame parent) {
         this.parent = parent;
         table = parent.getHotKeysTable();
@@ -63,8 +64,8 @@ public class HKTableListener implements KeyListener, ru.narod.jcommander.prefs.P
     @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        if ((KeyEvent.VK_CONTROL == keyCode) || (KeyEvent.VK_ALT == keyCode) ||
-                (KeyEvent.VK_SHIFT == keyCode)) {
+        if ((KeyEvent.VK_CONTROL == keyCode) || (KeyEvent.VK_ALT == keyCode)
+                || (KeyEvent.VK_SHIFT == keyCode)) {
             return;
         }
         if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {

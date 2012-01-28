@@ -25,46 +25,23 @@ package ru.narod.jcommander.gui;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Reader;
+import java.awt.event.*;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import ru.narod.jcommander.actions.*;
 import ru.narod.jcommander.actions.manager.ActionManager;
-import ru.narod.jcommander.fileSystem.BaseFile;
-import ru.narod.jcommander.fileSystem.RootFileSystem;
-import ru.narod.jcommander.fileSystem.FileSystemList;
-import ru.narod.jcommander.fileSystem.FileHelper;
-import ru.narod.jcommander.gui.listeners.*;
-import ru.narod.jcommander.fileSystem.LocalFile;
+import ru.narod.jcommander.fileSystem.*;
 import ru.narod.jcommander.gui.dialog.InputDialog;
 import ru.narod.jcommander.gui.dialog.WarningDialog;
+import ru.narod.jcommander.gui.listeners.*;
 import ru.narod.jcommander.gui.listeners.combobox.BaseComboBoxListener;
 import ru.narod.jcommander.gui.message.KeyShortcat;
 import ru.narod.jcommander.gui.message.Message;
@@ -81,8 +58,8 @@ import ru.narod.jcommander.util.LanguageBundle;
 import ru.narod.jcommander.util.LocaleWrapper;
 
 /**
- * Класс наследован от JFrame и описывает основное окно 
- * приложения
+ * Класс наследован от JFrame и описывает основное окно приложения
+ *
  * @author Pavel Ovcharov
  * @version 2005/04/26 9:27
  */
@@ -139,6 +116,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Создает новый объект класса MainFrame
+     *
      * @param version версия приложения
      * @param title заголовок окна
      */
@@ -161,7 +139,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         initDriveComboBox(jComboBoxLeft, RootFileSystem.getRoots());
         initDriveComboBox(jComboBoxRight, RootFileSystem.getRoots());
-        /***********************************/
+        /**
+         * ********************************
+         */
         currentLeftTable = new FileTable(root);
         currentRightTable = new FileTable(root);
 
@@ -273,7 +253,7 @@ public class MainFrame extends javax.swing.JFrame {
             jMenuItemDecodeHex.setText(lb.getString("KeyDecodeHex"));
 
             jTextAreaHotKeysHelp.setText(lb.getString("StrHotKeysHelp"));
-            
+
             jDialogAbout.setTitle(mainTitle);
             jDialogDeleteFavorites.setTitle(lb.getString("StrReady"));
 
@@ -481,17 +461,17 @@ public class MainFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemCommandLine.setSelected(jcPrefs.showCommandLine);
         jTextField3.setVisible(jcPrefs.showCommandLine);
         jCheckBoxMenuItemHiddenFiles.setSelected(jcPrefs.showHiddenFiles);
-        
+
         currentLeftTable.setQuickSearchMode(jcPrefs.quickSearchMode);
         currentLeftTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
         currentLeftTable.showToolTip(jcPrefs.showToolTips);
         currentLeftTable.refreshTable();
-        
+
         currentRightTable.setQuickSearchMode(jcPrefs.quickSearchMode);
         currentRightTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
         currentRightTable.showToolTip(jcPrefs.showToolTips);
         currentRightTable.refreshTable();
-        
+
         if (jcPrefs.arrangement) {
             changeArrangement();
         }
@@ -507,8 +487,8 @@ public class MainFrame extends javax.swing.JFrame {
         consoleCharset = Charset.forName(jComboBoxCharset.getSelectedItem().toString());
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(userFile));
-            Message msg = null;
-            KeyShortcat ks = null;
+            Message msg;
+            KeyShortcat ks;
             userKeyList.clear();
             for (int i = 0; i < jTableHotKeys.getRowCount(); i++) {
                 ks = (KeyShortcat) jTableHotKeys.getValueAt(i, 2);
@@ -666,7 +646,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Updates left/right panel
-     * @param left <B>true</B>Update left panel, <B>false</B> - update right panel
+     *
+     * @param left <B>true</B>Update left panel, <B>false</B> - update right
+     * panel
      */
     public void updatePanel(boolean left) {
         FileTable currentTable;
@@ -702,10 +684,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * В зависимости от переданного параметра возвращает левую или
-     * правую таблицу
-     * @param left <b>true</b> для получения левой таблицы, <b>false</b> -
-     * для получения правой
+     * В зависимости от переданного параметра возвращает левую или правую
+     * таблицу
+     *
+     * @param left <b>true</b> для получения левой таблицы, <b>false</b> - для
+     * получения правой
      * @return объект класса FileTable
      */
     public FileTable getTable(boolean left) {
@@ -713,10 +696,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * В зависимости от переданного параметра возвращает левую или
-     * правую метку статуса
-     * @param left <b>true</b> для получения левой метки, <b>false</b> -
-     * для получения правой
+     * В зависимости от переданного параметра возвращает левую или правую метку
+     * статуса
+     *
+     * @param left <b>true</b> для получения левой метки, <b>false</b> - для
+     * получения правой
      *
      * @return объект класса JLabel
      */
@@ -725,10 +709,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * В зависимости от переданного параметра возвращает левую или
-     * правую метку пути
-     * @param left <b>true</b> для получения левой метки, <b>false</b> -
-     * для получения правой
+     * В зависимости от переданного параметра возвращает левую или правую метку
+     * пути
+     *
+     * @param left <b>true</b> для получения левой метки, <b>false</b> - для
+     * получения правой
      * @return объект класса JTextField
      */
     public JTextField getDirLabel(boolean left) {
@@ -737,6 +722,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Заносит в cb список разделов File roots[]
+     *
      * @param cb выпадающий список, куда заносятся разделы
      * @param roots список доступных разделов
      */
@@ -754,10 +740,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * В зависимости от переданного параметра возвращает левый или
-     * правый список дисков
-     * @param left <b>true</b> для получения левого списка, <b>false</b> -
-     * для получения правого
+     * В зависимости от переданного параметра возвращает левый или правый список
+     * дисков
+     *
+     * @param left <b>true</b> для получения левого списка, <b>false</b> - для
+     * получения правого
      * @return объект класса JComboBox
      */
     public JComboBox getComboBox(boolean left) {
@@ -766,6 +753,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Получить активную таблицу
+     *
      * @return объект класса FileTable
      */
     public FileTable getActiveTable() {
@@ -840,6 +828,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Скрыть или вывести на экран панели
+     *
      * @param visible <b>true</b> для вывода панелей на экран, <b>false</b> -
      * для скрытия
      */
@@ -850,6 +839,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Определить видимы ли панели
+     *
      * @return <b>true</b>, если панели видимы, <b>false</b> - иначе
      */
     public boolean isPanelsVisible() {
@@ -1312,10 +1302,10 @@ public class MainFrame extends javax.swing.JFrame {
         return operationManager;
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

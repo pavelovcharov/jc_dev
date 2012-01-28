@@ -48,22 +48,6 @@ class ComponentKeyListener implements KeyListener {
                 owner.setVisible(false);
                 break;
             }
-//			case KeyEvent.VK_DOWN: {
-//				c.transferFocus();
-//				break;
-//			}
-//			case KeyEvent.VK_UP: {
-//				c.transferFocusBackward();
-//				break;
-//			}
-//			case KeyEvent.VK_LEFT: {
-//				c.transferFocusBackward();
-//				break;
-//			}
-//			case KeyEvent.VK_RIGHT: {
-//				c.transferFocus();
-//				break;
-//			}
         }
     }
 

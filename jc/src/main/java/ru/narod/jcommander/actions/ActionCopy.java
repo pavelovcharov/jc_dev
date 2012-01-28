@@ -46,7 +46,6 @@ public class ActionCopy extends AbstractAction {
         actionManager.selectCurrentFile(activeTable);
         action(activeTable, passiveTable);
         actionManager.clearSelection(activeTable);
-        return;
     }
 
     protected FileTable getTargetTable() {

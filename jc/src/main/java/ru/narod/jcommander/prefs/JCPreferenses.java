@@ -31,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import ru.narod.jcommander.gui.MainFrame;
-
 import ru.narod.jcommander.gui.table.Directive;
 import ru.narod.jcommander.gui.table.FileTable;
 import ru.narod.jcommander.gui.table.tableHeader.TableHeader;
@@ -164,16 +163,16 @@ public class JCPreferenses implements PrefKeys {
         arrangement = pref.getBoolean(PK_ARRANGEMENT, JCPreferenses.DEFAULT_ARRANGEMENT);
         useSystemIcons = pref.getBoolean(PK_USE_SYSTEM_ICONS, JCPreferenses.DEFAULT_USE_SYSTEM_ICONS);
         Locale defaultLocale = Locale.getDefault();
-        currentLocale =  pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry());
+        currentLocale = pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry());
         quickSearchMode = pref.getInt(PK_QUICK_SEARCH_MODE, JCPreferenses.DEFAULT_QUICK_SEARCH_MODE);
     }
 
     private void saveTablePrefs(boolean left) {
         pref.put(left ? PK_LEFT_DIR : PK_RIGHT_DIR, left ? leftPanelPath : rightPanelPath);
         pref.put(left ? PK_LEFT_SIZE : PK_RIGHT_SIZE, left ? leftHeaderSizes : rightHeaderSizes);
-        pref.put(left ? PK_LEFT_SORT : PK_RIGHT_SORT, left? leftSortingColumns : rightSortingColumns);
+        pref.put(left ? PK_LEFT_SORT : PK_RIGHT_SORT, left ? leftSortingColumns : rightSortingColumns);
     }
-    
+
     public void savePrefs() {
         pref.putInt(PK_HEIGHT, windowSize.height);
         pref.putInt(PK_WIDTH, windowSize.width);

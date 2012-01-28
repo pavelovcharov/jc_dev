@@ -22,14 +22,12 @@
  * Created on 21 may 2007, 13:06
  *
  */
-
 package ru.narod.jcommander.gui.listeners.combobox;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedHashMap;
 import javax.swing.JComboBox;
-
 import ru.narod.jcommander.gui.message.KeyShortcat;
 import ru.narod.jcommander.gui.message.Message;
 import ru.narod.jcommander.gui.message.MessageID;
@@ -39,8 +37,8 @@ import ru.narod.jcommander.gui.message.MessageID;
  * @author Programmer
  * @version
  */
-public class BaseComboBoxListener implements KeyListener, MessageID{
-    
+public class BaseComboBoxListener implements KeyListener, MessageID {
+
     private JComboBox comboBox;
     private LinkedHashMap defaultMap;
     private LinkedHashMap userMap;
@@ -63,34 +61,38 @@ public class BaseComboBoxListener implements KeyListener, MessageID{
             return;
         }
         KeyShortcat ks = new KeyShortcat(e);
-        Message msg = (Message)userMap.get(ks);
-        if (null == msg){
-            msg = (Message)defaultMap.get(ks);
+        Message msg = (Message) userMap.get(ks);
+        if (null == msg) {
+            msg = (Message) defaultMap.get(ks);
         }
         if (null == msg) {
             return;
         }
         int index = 0;
-        switch(msg.getMessageID()) {
+        switch (msg.getMessageID()) {
 
             case MSG_UP: {
-                index = comboBox.getSelectedIndex()-1;
-                if (0 > index) index = comboBox.getItemCount()-1;
+                index = comboBox.getSelectedIndex() - 1;
+                if (0 > index) {
+                    index = comboBox.getItemCount() - 1;
+                }
                 break;
             }
             case MSG_DOWN: {
-                index = comboBox.getSelectedIndex()+1;
-                if (comboBox.getItemCount() == index) index = 0;
+                index = comboBox.getSelectedIndex() + 1;
+                if (comboBox.getItemCount() == index) {
+                    index = 0;
+                }
                 break;
-            } 
+            }
             case MSG_FIRST: {
                 index = 0;
                 break;
             }
             case MSG_LAST: {
-                index = comboBox.getItemCount()-1;
+                index = comboBox.getItemCount() - 1;
                 break;
-            }            
+            }
             case MSG_ENTER: {
                 comboBox.setPopupVisible(false);
                 return;
@@ -103,5 +105,4 @@ public class BaseComboBoxListener implements KeyListener, MessageID{
 
     public void keyReleased(KeyEvent e) {
     }
-    
 }

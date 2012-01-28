@@ -15,58 +15,60 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ru.narod.jcommander.fileSystem;
 
 import java.util.ArrayList;
 
 /**
- * Класс предоставляет метод для создания и получения списка файлов
- * и подкаталогов из заданного каталога
+ * Класс предоставляет метод для создания и получения списка файлов и
+ * подкаталогов из заданного каталога
+ *
  * @author Sniper
  * @version 2005/05/08 12:15:18 PM
  */
 public abstract class SubDirectoriesList {
 
-	private static ArrayList list;
+    private static ArrayList list;
 
-	private static void getFilesFromSubDirectories(BaseFile[] fileList) {
-		int i;
-		if (null == fileList) {
-			return;
-		}
-		for (i = 0; i < fileList.length; i++) {
-			if (fileList[i].isDirectory()) {
-				list.add(fileList[i]);
-				BaseFile[] files = fileList[i].getFiles();
-				if (null == files) {
-					return;
-				}
-				getFilesFromSubDirectories(files);
-			} else {
-				list.add(fileList[i]);
-			}
-		}
+    private static void getFilesFromSubDirectories(BaseFile[] fileList) {
+        int i;
+        if (null == fileList) {
+            return;
+        }
+        for (i = 0; i < fileList.length; i++) {
+            if (fileList[i].isDirectory()) {
+                list.add(fileList[i]);
+                BaseFile[] files = fileList[i].getFiles();
+                if (null == files) {
+                    return;
+                }
+                getFilesFromSubDirectories(files);
+            } else {
+                list.add(fileList[i]);
+            }
+        }
 
-	}
+    }
 
-	/**
-	 * Возвращает созданный список файлов и подкаталогов
-	 * @param aFile каталог, в котором выполняется поиск файлов и подкаталогов
-	 * @return Возвращает объект класса ArrayList, содержащий файлы и подкаталои.
-	 * Если исходный список не содержит файлов/папок, возвращается пустой список.
-	 */
-	public static ArrayList getList(BaseFile aFile) {
-		if (null == aFile) {
-			return null;
-		}
-		list = new ArrayList();
-		if (aFile.isDirectory()) {
-			list.add(aFile);
-			getFilesFromSubDirectories(aFile.getFiles());
-		} else {
-			list.add(aFile);
-		}
-		return list;
-	}
+    /**
+     * Возвращает созданный список файлов и подкаталогов
+     *
+     * @param aFile каталог, в котором выполняется поиск файлов и подкаталогов
+     * @return Возвращает объект класса ArrayList, содержащий файлы и
+     * подкаталои. Если исходный список не содержит файлов/папок, возвращается
+     * пустой список.
+     */
+    public static ArrayList getList(BaseFile aFile) {
+        if (null == aFile) {
+            return null;
+        }
+        list = new ArrayList();
+        if (aFile.isDirectory()) {
+            list.add(aFile);
+            getFilesFromSubDirectories(aFile.getFiles());
+        } else {
+            list.add(aFile);
+        }
+        return list;
+    }
 }

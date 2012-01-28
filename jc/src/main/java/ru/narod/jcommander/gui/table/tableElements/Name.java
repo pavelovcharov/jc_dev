@@ -22,11 +22,9 @@
  * Created on 25 jun 2007, 8:44
  *
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 import java.awt.Color;
-
 import ru.narod.jcommander.fileSystem.BaseFile;
 
 /**
@@ -34,20 +32,22 @@ import ru.narod.jcommander.fileSystem.BaseFile;
  * @author Programmer
  * @version
  */
-abstract public class Name extends Element implements NameInterface{
-    
+abstract public class Name extends Element implements NameInterface {
+
     protected BaseFile aFile;
     /**
      * Имя файла (без расширения)
      */
-    protected String name;  
+    protected String name;
     /**
      * Полное имя файла
      */
     protected String fileName;
     protected String extention;
-            
-    /** Creates a new instance of Name */
+
+    /**
+     * Creates a new instance of Name
+     */
     public Name(BaseFile aFile, Color fontColor, Color bgColor) {
         super(fontColor, bgColor);
         this.aFile = aFile;
@@ -55,13 +55,14 @@ abstract public class Name extends Element implements NameInterface{
         fileName = aFile.getFilename();
         extention = aFile.getExtention();
     }
-    
+
     public Name(BaseFile aFile) {
         this(aFile, null, null);
     }
-    
+
     /**
      * Получить файл, связанный с данным объектом
+     *
      * @return файл связанный с данным объектом
      */
     public BaseFile getFile() {
@@ -75,8 +76,10 @@ abstract public class Name extends Element implements NameInterface{
     public String getFileName() {
         return fileName;
     }
+
     /**
      * Получить имя каталога
+     *
      * @return имя каталога, соответствующего данному объекту
      */
     public String getName() {
@@ -84,10 +87,10 @@ abstract public class Name extends Element implements NameInterface{
     }
 
     public int compareTo(Object obj) {
-        if (false == (obj instanceof Name)) return 1;
-        Name nm = (Name)obj;
+        if (false == (obj instanceof Name)) {
+            return 1;
+        }
+        Name nm = (Name) obj;
         return name.compareTo(nm.name);
     }
-    
-
 }

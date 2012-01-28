@@ -22,10 +22,11 @@
  */
 package ru.narod.jcommander.fileSystem.archive;
 
-import ru.narod.jcommander.fileSystem.*;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ru.narod.jcommander.fileSystem.BaseFile;
+import ru.narod.jcommander.fileSystem.LocalFile;
 import ru.narod.jcommander.tarlib.TGZArchive;
 import ru.narod.jcommander.tarlib.TarEntry;
 
@@ -35,331 +36,120 @@ import ru.narod.jcommander.tarlib.TarEntry;
  */
 public class MyTgzFile extends MyTarFile {
 
-//    protected HashMap archiveMap;
-//    protected LocalFile archive;
-//    protected BaseFile parent;
-//    protected TarEntry entry = null;
+    //XXX а если архив в сети?
+    /**
+     * Создать объект класса MyTarFile с помощью файла <I>parent</I>
+     *
+     * @param parent объект класса LocalFile, задающий положение архива
+     */
+    public MyTgzFile(LocalFile parent) {
+        super(parent);
+    }
 
-	//XXX а если архив в сети?
-	/**
-	 * Создать объект класса MyTarFile с помощью файла <I>parent</I>
-	 *
-	 * @param parent объект класса LocalFile, задающий положение архива
-	 */
-	public MyTgzFile(LocalFile parent) {
-		super(parent);
-//        if (false == exists()) throw new IllegalArgumentException("ArchiveFile " + parent + " doesn't exists!");
-//        this.archive = parent;
-//        this.parent = parent.getAbsoluteParent();
-//        archiveMap = new HashMap();
-//        getArchiveContent();
-	}
+    /**
+     * Создать объект класса MyTarFile с помощью файла <I>parent</I>
+     *
+     * @param parent объект класса BaseFile
+     */
+    public MyTgzFile(BaseFile parent) {
+        super(parent);
+    }
 
-	/**
-	 * Создать объект класса MyTarFile с помощью файла <I>parent</I>
-	 * @param parent объект класса BaseFile
-	 */
-	public MyTgzFile(BaseFile parent) {
-		super(parent);
-//        this(new LocalFile(parent));
-	}
+    /**
+     * Создать объект класса MyTarFile с помощью файла <I>parent</I> и имени
+     * файла <I>child</I>
+     *
+     * @param parent задает абсолютный путь к файлу
+     * @param child имя создавемого файла
+     */
+    public MyTgzFile(MyTgzFile parent, String child) {
+        super(parent, child);
+    }
 
-	/**
-	 * Создать объект класса MyTarFile с помощью файла <I>parent</I> и имени файла
-	 * <I>child</I>
-	 * @param parent задает абсолютный путь к файлу
-	 * @param child имя создавемого файла
-	 */
-	public MyTgzFile(MyTgzFile parent, String child) {
-		super(parent, child);
-//        this.parent = parent;
-//        archive = parent.archive;
-//        archiveMap = parent.archiveMap;
-//        entry = new TarEntry(parent.entry+ARCHIVE_SEPARATOR+child);
-//
-	}
+    protected MyTgzFile(LocalFile parent, TarEntry tarEntry) {
+        super(parent, tarEntry);
+    }
 
-	protected MyTgzFile(LocalFile parent, TarEntry tarEntry) {
-		super(parent, tarEntry);
-//        super(((MyTgzFile)parent).archive, entry.getName());
-//        this.entry = entry;
-//        this.parent = parent;
-//        if (parent instanceof MyTgzFile) {
-//            archiveMap = ((MyTgzFile) parent).archiveMap;
-//            archive = ((MyTgzFile) parent).archive;
-//        }
-	}
+    /**
+     * Создать объект класса MyTgzFile. Используется для реализации просмотра
+     * содержимого архива, находящегося внутри другого архива.
+     *
+     * @param parent объект класса ArchiveFile, представляющий собой архив,
+     * содержимое которого нужно просмотреть
+     * @param archive задает путь к архиву на диске (например, во временной
+     * папке)
+     */
+    public MyTgzFile(ArchiveFile parent, LocalFile archive) {
+        this(archive);
+        this.parent = parent;
+    }
 
-	/**
-	 * Создать объект класса MyTgzFile. Используется для реализации просмотра
-	 * содержимого архива, находящегося внутри другого архива.
-	 * @param parent объект класса MyTgzFile, представляющий собой архив, содержимое которого нужно
-	 * просмотреть
-	 * @param archive задает путь к архиву на диске (например, во временной папке)
-	 */
-//	public MyTgzFile(MyTgzFile parent, LocalFile archive) {
-//		super(parent, archive);
-////        this(archive);
-////        this.parent = parent;
-//	}
+    /**
+     * Получить поток для чтения из файла
+     *
+     * @return поток для чтения из файла
+     * @throws java.lang.Exception вызывается, если при создании потока
+     * произошла ошибка
+     */
+    @Override
+    public java.io.InputStream getInputStream() throws java.io.IOException {
+        try {
+            if (null == entry) {
+                return parent.getInputStream();
+            }
+            final TGZArchive tarArchive = new TGZArchive(archive.getAbsolutePath());
+            return tarArchive.getInputStream(entry.getName());
+        } catch (Exception ex) {
+            Logger.getLogger(MyTgzFile.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 
-	/**
-	 * Создать объект класса MyTgzFile. Используется для реализации просмотра
-	 * содержимого архива, находящегося внутри другого архива.
-	 * @param parent объект класса ArchiveFile, представляющий собой архив, содержимое которого нужно
-	 * просмотреть
-	 * @param archive задает путь к архиву на диске (например, во временной папке)
-	 */
-	public MyTgzFile(ArchiveFile parent, LocalFile archive) {
-		this(archive);
-		this.parent = parent;
-	}
+    @Override
+    protected boolean getArchiveContent() {
+        boolean success = true;
+        archiveMap.clear();
 
-	/**
-	 * Получить поток для чтения из файла
-	 * @return поток для чтения из файла
-	 * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
-	 */
-	@Override
-	public java.io.InputStream getInputStream() throws java.io.IOException {
-		try {
-			if (null == entry) {
-				return parent.getInputStream();
-			}
-			final TGZArchive tarArchive = new TGZArchive(archive.getAbsolutePath());
-			return tarArchive.getInputStream(entry.getName());
-		} catch (Exception ex) {
-			Logger.getLogger(MyTgzFile.class.getName()).log(Level.SEVERE, null, ex);
-			return null;
-		}
-	}
+        try {
+            String name;
+            final TGZArchive tarArchive = new TGZArchive(archive.getAbsolutePath());
+            final Collection entries = tarArchive.getEntries();
+            for (Object object : entries) {
+                if (object instanceof TarEntry) {
+                    TarEntry te = (TarEntry) object;
+                    name = te.getName();
+                    if (te.isDirectory()) {
+                        name = name.substring(0,
+                                name.lastIndexOf(ARCHIVE_SEPARATOR));
+                    }
+                    archiveMap.put(name, te);
+                }
 
-	@Override
-	protected boolean getArchiveContent() {
-		boolean success = true;
-		archiveMap.clear();
+            }
+        } catch (Exception ex) {
+            success = false;
+        }
 
-		try {
-			String name;
-			final TGZArchive tarArchive = new TGZArchive(archive.getAbsolutePath());
-			final Collection entries = tarArchive.getEntries();
-			for (Object object : entries) {
-				if (object instanceof TarEntry) {
-					TarEntry te = (TarEntry) object;
-					name = te.getName();
-					if (te.isDirectory()) {
-						name = name.substring(0,
-								name.lastIndexOf(ARCHIVE_SEPARATOR));
-					}
-					archiveMap.put(name, te);
-				}
+        return success;
+    }
 
-			}
-		} catch (Exception ex) {
-			success = false;
-		}
+    @Override
+    public BaseFile[] getFiles() {
+        final String[] names = list();
+        MyTgzFile[] files = null;
+        if (names != null) {
+            files = new MyTgzFile[names.length];
+            String name;
+            for (int i = 0; i < names.length; ++i) {
 
-		return success;
-	}
-
-//	private void setArchiveMap(HashMap archiveMap) {
-//		this.archiveMap = archiveMap;
-//	}
-
-//	/**
-//	 * Получить список имен файлов, находящихся в данной папке в архиве
-//	 * @return массив имен файлов
-//	 */
-//	@Override
-//	public String[] list() {
-//		ArrayList names = new ArrayList();
-//		Set keys = archiveMap.keySet();
-//		if (keys != null) {
-//			if (null == entry) {//корень архива
-//				// search through all available archive entries
-//				Iterator iter = keys.iterator();
-//				while (iter.hasNext()) {
-//					String key = (String) iter.next();
-//					if (key.indexOf(ARCHIVE_SEPARATOR) == 0) {
-//						// remove leading "/"
-//						key = key.substring(ARCHIVE_SEPARATOR.length());
-//					}
-//
-//					if (key.indexOf(ARCHIVE_SEPARATOR) < 0) {
-//						// no more "/" found => correct level
-//						names.add(key);
-//					}
-//				}
-//			} else {
-//				final String name = entry.getName();
-//
-//				// search through all available archive entries
-//				final Iterator iter = keys.iterator();
-//				while (iter.hasNext()) {
-//					final String key = (String) iter.next();
-//					if (key.startsWith(name) && !key.equals(name)) {
-//						// candidate found
-//						String rest = key.substring(name.length());
-//						if (rest.indexOf(ARCHIVE_SEPARATOR) == 0) {
-//							// remove leading "/"
-//							rest = rest.substring(ARCHIVE_SEPARATOR.length());
-//						}
-//
-//						if (rest.indexOf(ARCHIVE_SEPARATOR) < 0) {
-//							// no more "/" found => correct level
-//							names.add(rest);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		String[] list = new String[names.size()];
-//		for (int i = 0; i < list.length; i++) {
-//			list[i] = names.get(i).toString();
-//		}
-//		return list;
-//	}
-
-//	/**
-//	 * Получить список файлов, находящихся в данной папке в архиве
-//	 * @return массив файлов
-//	 */
-//	@Override
-//	public BaseFile[] getFiles(FileFilter filter) {
-//		return getFiles();
-//	}
-	@Override
-	public BaseFile[] getFiles() {
-		final String[] names = list();
-		MyTgzFile[] files = null;
-		if (names != null) {
-			files = new MyTgzFile[names.length];
-			String name;
-			for (int i = 0; i < names.length; ++i) {
-
-				if (null != entry) {
-					name = entry.getName() + names[i];
-				} else {
-					name = names[i];
-				}
-				files[i] = new MyTgzFile(this, (TarEntry) archiveMap.get(name));
-			}
-		}
-		return files;
-	}
-
-//	/**
-//	 * Определить, является ли данный объект файлом или каталогом
-//	 * @return <B>true</B>, если данный объект является каталогом, иначе - <B>false</B>
-//	 */
-//	@Override
-//	public boolean isDirectory() {
-//		return (null == entry) ? archive.isDirectory() : entry.isDirectory();
-//	}
-
-//	/**
-//	 * Получить родительскую папку для данного файла
-//	 * @return объект класса BaseFile, представляющий родительскую папку данного файла
-//	 */
-//	@Override
-//	public BaseFile getAbsoluteParent() {
-//		return parent;
-//	//return getAbstractParent();
-//	}
-
-//	/**
-//	 * Представляет размер в более наглядной форме. Например, число
-//	 * 12455 будет иметь вид 12 455
-//	 * @return строка содержащая размер файла в отформатированном виде
-//	 */
-//	@Override
-//	public String getFormatFileSize() {
-//		if (null == entry) {
-//			return getFormatFileSize(archive.length());
-//		}
-//		if (true == entry.isDirectory()) {
-//			return DEFAULT_DIR_SIZE;
-//		}
-//		return getFormatFileSize(entry.getSize());
-//	}
-
-//	/**
-//	 * Возвращает дату последеней модификации файла или каталога
-//	 * @return дату последеней модификации в формате dd.MM.yyyy hh:mm
-//	 */
-//	@Override
-//	public String getLastModifiedDate() {
-//		Date date = new Date();
-//		SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
-//		if (null == entry) {
-//			date.setTime(((LocalFile) parent).lastModified());
-//		} else {
-//			date.setTime(entry.getTime());
-//		}
-//		return sdate.format(date);
-//
-//	}
-
-//	/**
-//	 * Возвращает атрибуты файла или каталога. ro - только для чтения,
-//	 * h - скрытый
-//	 * @return строку, содержащую атрибуты файла или каталога
-//	 */
-//	@Override
-//	public String getAtributeString() {
-//		if (null == entry) {
-//			return ((LocalFile) parent).getAtributeString();
-//		}
-//		return "ro";
-//	}
-
-//	/**
-//	 * Получить поток для записи в файл
-//	 * @throws java.lang.Exception вызывается, если при создании потока произошла ошибка
-//	 * @return поток для записи в файл
-//	 */
-//	@Override
-//	public java.io.OutputStream getOutputStream() throws java.io.IOException {
-//		if (null == entry) {
-//			return parent.getOutputStream();
-//		}
-//		return null;
-//	}
-
-//	/**
-//	 * Получить строковое представление объекта
-//	 * @return строковое представление
-//	 */
-//	@Override
-//	public String toString() {
-//		if (false == parent.hasParent()) {
-//			return parent + getFilename();
-//		}
-//		return parent + separator + getFilename();
-//	}
-//
-//	@Override
-//	public long getLastModifiedTime() {
-//		if (null == entry) {
-//			return parent.getLastModifiedTime();
-//		} else {
-//			return entry.getTime();
-//		}
-//	}
-//
-//	@Override
-//	public long length() {
-//		if (null == entry) {
-//			return archive.length();
-//		} else {
-//			return entry.getSize();
-//		}
-//	}
-//
-//	@Override
-//	public String getPathWithSlash() {
-//		String path = getAbsolutePath();
-//		//if (false == isDirectory() ) return super.getAbsolutePath();
-//		return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
-//	}
+                if (null != entry) {
+                    name = entry.getName() + names[i];
+                } else {
+                    name = names[i];
+                }
+                files[i] = new MyTgzFile(this, (TarEntry) archiveMap.get(name));
+            }
+        }
+        return files;
+    }
 }

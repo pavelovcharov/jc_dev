@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
@@ -35,29 +34,22 @@ import ru.narod.jcommander.gui.table.tableElements.UpperDirectory;
  */
 public class ActionSelectNDown extends AbstractAction {
 
-	public ActionSelectNDown(MainFrame parent) {
-		super(parent);
-	}
+    public ActionSelectNDown(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		NameInterface name = activeTable.getElementAtCursor();
-		if ((name instanceof UpperDirectory) == false) {
-			BaseFile currentFile = name.getFile();
-			if (null == currentFile) {
-				return;
-			}
-			activeTable.selectFileAt(activeTable.getCurrentPosition());
-		}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        NameInterface name = activeTable.getElementAtCursor();
+        if ((name instanceof UpperDirectory) == false) {
+            BaseFile currentFile = name.getFile();
+            if (null == currentFile) {
+                return;
+            }
+            activeTable.selectFileAt(activeTable.getCurrentPosition());
+        }
 
-//		activeTableIndex = activeTable.getCurrentPosition() + 1;
-//		if (activeTableIndex == activeTable.getRowCount() - 1) {
-//			activeTableIndex = activeTable.getRowCount() - 1;
-//		}
-//		activeTable.changeSelection(activeTableIndex, FileTable.NAME, false, false);
-		activeTable.moveCursorDown();
-		parent.updateActiveStatusLabel();
-	}
-
-
+        activeTable.moveCursorDown();
+        parent.updateActiveStatusLabel();
+    }
 }

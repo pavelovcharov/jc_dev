@@ -20,7 +20,6 @@
  * ActionAddTab.java
  * Created on 11.01.2009 11:59:19
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -31,12 +30,11 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionAddTab extends AbstractAction {
 
-	public ActionAddTab(MainFrame parent) {
-		super(parent);
-	}
+    public ActionAddTab(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		parent.addTab(parent.getActive());
-	}
-
+    public void execute() {
+        parent.addTab(parent.getActive());
+    }
 }

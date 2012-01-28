@@ -26,7 +26,6 @@
  *
  * Created on 22.06.2009, 15:06:22
  */
-
 package ru.narod.jcommander.gui.dialog;
 
 import java.awt.event.ActionEvent;
@@ -41,91 +40,86 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class RewriteDialog extends javax.swing.JDialog {
 
-    public enum ReplaceResult {REPLACE, REPLACE_OLD, SKIP, CANCEL};
-	ReplaceResult dialogResult;
+    public enum ReplaceResult {
 
-	/** Creates new form RewriteDialog */
+        REPLACE, REPLACE_OLD, SKIP, CANCEL
+    };
+    ReplaceResult dialogResult;
+
+    /**
+     * Creates new form RewriteDialog
+     */
     public RewriteDialog(JDialog parent, BaseFile source, BaseFile target) {
         super(parent, true);
         initComponents();
-		setLocationRelativeTo(parent);
-//		setResizable(false);
+        setLocationRelativeTo(parent);
 
-		setSize(500, 330);
+        setSize(500, 330);
 
-		LanguageBundle lb = LanguageBundle.getInstance();
+        LanguageBundle lb = LanguageBundle.getInstance();
 
-		jButtonYes.addActionListener(new ButtonListener(this, ReplaceResult.REPLACE));
-		jButtonYes.addKeyListener(new ButtonKeyListener(this));
-		jButtonNo.addActionListener(new ButtonListener(this, ReplaceResult.SKIP));
-		jButtonNo.addKeyListener(new ButtonKeyListener(this));
-		jButtonCancel.addActionListener(new ButtonListener(this, ReplaceResult.CANCEL));
-		jButtonCancel.addKeyListener(new ButtonKeyListener(this));
+        jButtonYes.addActionListener(new ButtonListener(this, ReplaceResult.REPLACE));
+        jButtonYes.addKeyListener(new ButtonKeyListener(this));
+        jButtonNo.addActionListener(new ButtonListener(this, ReplaceResult.SKIP));
+        jButtonNo.addKeyListener(new ButtonKeyListener(this));
+        jButtonCancel.addActionListener(new ButtonListener(this, ReplaceResult.CANCEL));
+        jButtonCancel.addKeyListener(new ButtonKeyListener(this));
 
-		jCheckBoxApplyToAll.addKeyListener(new ComponentKeyListener(this, jButtonYes));
-		jCheckBoxApplyToOlder.addKeyListener(new ComponentKeyListener(this, jButtonYes));
-		jCheckBoxApplyToAll.addKeyListener(new CursorKeyListener());
-		jCheckBoxApplyToOlder.addKeyListener(new CursorKeyListener());
+        jCheckBoxApplyToAll.addKeyListener(new ComponentKeyListener(this, jButtonYes));
+        jCheckBoxApplyToOlder.addKeyListener(new ComponentKeyListener(this, jButtonYes));
+        jCheckBoxApplyToAll.addKeyListener(new CursorKeyListener());
+        jCheckBoxApplyToOlder.addKeyListener(new CursorKeyListener());
 
-		jButtonYes.setText(lb.getString("StrOk"));
-		jButtonNo.setText(lb.getString("StrSkip"));
-		jButtonCancel.setText(lb.getString("StrCancel"));
+        jButtonYes.setText(lb.getString("StrOk"));
+        jButtonNo.setText(lb.getString("StrSkip"));
+        jButtonCancel.setText(lb.getString("StrCancel"));
 
-		setTitle(LanguageBundle.getInstance().getString("StrFileExist"));
+        setTitle(LanguageBundle.getInstance().getString("StrFileExist"));
 
-//		jLabelHeader.setText(lb.getString("StrReplaceThisFile"));
-		jLabel2.setText(lb.getString("StrReplaceThisFile") + " " + lb.getString("StrCurrentFile"));
-//		jLabel1.setText(target.getAbsolutePath());
-//		jTextPane1.setVisible(false);
-		jTextPane1.setText(target.getAbsolutePath());
-		jLabel4.setText( String.format(lb.getString("StrDateSize"), target.getFormatFileSize(), target.getLastModifiedDate()));
+        jLabel2.setText(lb.getString("StrReplaceThisFile") + " " + lb.getString("StrCurrentFile"));
+        jTextPane1.setText(target.getAbsolutePath());
+        jLabel4.setText(String.format(lb.getString("StrDateSize"), target.getFormatFileSize(), target.getLastModifiedDate()));
 
-		jLabel3.setText(lb.getString("StrNewFile"));
-		jTextPane2.setText(source.getAbsolutePath());
-		jLabel6.setText(String.format(lb.getString("StrDateSize"), source.getFormatFileSize(), source.getLastModifiedDate()));
-		jCheckBoxApplyToAll.setText(lb.getString("StrApplyToAll"));
-		jCheckBoxApplyToOlder.setText(lb.getString("StrAplyToOlder"));
-
-//		String path = target.getAbsolutePath();
-//		int realWidth = jLabelFilename.getFontMetrics(jLabelFilename.getFont()).stringWidth(path);
-//
-//		if (jLabelFilename.getWidth()< realWidth) {
-//			jLabelFilename.setText(path.substring(0, 25) + "... " + path.substring(path.length()-25, path.length()));
-//		}
-
+        jLabel3.setText(lb.getString("StrNewFile"));
+        jTextPane2.setText(source.getAbsolutePath());
+        jLabel6.setText(String.format(lb.getString("StrDateSize"), source.getFormatFileSize(), source.getLastModifiedDate()));
+        jCheckBoxApplyToAll.setText(lb.getString("StrApplyToAll"));
+        jCheckBoxApplyToOlder.setText(lb.getString("StrAplyToOlder"));
     }
 
-	public boolean getApplyToAll() {
-		return jCheckBoxApplyToAll.isSelected();
-	}
+    public boolean getApplyToAll() {
+        return jCheckBoxApplyToAll.isSelected();
+    }
 
-	public boolean getApplyToOlder() {
-		return jCheckBoxApplyToOlder.isSelected();
-	}
+    public boolean getApplyToOlder() {
+        return jCheckBoxApplyToOlder.isSelected();
+    }
 
-	public ReplaceResult getDialogResult() {
-		return dialogResult;
-	}
+    public ReplaceResult getDialogResult() {
+        return dialogResult;
+    }
 
+    private class ButtonListener implements ActionListener {
 
-	private class ButtonListener implements ActionListener{
-		private ReplaceResult result;
-		private JDialog parent;
-		public ButtonListener(JDialog parent, ReplaceResult result) {
-			this.result = result;
-			this.parent = parent;
-		}
+        private ReplaceResult result;
+        private JDialog parent;
 
-		public void actionPerformed(ActionEvent e) {
+        public ButtonListener(JDialog parent, ReplaceResult result) {
+            this.result = result;
+            this.parent = parent;
+        }
 
-			dialogResult = result;
-			parent.setVisible(false);
-		}
-	}
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+        public void actionPerformed(ActionEvent e) {
+
+            dialogResult = result;
+            parent.setVisible(false);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -234,7 +228,6 @@ public class RewriteDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonNo;
@@ -256,5 +249,4 @@ public class RewriteDialog extends javax.swing.JDialog {
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPane2;
     // End of variables declaration//GEN-END:variables
-
 }

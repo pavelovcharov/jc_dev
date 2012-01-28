@@ -17,11 +17,7 @@
  */
 package ru.narod.jcommander.fileSystem;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  *
@@ -106,7 +102,7 @@ public class PseudoFolder implements BaseFile {
     }
 
     public String getPathWithSlash() {
-        return  "";
+        return "";
     }
 
     public boolean mkdirs() {

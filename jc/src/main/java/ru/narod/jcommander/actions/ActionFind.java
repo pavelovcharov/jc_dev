@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import javax.swing.JDialog;
@@ -32,14 +31,13 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionFind extends AbstractAction {
 
-	public ActionFind(MainFrame parent) {
-		super(parent);
-	}
+    public ActionFind(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-            JDialog form = parent.getFindDialog();
-            form.setLocationRelativeTo(parent);
-            form.setVisible(true);
-	}
-
+    public void execute() {
+        JDialog form = parent.getFindDialog();
+        form.setLocationRelativeTo(parent);
+        form.setVisible(true);
+    }
 }

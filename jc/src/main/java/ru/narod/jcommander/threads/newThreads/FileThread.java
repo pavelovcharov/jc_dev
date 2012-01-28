@@ -20,11 +20,9 @@
  * FileThread.java
  * Created on 14.04.2009 16:31:21
  */
-
 package ru.narod.jcommander.threads.newThreads;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
-//import ru.narod.jcommander.gui.dialog.ReplaceDialog;
 import ru.narod.jcommander.gui.dialog.RewriteDialog;
 import ru.narod.jcommander.gui.dialog.WarningDialog;
 import ru.narod.jcommander.util.LanguageBundle;
@@ -33,90 +31,65 @@ import ru.narod.jcommander.util.LanguageBundle;
  *
  * @author Programmer
  */
-
 public abstract class FileThread extends BaseThread {
 
-	protected RewriteDialog.ReplaceResult replaceResult;
+    protected RewriteDialog.ReplaceResult replaceResult;
 
-	protected enum ErrorAction {
+    protected enum ErrorAction {
 
-		Skip, SkipAll, Retry,
-	};
-	protected ErrorAction resultError = ErrorAction.Skip;
+        Skip, SkipAll, Retry,
+    };
+    protected ErrorAction resultError = ErrorAction.Skip;
+    protected boolean applyToAll = false;
 
-	protected boolean applyToAll = false;
-	/**
-	 * Возвращает true если можно продолжать поток
-	 */
-	protected boolean queryReplace(BaseFile source, BaseFile target) {
-		
-//		if (applyToAll) {
-//			return true;
-//		}
-//		ReplaceDialog rd = new ReplaceDialog();
-//		rd.showReplaceAll(parent, source, target);
-//		int dialogResult = rd.getDialogResult();
-//		applyToAll = rd.getApplyToAll();
-//
-//		switch (dialogResult) {
-//			case ReplaceDialog.RESULT_REPLACE:
-//
-//				resultReplace = ReplaceAction.Replace;
-//				break;
-//			case ReplaceDialog.RESULT_SKIP:
-//				resultReplace = ReplaceAction.Skip;
-//				break;
-//			case ReplaceDialog.RESULT_REPLACE_OLD:
-//				resultReplace = ReplaceAction.ReplaceOld;
-//				break;
-//			default:
-//				return false;
-//		}
-//
-//		return true;
-		if (applyToAll) {
-			return true;
-		}
-		RewriteDialog rd = new RewriteDialog(parent, source, target);
-		rd.setVisible(true);
-		
-		applyToAll = rd.getApplyToAll();
-		replaceResult = rd.getDialogResult();
-		if (null == replaceResult || RewriteDialog.ReplaceResult.CANCEL == replaceResult)
-			return false;
+    /**
+     * Возвращает true если можно продолжать поток
+     */
+    protected boolean queryReplace(BaseFile source, BaseFile target) {
 
-		if (RewriteDialog.ReplaceResult.REPLACE == replaceResult && rd.getApplyToOlder()) {
-			replaceResult = RewriteDialog.ReplaceResult.REPLACE_OLD;
-		}
-		return true;
+        if (applyToAll) {
+            return true;
+        }
+        RewriteDialog rd = new RewriteDialog(parent, source, target);
+        rd.setVisible(true);
 
-	}
+        applyToAll = rd.getApplyToAll();
+        replaceResult = rd.getDialogResult();
+        if (null == replaceResult || RewriteDialog.ReplaceResult.CANCEL == replaceResult) {
+            return false;
+        }
 
-	/**
-	 * Возвращает true если можно продолжать поток
-	 */
-	protected boolean queryError(String errorText) {
-		if (resultError.equals(ErrorAction.SkipAll)) {
-			return true;
-		}
-		LanguageBundle lb = LanguageBundle.getInstance();
-		Object[] options = new Object[]{lb.getString("StrSkip"), lb.getString("StrSkipAll"), lb.getString("StrRetry"), lb.getString("StrCancel")};
-		int result = WarningDialog.showMessage(parent, errorText, lb.getString("StrJC"), options, WarningDialog.MESSAGE_ERROR, 0);
-		switch (result) {
-			case 0:
-				resultError = ErrorAction.Skip;
-				break;
-			case 1:
-				resultError = ErrorAction.SkipAll;
-				break;
-			case 2:
-				resultError = ErrorAction.Retry;
-				break;
-			default:
-				return false;
-		}
+        if (RewriteDialog.ReplaceResult.REPLACE == replaceResult && rd.getApplyToOlder()) {
+            replaceResult = RewriteDialog.ReplaceResult.REPLACE_OLD;
+        }
+        return true;
 
-		return true;
-	}
+    }
 
+    /**
+     * Возвращает true если можно продолжать поток
+     */
+    protected boolean queryError(String errorText) {
+        if (resultError.equals(ErrorAction.SkipAll)) {
+            return true;
+        }
+        LanguageBundle lb = LanguageBundle.getInstance();
+        Object[] options = new Object[]{lb.getString("StrSkip"), lb.getString("StrSkipAll"), lb.getString("StrRetry"), lb.getString("StrCancel")};
+        int result = WarningDialog.showMessage(parent, errorText, lb.getString("StrJC"), options, WarningDialog.MESSAGE_ERROR, 0);
+        switch (result) {
+            case 0:
+                resultError = ErrorAction.Skip;
+                break;
+            case 1:
+                resultError = ErrorAction.SkipAll;
+                break;
+            case 2:
+                resultError = ErrorAction.Retry;
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
 }

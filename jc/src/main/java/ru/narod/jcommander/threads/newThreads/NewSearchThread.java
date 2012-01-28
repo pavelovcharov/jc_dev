@@ -26,11 +26,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.Vector;
-
+import org.apache.commons.io.IOCase;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.WildcardFilenameFilter;
 import ru.narod.jcommander.fileSystem.archive.ArchiveFile;
-import org.apache.commons.io.IOCase;
 
 /**
  *

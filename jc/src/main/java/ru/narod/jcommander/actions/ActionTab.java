@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -31,10 +30,11 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionTab extends AbstractAction {
 
-	public ActionTab(MainFrame parent) {
-		super(parent);
-	}
-	public void execute() {
-		parent.getPassiveTable().requestFocus();
-	}
+    public ActionTab(MainFrame parent) {
+        super(parent);
+    }
+
+    public void execute() {
+        parent.getPassiveTable().requestFocus();
+    }
 }

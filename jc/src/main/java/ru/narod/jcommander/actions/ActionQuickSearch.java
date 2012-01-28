@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -31,12 +30,11 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionQuickSearch extends AbstractAction {
 
-	public ActionQuickSearch(MainFrame parent) {
-		super(parent);
-	}
+    public ActionQuickSearch(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		parent.setSearchVisible(true);
-	}
-
+    public void execute() {
+        parent.setSearchVisible(true);
+    }
 }

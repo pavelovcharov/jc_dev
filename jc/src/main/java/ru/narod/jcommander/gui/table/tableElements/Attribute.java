@@ -19,10 +19,9 @@
 /*
  * Attribute.java
  *
- * Created on 25 ���� 2007 �., 10:57
+ * Created on 25 jun 2007, 10:57
  *
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 /**
@@ -30,30 +29,31 @@ package ru.narod.jcommander.gui.table.tableElements;
  * @author Programmer
  * @version
  */
-public class Attribute extends Element{
-    
+public class Attribute extends Element {
+
     private String attributeStr;
-    
-    /** Creates a new instance of Attribute */
+
+    /**
+     * Creates a new instance of Attribute
+     */
     public Attribute() {
         attributeStr = "";
     }
-    
+
     public Attribute(String attribute) {
         attributeStr = attribute;
     }
-    
-	@Override
+
+    @Override
     public String toString() {
         return attributeStr;
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Attribute)) return 1;
-        Attribute a = (Attribute)o;
+        if (false == (o instanceof Attribute)) {
+            return 1;
+        }
+        Attribute a = (Attribute) o;
         return attributeStr.compareTo(a.attributeStr);
     }
-    
-    
-    
 }

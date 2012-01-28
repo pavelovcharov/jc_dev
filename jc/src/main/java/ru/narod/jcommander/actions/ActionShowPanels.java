@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -31,14 +30,11 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionShowPanels extends AbstractAction {
 
-	public ActionShowPanels(MainFrame parent) {
-		super(parent);
-	}
+    public ActionShowPanels(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-//		parent.getCmdLine().setVisible(!parent.isPanelsVisible());
-		parent.setPanelsVisible(!parent.isPanelsVisible());
-//		parent.pack();
-	}
-
+    public void execute() {
+        parent.setPanelsVisible(!parent.isPanelsVisible());
+    }
 }

@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.gui.MainFrame;
@@ -30,14 +29,15 @@ import ru.narod.jcommander.gui.MainFrame;
  * @author Programmer
  */
 public class ActionJump extends AbstractAction {
-	private boolean up;
 
-	public ActionJump(MainFrame parent, boolean up) {
-		super(parent);
-		this.up = up;
-	}
+    private boolean up;
 
-	public void execute() {
-		parent.getActiveTable().jump(up);
-	}
+    public ActionJump(MainFrame parent, boolean up) {
+        super(parent);
+        this.up = up;
+    }
+
+    public void execute() {
+        parent.getActiveTable().jump(up);
+    }
 }

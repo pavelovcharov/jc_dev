@@ -20,7 +20,6 @@
  * ActionCopyPath.java
  * Created on 11.01.2009 14:08:10
  */
-
 package ru.narod.jcommander.actions;
 
 import javax.swing.JTextField;
@@ -34,22 +33,22 @@ import ru.narod.jcommander.gui.table.tableElements.NameInterface;
  */
 public class ActionCopyPath extends AbstractAction {
 
-	public ActionCopyPath(MainFrame parent) {
-		super(parent);
-	}
+    public ActionCopyPath(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		NameInterface name = parent.getActiveTable().getElementAtCursor();
-		BaseFile currentFile;
-		if (null == name) {
-			return;
-		} else {
-			currentFile = name.getFile();
-		}
-		if (null == currentFile) {
-			return;
-		}
-		JTextField cmdLine = parent.getCmdLine();
-		cmdLine.setText(cmdLine.getText() + " " + currentFile.getAbsolutePath() + " ");
-	}
+    public void execute() {
+        NameInterface name = parent.getActiveTable().getElementAtCursor();
+        BaseFile currentFile;
+        if (null == name) {
+            return;
+        } else {
+            currentFile = name.getFile();
+        }
+        if (null == currentFile) {
+            return;
+        }
+        JTextField cmdLine = parent.getCmdLine();
+        cmdLine.setText(cmdLine.getText() + " " + currentFile.getAbsolutePath() + " ");
+    }
 }

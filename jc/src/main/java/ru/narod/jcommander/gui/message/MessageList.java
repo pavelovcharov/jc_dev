@@ -101,69 +101,65 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
     void createMaps() {
         descriptors = new LinkedHashMap<Object, MessageDescriptor>();
         messages = new LinkedHashMap<Object, Message>();
-        try {
-            LanguageBundle lb = LanguageBundle.getInstance();
-            LanguageBundle languageBundle = lb;
-            descriptors.put(MessageType.TitleNavigation, new MessageDescriptor("MSG_TITLE_NAVIGATION", lb.getString("KeyTitleNavigation")));
-            descriptors.put(MessageType.Enter, new MessageDescriptor("MSG_ENTER", lb.getString("KeyEnter")));
-            descriptors.put(MessageType.Tab, new MessageDescriptor("MSG_TAB", lb.getString("KeySwitch")));
-            descriptors.put(MessageType.DirUp, new MessageDescriptor("MSG_DIR_UP", lb.getString("KeyParent")));
-            descriptors.put(MessageType.LeftCombo, new MessageDescriptor("MSG_LEFT_COMBOBOX", lb.getString("KeyLeftDrive")));
-            descriptors.put(MessageType.RightCombo, new MessageDescriptor("MSG_RIGHT_COMBOBOX", lb.getString("KeyRightDrive")));
-            descriptors.put(MessageType.ActivateLeft, new MessageDescriptor("MSG_ACTIVE_LEFT", lb.getString("KeyLeft")));
-            descriptors.put(MessageType.ActiateRight, new MessageDescriptor("MSG_ACTIVE_RIGHT", lb.getString("KeyRight")));
-            descriptors.put(MessageType.Up, new MessageDescriptor("MSG_UP", lb.getString("KeyUp")));
-            descriptors.put(MessageType.Down, new MessageDescriptor("MSG_DOWN", lb.getString("KeyDown")));
-            descriptors.put(MessageType.PgUp, new MessageDescriptor("MSG_PG_UP", lb.getString("KeyPgUp")));
-            descriptors.put(MessageType.PgDown, new MessageDescriptor("MSG_PG_DOWN", lb.getString("KeyPgDown")));
-            descriptors.put(MessageType.First, new MessageDescriptor("MSG_FIRST", lb.getString("KeyFirst")));
-            descriptors.put(MessageType.Last, new MessageDescriptor("MSG_LAST", lb.getString("KeyLast")));
-            descriptors.put(MessageType.ShowPanels, new MessageDescriptor("MSG_SHOW_PANELS", lb.getString("KeyConsole")));
-            descriptors.put(MessageType.GotoCmdLine, new MessageDescriptor("MSG_GOTO_CMDLINE", lb.getString("KeyGotoCmdLine")));
-            descriptors.put(MessageType.SwapPanels, new MessageDescriptor("MSG_SWAP", lb.getString("KeySwapPanels")));
-            descriptors.put(MessageType.Exit, new MessageDescriptor("MSG_EXIT", lb.getString("KeyExit")));
-            descriptors.put(MessageType.TitleFiles, new MessageDescriptor("MSG_TITLE_FILES", lb.getString("KeyTitleFiles")));
-            descriptors.put(MessageType.Rename, new MessageDescriptor("MSG_RENAME", lb.getString("KeyRename")));
-            descriptors.put(MessageType.View, new MessageDescriptor("MSG_VIEW", lb.getString("KeyView")));
-            descriptors.put(MessageType.Edit, new MessageDescriptor("MSG_EDIT", lb.getString("KeyEdit")));
-            descriptors.put(MessageType.Copy, new MessageDescriptor("MSG_COPY", lb.getString("KeyCopy")));
-            descriptors.put(MessageType.CopySameFolder, new MessageDescriptor("MSG_COPY_SAME_FOLDER", lb.getString("KeyCopySameFolder")));
-            descriptors.put(MessageType.Move, new MessageDescriptor("MSG_MOVE", lb.getString("KeyMove")));
-            descriptors.put(MessageType.NewDir, new MessageDescriptor("MSG_NEW_DIR", lb.getString("KeyNewDir")));
-            descriptors.put(MessageType.Delete, new MessageDescriptor("MSG_DELETE", lb.getString("KeyDel")));
-            descriptors.put(MessageType.Refresh, new MessageDescriptor("MSG_REFRESH", lb.getString("KeyRefresh")));
-            descriptors.put(MessageType.Sync, new MessageDescriptor("MSG_SYNC", lb.getString("KeySync")));
-            descriptors.put(MessageType.Pack, new MessageDescriptor("MSG_PACK", lb.getString("KeyPack")));
-            descriptors.put(MessageType.EditNew, new MessageDescriptor("MSG_NEW_EDIT", lb.getString("KeyNewFile")));
-            descriptors.put(MessageType.QuickSearch, new MessageDescriptor("MSG_QUICK_SEARCH", lb.getString("KeyQuickSearch")));
-            descriptors.put(MessageType.Find, new MessageDescriptor("MSG_FIND", lb.getString("KeySearch")));
-            descriptors.put(MessageType.TitleSelection, new MessageDescriptor("MSG_TITLE_SELECTION", lb.getString("KeyTitleSelection")));
-            descriptors.put(MessageType.SelectAll, new MessageDescriptor("MSG_SELECT_ALL", lb.getString("KeySelectAll")));
-            descriptors.put(MessageType.SelectDown, new MessageDescriptor("MSG_SELECT_N_DOWN", lb.getString("KeySelectDown")));
-            descriptors.put(MessageType.SelectUp, new MessageDescriptor("MSG_SELECT_N_UP", lb.getString("KeySelectUp")));
-            descriptors.put(MessageType.SelectSpace, new MessageDescriptor("MSG_SPACE", lb.getString("KeySize")));
-            descriptors.put(MessageType.TitleTabs, new MessageDescriptor("MSG_TITLE_TABS", lb.getString("KeyTitleTabs")));
-            descriptors.put(MessageType.AddTab, new MessageDescriptor("MSG_ADD_TAB", lb.getString("KeyAddTab")));
-            descriptors.put(MessageType.RemoveTab, new MessageDescriptor("MSG_REMOVE_TAB", lb.getString("KeyRemoveTab")));
-            descriptors.put(MessageType.NextTab, new MessageDescriptor("MSG_NEXT_TAB", lb.getString("KeyNextTab")));
-            descriptors.put(MessageType.PrevTab, new MessageDescriptor("MSG_PREV_TAB", lb.getString("KeyPrevTab")));
-            descriptors.put(MessageType.TiteMisc, new MessageDescriptor("MSG_TITLE_MISC", lb.getString("KeyTitleMisc")));
-            descriptors.put(MessageType.CopyPath, new MessageDescriptor("MSG_COPY_PATH", lb.getString("KeyCopyPath")));
-            descriptors.put(MessageType.CopyName, new MessageDescriptor("MSG_COPY_NAME", lb.getString("KeyCopyFilename")));
-            descriptors.put(MessageType.DecodeHex, new MessageDescriptor("MSG_DECODE_HEX", lb.getString("KeyDecodeHex")));
-            descriptors.put(MessageType.Explorer, new MessageDescriptor("MSG_EXPORER", lb.getString("KeyExplorer")));
-            descriptors.put(MessageType.MoveToTrash, new MessageDescriptor("MSG_MOVE_TO_TRASH", lb.getString("KeyMoveToTrash")));
+
+        LanguageBundle lb = LanguageBundle.getInstance();
+        LanguageBundle languageBundle = lb;
+        descriptors.put(MessageType.TitleNavigation, new MessageDescriptor("MSG_TITLE_NAVIGATION", lb.getString("KeyTitleNavigation")));
+        descriptors.put(MessageType.Enter, new MessageDescriptor("MSG_ENTER", lb.getString("KeyEnter")));
+        descriptors.put(MessageType.Tab, new MessageDescriptor("MSG_TAB", lb.getString("KeySwitch")));
+        descriptors.put(MessageType.DirUp, new MessageDescriptor("MSG_DIR_UP", lb.getString("KeyParent")));
+        descriptors.put(MessageType.LeftCombo, new MessageDescriptor("MSG_LEFT_COMBOBOX", lb.getString("KeyLeftDrive")));
+        descriptors.put(MessageType.RightCombo, new MessageDescriptor("MSG_RIGHT_COMBOBOX", lb.getString("KeyRightDrive")));
+        descriptors.put(MessageType.ActivateLeft, new MessageDescriptor("MSG_ACTIVE_LEFT", lb.getString("KeyLeft")));
+        descriptors.put(MessageType.ActiateRight, new MessageDescriptor("MSG_ACTIVE_RIGHT", lb.getString("KeyRight")));
+        descriptors.put(MessageType.Up, new MessageDescriptor("MSG_UP", lb.getString("KeyUp")));
+        descriptors.put(MessageType.Down, new MessageDescriptor("MSG_DOWN", lb.getString("KeyDown")));
+        descriptors.put(MessageType.PgUp, new MessageDescriptor("MSG_PG_UP", lb.getString("KeyPgUp")));
+        descriptors.put(MessageType.PgDown, new MessageDescriptor("MSG_PG_DOWN", lb.getString("KeyPgDown")));
+        descriptors.put(MessageType.First, new MessageDescriptor("MSG_FIRST", lb.getString("KeyFirst")));
+        descriptors.put(MessageType.Last, new MessageDescriptor("MSG_LAST", lb.getString("KeyLast")));
+        descriptors.put(MessageType.ShowPanels, new MessageDescriptor("MSG_SHOW_PANELS", lb.getString("KeyConsole")));
+        descriptors.put(MessageType.GotoCmdLine, new MessageDescriptor("MSG_GOTO_CMDLINE", lb.getString("KeyGotoCmdLine")));
+        descriptors.put(MessageType.SwapPanels, new MessageDescriptor("MSG_SWAP", lb.getString("KeySwapPanels")));
+        descriptors.put(MessageType.Exit, new MessageDescriptor("MSG_EXIT", lb.getString("KeyExit")));
+        descriptors.put(MessageType.TitleFiles, new MessageDescriptor("MSG_TITLE_FILES", lb.getString("KeyTitleFiles")));
+        descriptors.put(MessageType.Rename, new MessageDescriptor("MSG_RENAME", lb.getString("KeyRename")));
+        descriptors.put(MessageType.View, new MessageDescriptor("MSG_VIEW", lb.getString("KeyView")));
+        descriptors.put(MessageType.Edit, new MessageDescriptor("MSG_EDIT", lb.getString("KeyEdit")));
+        descriptors.put(MessageType.Copy, new MessageDescriptor("MSG_COPY", lb.getString("KeyCopy")));
+        descriptors.put(MessageType.CopySameFolder, new MessageDescriptor("MSG_COPY_SAME_FOLDER", lb.getString("KeyCopySameFolder")));
+        descriptors.put(MessageType.Move, new MessageDescriptor("MSG_MOVE", lb.getString("KeyMove")));
+        descriptors.put(MessageType.NewDir, new MessageDescriptor("MSG_NEW_DIR", lb.getString("KeyNewDir")));
+        descriptors.put(MessageType.Delete, new MessageDescriptor("MSG_DELETE", lb.getString("KeyDel")));
+        descriptors.put(MessageType.Refresh, new MessageDescriptor("MSG_REFRESH", lb.getString("KeyRefresh")));
+        descriptors.put(MessageType.Sync, new MessageDescriptor("MSG_SYNC", lb.getString("KeySync")));
+        descriptors.put(MessageType.Pack, new MessageDescriptor("MSG_PACK", lb.getString("KeyPack")));
+        descriptors.put(MessageType.EditNew, new MessageDescriptor("MSG_NEW_EDIT", lb.getString("KeyNewFile")));
+        descriptors.put(MessageType.QuickSearch, new MessageDescriptor("MSG_QUICK_SEARCH", lb.getString("KeyQuickSearch")));
+        descriptors.put(MessageType.Find, new MessageDescriptor("MSG_FIND", lb.getString("KeySearch")));
+        descriptors.put(MessageType.TitleSelection, new MessageDescriptor("MSG_TITLE_SELECTION", lb.getString("KeyTitleSelection")));
+        descriptors.put(MessageType.SelectAll, new MessageDescriptor("MSG_SELECT_ALL", lb.getString("KeySelectAll")));
+        descriptors.put(MessageType.SelectDown, new MessageDescriptor("MSG_SELECT_N_DOWN", lb.getString("KeySelectDown")));
+        descriptors.put(MessageType.SelectUp, new MessageDescriptor("MSG_SELECT_N_UP", lb.getString("KeySelectUp")));
+        descriptors.put(MessageType.SelectSpace, new MessageDescriptor("MSG_SPACE", lb.getString("KeySize")));
+        descriptors.put(MessageType.TitleTabs, new MessageDescriptor("MSG_TITLE_TABS", lb.getString("KeyTitleTabs")));
+        descriptors.put(MessageType.AddTab, new MessageDescriptor("MSG_ADD_TAB", lb.getString("KeyAddTab")));
+        descriptors.put(MessageType.RemoveTab, new MessageDescriptor("MSG_REMOVE_TAB", lb.getString("KeyRemoveTab")));
+        descriptors.put(MessageType.NextTab, new MessageDescriptor("MSG_NEXT_TAB", lb.getString("KeyNextTab")));
+        descriptors.put(MessageType.PrevTab, new MessageDescriptor("MSG_PREV_TAB", lb.getString("KeyPrevTab")));
+        descriptors.put(MessageType.TiteMisc, new MessageDescriptor("MSG_TITLE_MISC", lb.getString("KeyTitleMisc")));
+        descriptors.put(MessageType.CopyPath, new MessageDescriptor("MSG_COPY_PATH", lb.getString("KeyCopyPath")));
+        descriptors.put(MessageType.CopyName, new MessageDescriptor("MSG_COPY_NAME", lb.getString("KeyCopyFilename")));
+        descriptors.put(MessageType.DecodeHex, new MessageDescriptor("MSG_DECODE_HEX", lb.getString("KeyDecodeHex")));
+        descriptors.put(MessageType.Explorer, new MessageDescriptor("MSG_EXPORER", lb.getString("KeyExplorer")));
+        descriptors.put(MessageType.MoveToTrash, new MessageDescriptor("MSG_MOVE_TO_TRASH", lb.getString("KeyMoveToTrash")));
 
 
-            int msgCount = 0;
-            for (MessageType type : MessageType.values()) {
-                messages.put(type, new Message(numbers.get(type), descriptors.get(type)));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
+        int msgCount = 0;
+        for (MessageType type : MessageType.values()) {
+            messages.put(type, new Message(numbers.get(type), descriptors.get(type)));
         }
+
     }
 
     class MessageDescriptor {
@@ -175,7 +171,7 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
         public String name;
         public String description;
     }
-//
+
     public Message MESSAGE_ENTER;
     public Message MESSAGE_TAB;
     public Message MESSAGE_RENAME;
@@ -229,7 +225,6 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
     private MessageList() {
         createMaps();
         createMessages();
-
     }
 
     void createMessages() {
@@ -307,10 +302,9 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
         }
         return null;
     }
-    
+
     public static MessageList ensureMessageList() {
         defaultMessageList = new MessageList();
-        return  defaultMessageList;
+        return defaultMessageList;
     }
 }
-

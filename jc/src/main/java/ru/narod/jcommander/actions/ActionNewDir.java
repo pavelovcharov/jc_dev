@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
@@ -36,44 +35,38 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class ActionNewDir extends AbstractAction {
 
-	static private String NEW_DIR_NAME = "New dir";
+    static private String NEW_DIR_NAME = "New dir";
 
-	public ActionNewDir(MainFrame parent) {
-		super(parent);
-	}
+    public ActionNewDir(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		BaseFile activeFile = parent.getActiveTable().getFileAtCursor();
+    public void execute() {
+        BaseFile activeFile = parent.getActiveTable().getFileAtCursor();
 
-		String newDir;
-		if (activeFile.getFilename().equals("")) {
-			newDir = NEW_DIR_NAME;
-		} else {
-			newDir = activeFile.getFilename();
-		}
+        String newDir;
+        if (activeFile.getFilename().equals("")) {
+            newDir = NEW_DIR_NAME;
+        } else {
+            newDir = activeFile.getFilename();
+        }
 
-		LanguageBundle lb = LanguageBundle.getInstance();
+        LanguageBundle lb = LanguageBundle.getInstance();
 
-		//newDir = InputDialog.showAnotherDialog(parent, "Create new file", newDir);
-		newDir = InputDialog.showInputDialog(parent, lb.getString("StrCreateNewDir"), newDir);
-		if (null == newDir) //cancel pressed
-		{
-			return;
-		}
-		BaseFile result = FileHelper.getRealFile(parent.getActiveTable().getCurrentDir(), newDir);
+        newDir = InputDialog.showInputDialog(parent, lb.getString("StrCreateNewDir"), newDir);
+        if (null == newDir) //cancel pressed
+        {
+            return;
+        }
+        BaseFile result = FileHelper.getRealFile(parent.getActiveTable().getCurrentDir(), newDir);
 
-		boolean res = result.mkdirs();
-		parent.updateMainWindow();
-		if (!res) {
-			WarningDialog.showMessage(parent, lb.getString("StrCreateError") + " " + result,
-					lb.getString("StrError"), new Object[] {lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
-		}
-		else
-			parent.getActiveTable().moveToFile(result);
-//		if (activeTable.getCurrentDir().equals(passiveTable.getCurrentDir())) {
-//			parent.updateMainWindow();
-//		} else {
-//			parent.updateActivePanel();
-//		}
-	}
+        boolean res = result.mkdirs();
+        parent.updateMainWindow();
+        if (!res) {
+            WarningDialog.showMessage(parent, lb.getString("StrCreateError") + " " + result,
+                    lb.getString("StrError"), new Object[]{lb.getString("StrOk")}, WarningDialog.MESSAGE_ERROR, 0);
+        } else {
+            parent.getActiveTable().moveToFile(result);
+        }
+    }
 }

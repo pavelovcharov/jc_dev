@@ -17,11 +17,7 @@
  */
 package ru.narod.jcommander.gui.table;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -32,23 +28,18 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.FileSystemList;
 import ru.narod.jcommander.fileSystem.utils.FileMonitor;
-import ru.narod.jcommander.gui.table.tableElements.Directory;
-import ru.narod.jcommander.gui.table.tableElements.Element;
-import ru.narod.jcommander.gui.table.tableElements.Filename;
-import ru.narod.jcommander.gui.table.tableElements.NameInterface;
-import ru.narod.jcommander.gui.table.tableElements.Size;
-import ru.narod.jcommander.gui.table.tableElements.UpperDirectory;
+import ru.narod.jcommander.gui.table.tableElements.*;
 import ru.narod.jcommander.gui.table.tableHeader.ColumnNumbers;
 import ru.narod.jcommander.gui.table.tableHeader.TableHeader;
 
 /**
- * Класс наследован от JTable и описывают таблицу для отображения списка
- * файлов и каталогов. Для отображения файловой системы с таблицей связан
- * объект класса FileSystemList.
+ * Класс наследован от JTable и описывают таблицу для отображения списка файлов
+ * и каталогов. Для отображения файловой системы с таблицей связан объект класса
+ * FileSystemList.
+ *
  * @author Pavel Ovcharov
  * @version 2005/04/25 11:03:08 PM
  * @see FileSystemList
@@ -72,8 +63,8 @@ public class FileTable extends JTable implements ColumnNumbers {
     private int quickSearchMode;
 
     /**
-     * Создает новую таблицу. Текущим каталогом устанавливается каталог
-     *  <i>f</i>
+     * Создает новую таблицу. Текущим каталогом устанавливается каталог <i>f</i>
+     *
      * @param file устанавливает текущий каталог файловой системы
      */
     public FileTable(BaseFile file) {
@@ -149,13 +140,13 @@ public class FileTable extends JTable implements ColumnNumbers {
     public void setDefaultKeys() {
         InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.getParent().clear();
-
     }
 
     /**
      * Возвращает файловую систему для текущего каталога
-     * @return объект класса FileSystemList - файловую систему для
-     *  текущего каталога
+     *
+     * @return объект класса FileSystemList - файловую систему для текущего
+     * каталога
      */
     public FileSystemList getFileList() {
         return fsl;
@@ -163,8 +154,9 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Устанавливает состояние данной таблицы
-     * @param active <b>true</b> делает таблицу активной (т.е. с
-     * которой ведется работа), <b>false</b> - делает таблицу неактивной
+     *
+     * @param active <b>true</b> делает таблицу активной (т.е. с которой ведется
+     * работа), <b>false</b> - делает таблицу неактивной
      *
      */
     public void setActive(boolean active) {
@@ -173,6 +165,7 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Возвращает состояние таблицы
+     *
      * @return <b>true</b> если таблица активна, иначе - <b>false</b>
      */
     public boolean isActive() {
@@ -181,6 +174,7 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Определяет текущую строку таблицы
+     *
      * @return номер выделенной строки
      */
     public int getCurrentPosition() {
@@ -189,6 +183,7 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Устанавливает текущую строку таблицы
+     *
      * @param currentPosition новый номер текущей строки
      */
     public void setCurrentPosition(int currentPosition) {
@@ -200,11 +195,11 @@ public class FileTable extends JTable implements ColumnNumbers {
             this.currentPosition = currentPosition;
         }
         setRowSelectionInterval(this.currentPosition, this.currentPosition);
-        //super.setRowSelectionInterval(this.currentPosition, this.currentPosition);
     }
 
     /**
      * Определить позицию объекта в таблице (папки, файла, родительской папки)
+     *
      * @param anotherObject объект в таблице
      * @return позиция файла в таблице: -1, если файла в таблице нет
      */
@@ -226,6 +221,7 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Определяет позицию файла в таблице
+     *
      * @param aFile файла в таблице
      * @return позиция файла в таблице: -1, если файла в таблице нет
      * @see BaseFile
@@ -258,9 +254,11 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Выделить в таблице строки с <I>index1</I> по <I>index2</I>
+     *
      * @param index0 индекс начала выделения
      * @param index1 индекс конца выделения
-     * @throws java.lang.IllegalArgumentException исключение вызывается, если <I>index1>index2</I>
+     * @throws java.lang.IllegalArgumentException исключение вызывается, если
+     * <I>index1>index2</I>
      */
     @Override
     public void setRowSelectionInterval(int index0, int index1) throws IllegalArgumentException {
@@ -301,7 +299,9 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
 
     /**
-     * Определить позицию файла, название которого начинается со строки <I>str</I>
+     * Определить позицию файла, название которого начинается со строки
+     * <I>str</I>
+     *
      * @param str начало названия файла
      * @return позиция найденного файла; -1, если файл не найден
      */
@@ -323,6 +323,7 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Добавить файл в список выделенных
+     *
      * @param newFile новый файл
      * @see BaseFile
      */
@@ -336,14 +337,17 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Определяет, есть ли в таблице выделенные файлы
-     * @return <B>true</B>если список выделенных файлов не пуст, <B>false</B> - иначе
+     *
+     * @return <B>true</B>если список выделенных файлов не пуст, <B>false</B> -
+     * иначе
      */
     public boolean hasSelectedFiles() {
-        return selectedFilesList.size() == 0 ? false : true;
+        return selectedFilesList.isEmpty();
     }
 
     /**
      * Получить список выделенных файлов
+     *
      * @return список выделенных файлов
      */
     public ArrayList getSelectedList() {
@@ -359,6 +363,7 @@ public class FileTable extends JTable implements ColumnNumbers {
 
     /**
      * Получить текущий каталог, отображаемый в таблице
+     *
      * @return текущий каталог таблицы
      * @see BaseFile
      */

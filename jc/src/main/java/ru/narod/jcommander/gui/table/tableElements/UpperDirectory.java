@@ -21,51 +21,37 @@
  *
  * Created on 15 oct 2006, 11:58
  */
-
 package ru.narod.jcommander.gui.table.tableElements;
 
 import java.awt.Color;
 import ru.narod.jcommander.fileSystem.BaseFile;
+
 /**
  *
  * @author Pavel Ovcharov
  */
-public class UpperDirectory extends Name{
+public class UpperDirectory extends Name {
 
     private String UPPER_DIRECTORY_DEFAULT_NAME = "..";
-    /** Creates a new instance of UpperDirectory */
 
+    /**
+     * Creates a new instance of UpperDirectory
+     */
     public UpperDirectory(BaseFile aFile, Color fontColor, Color bgColor) {
         super(aFile, fontColor, bgColor);
     }
-    
+
     public UpperDirectory(BaseFile aFile) {
         super(aFile);
     }
-    
-	@Override
+
+    @Override
     public String toString() {
         return UPPER_DIRECTORY_DEFAULT_NAME;
     }
-	@Override
+
+    @Override
     public void setSelected(boolean isSelected) {
         isSelected = false;
     }
-/*
-    public String getName() {
-        return UPPER_DIRECTORY_DEFAULT_NAME;
-    }
-
-    public String getExtention() {
-        return "";
-    }
-
-    public String getFileName() {
-        return UPPER_DIRECTORY_DEFAULT_NAME;
-    }
-
-    public BaseFile getFile() {
-        return aFile;
-    }
- */
 }

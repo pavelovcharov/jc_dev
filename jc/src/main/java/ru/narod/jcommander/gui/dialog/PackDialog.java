@@ -20,7 +20,6 @@
  * PackDialog.java
  * Created on 06.04.2009 10:50:22
  */
-
 package ru.narod.jcommander.gui.dialog;
 
 import java.awt.GridLayout;
@@ -40,112 +39,88 @@ import ru.narod.jcommander.util.LanguageBundle;
  */
 public class PackDialog implements PrefKeys {
 
-	private BaseFile newTarget;
-	private int packLevel;
-	public static String DEFAULT_EXTENTION = "zip";
-	public static String DEFAULT_ARCHIVE_NAME = "archive";
+    private BaseFile newTarget;
+    private int packLevel;
+    public static String DEFAULT_EXTENTION = "zip";
+    public static String DEFAULT_ARCHIVE_NAME = "archive";
 
-	public PackDialog(MainFrame parent, BaseFile sourceDir, BaseFile targerDir, BaseFile[] filesToPack) {
-		//XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
+    public PackDialog(MainFrame parent, BaseFile sourceDir, BaseFile targerDir, BaseFile[] filesToPack) {
+        //XXX зачем нам sourceDir и filesToCopy просто возвращаем новую строку, а создаем для нее файл не в диалоге
 
-		LanguageBundle lb = LanguageBundle.getInstance();
+        LanguageBundle lb = LanguageBundle.getInstance();
 
-		String messageText = lb.getString("StrArchive");
-		JTextField jTextFieldPath = new JTextField();
-		String archiveName;
-		if (filesToPack.length > 1) {
-			messageText += " " + filesToPack.length + " " + lb.getString("StrManyFilesTo");
-			if (sourceDir.hasParent()) {
-				archiveName = sourceDir.getFilename();
-			} else {
-				archiveName = DEFAULT_ARCHIVE_NAME;
-			}
-		} else {
-			messageText += " " + filesToPack[0].getFilename();
-			archiveName = filesToPack[0].getAbstractFileName();
-		}
-		jTextFieldPath.setText(targerDir.getPathWithSlash() + archiveName + "." + DEFAULT_EXTENTION);
+        String messageText = lb.getString("StrArchive");
+        JTextField jTextFieldPath = new JTextField();
+        String archiveName;
+        if (filesToPack.length > 1) {
+            messageText += " " + filesToPack.length + " " + lb.getString("StrManyFilesTo");
+            if (sourceDir.hasParent()) {
+                archiveName = sourceDir.getFilename();
+            } else {
+                archiveName = DEFAULT_ARCHIVE_NAME;
+            }
+        } else {
+            messageText += " " + filesToPack[0].getFilename();
+            archiveName = filesToPack[0].getAbstractFileName();
+        }
+        jTextFieldPath.setText(targerDir.getPathWithSlash() + archiveName + "." + DEFAULT_EXTENTION);
 
-		JPanel panel = new JPanel();
-		JComboBox jComboBoxLevel = new JComboBox(new Object[]{lb.getString("StrNoCompression"),
-		lb.getString("StrFast"), lb.getString("StrNormal"), lb.getString("StrMax")});
+        JPanel panel = new JPanel();
+        JComboBox jComboBoxLevel = new JComboBox(new Object[]{lb.getString("StrNoCompression"),
+                    lb.getString("StrFast"), lb.getString("StrNormal"), lb.getString("StrMax")});
 
-		jComboBoxLevel.setSelectedItem(lb.getString("StrMax"));
+        jComboBoxLevel.setSelectedItem(lb.getString("StrMax"));
 
-		panel.setLayout(new GridLayout(1, 2, 10, 0));
+        panel.setLayout(new GridLayout(1, 2, 10, 0));
 
-		JLabel l = new JLabel(lb.getString("StrLevel"));
-//		l.setFont(new java.awt.Font(null/*"Dialog"*/, 0, 12));
-//		jComboBoxLevel.setFont(new java.awt.Font(null/*"Dialog"*/, 0, 12));
+        JLabel l = new JLabel(lb.getString("StrLevel"));
 
-		panel.add(l);
-		panel.add(jComboBoxLevel);
+        panel.add(l);
+        panel.add(jComboBoxLevel);
 
 
-		Object message[] = new Object[]{
-			messageText,
-			jTextFieldPath,
-			panel,
-		};
-		Object options[] = new Object[]{lb.getString("StrOk"), lb.getString("StrCancel")};
+        Object message[] = new Object[]{
+            messageText,
+            jTextFieldPath,
+            panel,};
+        Object options[] = new Object[]{lb.getString("StrOk"), lb.getString("StrCancel")};
 
-		BaseDialog bd = new BaseDialog(parent, lb.getString("StrJC"), message, options, 0);
+        BaseDialog bd = new BaseDialog(parent, lb.getString("StrJC"), message, options, 0);
 
-		String path = jTextFieldPath.getText();
-        jTextFieldPath.select(path.length() - archiveName.length() -
-                DEFAULT_EXTENTION.length() - 1, path.length()-DEFAULT_EXTENTION.length() - 1);
-		jTextFieldPath.requestFocus();
+        String path = jTextFieldPath.getText();
+        jTextFieldPath.select(path.length() - archiveName.length()
+                - DEFAULT_EXTENTION.length() - 1, path.length() - DEFAULT_EXTENTION.length() - 1);
+        jTextFieldPath.requestFocus();
 
-		bd.setVisible(true);
+        bd.setVisible(true);
 
-		if (0 == bd.getResult()) {//OK
-
-		} else {
-			newTarget = null;
-			return;
-		}
+        if (0 == bd.getResult()) {//OK
+        } else {
+            newTarget = null;
+            return;
+        }
 
 
-		String newPath = jTextFieldPath.getText();
+        String newPath = jTextFieldPath.getText();
 
-		newTarget = targerDir;
-		if (newPath.startsWith("smb://")) {
-		}
-		else {
-			if (FileHelper.isAbsolutePath(newPath)) {
-				newTarget = FileHelper.getRealFile(newPath);
-			}
-			else {
-				newTarget = FileHelper.getRealFile(sourceDir, newPath);
-			}
-		}
+        newTarget = targerDir;
+        if (newPath.startsWith("smb://")) {
+        } else {
+            if (FileHelper.isAbsolutePath(newPath)) {
+                newTarget = FileHelper.getRealFile(newPath);
+            } else {
+                newTarget = FileHelper.getRealFile(sourceDir, newPath);
+            }
+        }
 
-		packLevel = jComboBoxLevel.getSelectedIndex();
+        packLevel = jComboBoxLevel.getSelectedIndex();
+    }
 
-//		NewMoveThread nmt = new NewMoveThread(sourceDir, newTarget, filesToCopy, toCopy);
-//		ProgressDialog pd = new ProgressDialog(parent, nmt);
-//		ProgressThread pt = new ProgressThread(nmt, pd);
-//		nmt.setFrameParent(pd.getDialog());
-//		nmt.start();
-//		pt.start();
-//		pd.show();
+    public BaseFile getNewTarget() {
+        return newTarget;
+    }
 
-
-//		ru.narod.jcommander.threads.MovingThread mt =
-//				new ru.narod.jcommander.threads.MovingThread(sourceDir, sourceList, toCopy);
-//		mt.setTargetDirString(targetDir.getAbsolutePath());
-//
-//		okButton.addActionListener(new CopyButtonListener(mt, okButton, parent, this));
-//		okButton.addKeyListener(new ButtonKeyListener(okButton, mt));
-//		jTextFieldPath.addKeyListener(new PathFieldKeyListener(this, okButton));
-//		addWindowListener(new DialogListener(parent, mt));
-	}
-
-	public BaseFile getNewTarget() {
-		return newTarget;
-	}
-
-	public int getPackLevel() {
-		return packLevel;
-	}
+    public int getPackLevel() {
+        return packLevel;
+    }
 }

@@ -31,17 +31,17 @@ import ru.narod.jcommander.gui.MainFrame;
  */
 public class ActionGotoCmdLine extends AbstractAction {
 
-	public ActionGotoCmdLine(MainFrame parent) {
-		super(parent);
-	}
+    public ActionGotoCmdLine(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		JTextField cmdLine = parent.getCmdLine();
-		if (cmdLine.hasFocus()) {
-			parent.requestFocus();
-		} else {
-			cmdLine.selectAll();
-			cmdLine.requestFocus();
-		}
-	}
+    public void execute() {
+        JTextField cmdLine = parent.getCmdLine();
+        if (cmdLine.hasFocus()) {
+            parent.requestFocus();
+        } else {
+            cmdLine.selectAll();
+            cmdLine.requestFocus();
+        }
+    }
 }

@@ -20,7 +20,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.narod.jcommander.actions;
 
 import ru.narod.jcommander.fileSystem.BaseFile;
@@ -35,22 +34,22 @@ import ru.narod.jcommander.gui.table.tableElements.UpperDirectory;
  */
 public class ActionSelectNUp extends AbstractAction {
 
-	public ActionSelectNUp(MainFrame parent) {
-		super(parent);
-	}
+    public ActionSelectNUp(MainFrame parent) {
+        super(parent);
+    }
 
-	public void execute() {
-		FileTable activeTable = parent.getActiveTable();
-		NameInterface name = activeTable.getElementAtCursor();
-		if ((name instanceof UpperDirectory) == false) {
-			BaseFile currentFile = name.getFile();
-			if (null == currentFile) {
-				return;
-			}
-			activeTable.selectFileAt(activeTable.getCurrentPosition());
-		}
+    public void execute() {
+        FileTable activeTable = parent.getActiveTable();
+        NameInterface name = activeTable.getElementAtCursor();
+        if ((name instanceof UpperDirectory) == false) {
+            BaseFile currentFile = name.getFile();
+            if (null == currentFile) {
+                return;
+            }
+            activeTable.selectFileAt(activeTable.getCurrentPosition());
+        }
 
-		activeTable.moveCursorUp();
-		parent.updateActiveStatusLabel();
-	}
+        activeTable.moveCursorUp();
+        parent.updateActiveStatusLabel();
+    }
 }
