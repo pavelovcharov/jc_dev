@@ -27,7 +27,6 @@ package ru.narod.jcommander.gui.table;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 import ru.narod.jcommander.fileSystem.BaseFile;
@@ -51,7 +50,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     public static final int NOSORT = 0;
     public static final int ASCENDING = 1;
     public static Directive NULL_DIRECTIVE = new Directive(-1, NOSORT);
-    private Vector rows;
+    private ArrayList rows;
     private Row[] fileRows;
     private Row[] dirRows;
     private Row parentRow = null;
@@ -65,7 +64,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     public FileTableSorter(FileSystemList fsl, ArrayList sortingColumns) {
         this.fsl = fsl;
         this.sortingColumns = sortingColumns;
-        rows = new Vector();
+        rows = new ArrayList();
 
         if (fsl.hasParent()) {
             parentRow = new Row();
@@ -174,7 +173,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
             return null;
         }
         Row r = (Row) rows.get(aRow);
-        return r.data.elementAt(aColumn);
+        return r.data.get(aColumn);
     }
 
     /**
@@ -187,11 +186,11 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
     @Override
     public void setValueAt(Object value, int row, int column) {
         Row r = (Row) rows.get(row);
-        r.data.setElementAt(value, column);
+        r.data.set(column, value);
 
     }
 
-    public Vector getValuesAt(int row) {
+    public ArrayList getValuesAt(int row) {
         return ((Row) (rows.get(row))).data;
     }
 
@@ -207,7 +206,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
 
     class Row implements Comparable {
 
-        private Vector data = new Vector(TableHeader.TITLE.length);
+        private ArrayList data = new ArrayList(TableHeader.TITLE.length);
 
         public Row() {
         }
@@ -258,7 +257,7 @@ public class FileTableSorter extends AbstractTableModel implements ColumnNumbers
                 Element e1 = (Element) data.get(column);
                 Element e2 = (Element) ((Row) o).data.get(column);
 
-                int comparison = 0;
+                int comparison;
                 // Define null less than everything, except null.
                 if (e1 == null && e2 == null) {
                     comparison = 0;

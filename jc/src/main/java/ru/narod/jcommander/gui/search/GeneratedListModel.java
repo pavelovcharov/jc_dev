@@ -17,9 +17,9 @@
  */
 package ru.narod.jcommander.gui.search;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Vector;
 import javax.swing.AbstractListModel;
 import ru.narod.jcommander.fileSystem.BaseFile;
 
@@ -29,7 +29,7 @@ import ru.narod.jcommander.fileSystem.BaseFile;
  */
 public class GeneratedListModel extends AbstractListModel {
 
-    private final Vector data = new Vector();
+    private final ArrayList data = new ArrayList();
 
     public GeneratedListModel() {
     }
@@ -54,7 +54,7 @@ public class GeneratedListModel extends AbstractListModel {
 
     @Override
     public Object getElementAt(int index) {
-        return data.elementAt(index);
+        return data.get(index);
     }
 
     public void sortByPath() {

@@ -25,7 +25,7 @@ package ru.narod.jcommander.threads.newThreads;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.apache.commons.io.IOCase;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.WildcardFilenameFilter;
@@ -37,7 +37,7 @@ import ru.narod.jcommander.fileSystem.archive.ArchiveFile;
  */
 public class NewSearchThread extends BaseThread {
 
-    private final Vector resultList;
+    private final ArrayList resultList;
     private BaseFile file;
     private String namePart;
     private String searchText;
@@ -48,7 +48,7 @@ public class NewSearchThread extends BaseThread {
 
     public NewSearchThread(BaseFile file, String namePart, String searchText, boolean matchCase) {
         super(name);
-        resultList = new Vector();
+        resultList = new ArrayList();
         this.file = file;
         this.namePart = namePart.trim().toLowerCase();
         if (this.namePart.isEmpty()) {
@@ -124,10 +124,10 @@ public class NewSearchThread extends BaseThread {
         action(file);
     }
 
-    public Vector getResultList() {
-        Vector res;
+    public ArrayList getResultList() {
+        ArrayList res;
         synchronized (resultList) {
-            res = new Vector(resultList);
+            res = new ArrayList(resultList);
             resultList.clear();
         }
         return res;
