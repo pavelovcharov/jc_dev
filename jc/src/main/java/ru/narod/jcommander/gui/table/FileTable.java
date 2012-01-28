@@ -21,7 +21,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.JTableHeader;
@@ -386,7 +385,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
     
     public void selectFileAt(int row) {
-        Vector v = ((FileTableSorter) getModel()).getValuesAt(row);
+        ArrayList v = ((FileTableSorter) getModel()).getValuesAt(row);
         NameInterface name = (NameInterface) v.get(NAME);
         if (name instanceof UpperDirectory) {
         } else {
@@ -557,7 +556,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 sortByColumn(e);                
-            }    
+            }            
         }
         
         void sortByColumn(MouseEvent e) {
