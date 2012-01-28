@@ -28,13 +28,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.text.Document;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.gui.dialog.WarningDialog;
 import ru.narod.jcommander.util.LanguageBundle;
@@ -126,7 +125,7 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, ru.narod.
         try {
             prefs.exportNode(new FileOutputStream(new java.io.File("viewer.xml")));
         } catch (Exception ex) {
-            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
 
     }
@@ -254,7 +253,7 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, ru.narod.
             osr.write(jTextArea1.getText());
             osr.close();
         } catch (IOException ex) {
-            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
             String[] options = {lb.getString("StrOk")};
             WarningDialog.showMessage(lb.getString("StrErrorSave"), lb.getString("StrJC"), options,
                     WarningDialog.MESSAGE_ERROR, 0);
@@ -333,9 +332,8 @@ public class Editor extends javax.swing.JFrame implements EditorPrefs, ru.narod.
                 isr.close();
                 return;
             } catch (Exception e) {
-                Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, e);
-            }
-            finally {
+                JCLogger.logSevere(null, e);
+            } finally {
                 if (jTextArea1.isEditable()) {
                     jMenuItemSave.setEnabled(true);
                 }

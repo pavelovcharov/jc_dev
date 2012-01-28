@@ -28,10 +28,9 @@ import java.io.FileFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.LocalFile;
 
@@ -59,7 +58,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             smbFile = new SmbFile(path);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
     }
 
@@ -105,7 +104,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             }
             return list;
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return null;
     }
@@ -137,7 +136,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.isDirectory();
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return false;
     }
@@ -156,7 +155,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return getFormatFileSize(smbFile.length());
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return "" + 0;
     }
@@ -189,7 +188,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
                 atr += "h";
             }
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
 
         return atr;
@@ -206,7 +205,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             smbFile.delete();
             return true;
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return false;
     }
@@ -254,7 +253,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.exists();
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return false;
     }
@@ -280,7 +279,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             smbFile.mkdirs();
             return true;
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
             return false;
         }
 
@@ -299,7 +298,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             smbFile.setLastModified(time);
             return true;
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return false;
     }
@@ -331,7 +330,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
             }
             return true;
         } catch (Exception ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return false;
     }
@@ -361,7 +360,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.length();
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return 0;
     }
@@ -375,7 +374,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
         try {
             return smbFile.lastModified();
         } catch (SmbException ex) {
-            Logger.getLogger(NetFile.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
         return 0;
     }

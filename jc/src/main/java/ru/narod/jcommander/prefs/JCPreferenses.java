@@ -27,9 +27,8 @@ import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.gui.MainFrame;
 import ru.narod.jcommander.gui.table.Directive;
 import ru.narod.jcommander.gui.table.FileTable;
@@ -104,7 +103,7 @@ public class JCPreferenses implements PrefKeys {
         try {
             Preferences.importPreferences(new FileInputStream(new java.io.File("jc.xml")));
         } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         } finally {
             if (null == pref) {
                 pref = Preferences.userNodeForPackage(MainFrame.class);
@@ -205,7 +204,7 @@ public class JCPreferenses implements PrefKeys {
         try {
             pref.exportNode(new FileOutputStream(new java.io.File("jc.xml")));
         } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
     }
 }

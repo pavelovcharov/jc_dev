@@ -32,13 +32,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.actions.*;
 import ru.narod.jcommander.actions.manager.ActionManager;
 import ru.narod.jcommander.fileSystem.*;
@@ -285,7 +285,7 @@ public class MainFrame extends javax.swing.JFrame {
             updateStatusLabel(true);
 
         } catch (Exception e) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
+            JCLogger.logSevere(null, e);
         }
 
     }
@@ -295,7 +295,7 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel(lnf);
         } catch (Exception e) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
+            JCLogger.logSevere(null, e);
         }
         SwingUtilities.updateComponentTreeUI(this);
         SwingUtilities.updateComponentTreeUI(jDialogAbout);
@@ -518,7 +518,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
             oos.close();
         } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
 
         initMessageList();
@@ -1010,7 +1010,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
             ois.close();
         } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.WARNING, null, ex);
+            JCLogger.getLogger().log(Level.WARNING, null, ex);
         }
         initFavorites();
     }
@@ -1045,7 +1045,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
             oos.close();
         } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
     }
 
@@ -2450,7 +2450,7 @@ public class MainFrame extends javax.swing.JFrame {
                     ps.start();
                 } catch (java.io.IOException e) {
                     jTextArea1.append(lineSeparator + e.toString());
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, null, e);
+                    JCLogger.getLogger().log(Level.INFO, null, e);
                 }
             }
         }
@@ -2850,7 +2850,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
                     jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
                 }
             } catch (java.io.IOException e) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, e);
+                JCLogger.logSevere(null, e);
             }
         }
     }
@@ -2882,7 +2882,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
                 try {
                     sleep(100);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    JCLogger.logSevere(null, ex);
                 }
             }
             jTextArea1.append(getActiveTable().getCurrentDir().getAbsolutePath() + ">");

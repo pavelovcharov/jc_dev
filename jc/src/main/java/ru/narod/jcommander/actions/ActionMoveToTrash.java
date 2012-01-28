@@ -8,8 +8,7 @@ import com.sun.jna.platform.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ru.narod.jcommander.JCLogger;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.gui.MainFrame;
 
@@ -51,7 +50,7 @@ public class ActionMoveToTrash extends ActionDelete {
         try {
             instance.moveToTrash(list.toArray(f));
         } catch (IOException ex) {
-            Logger.getLogger(ActionMoveToTrash.class.getName()).log(Level.SEVERE, null, ex);
+            JCLogger.logSevere(null, ex);
         }
     }
 }
