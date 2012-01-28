@@ -23,6 +23,7 @@
  */
 package ru.narod.jcommander.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.*;
@@ -35,6 +36,8 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import ru.narod.jcommander.actions.*;
 import ru.narod.jcommander.actions.manager.ActionManager;
@@ -182,8 +185,11 @@ public class MainFrame extends javax.swing.JFrame {
         jComboBoxLeft.setRenderer(new ComboCellRenderer());
         jComboBoxRight.setRenderer(new ComboCellRenderer());
 
-        jTextFieldSearchLeft.addKeyListener(new SearchKeyListener(this));
-        jTextFieldSearchRight.addKeyListener(new SearchKeyListener(this));
+        jTextFieldSearchLeft.addKeyListener(new QuickSearchKeyListener(this));
+        jTextFieldSearchLeft.getDocument().addDocumentListener(new QuickSearchListener(this, jTextFieldSearchLeft));
+
+        jTextFieldSearchRight.addKeyListener(new QuickSearchKeyListener(this));
+        jTextFieldSearchRight.getDocument().addDocumentListener(new QuickSearchListener(this, jTextFieldSearchRight));
 
         loadFavorites();
 
@@ -2810,6 +2816,7 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
     private static final String JCOM_COPYRIGHT = "2005-2011 (c) kneeMade, Inc";
     private static final String JCOM_MAIL = "java.commander@gmail.com";
     private static final String JCOM_PAGE = "http://jcommander.narod.ru";
+    final static Color QUICK_SEARCH_ERROR_COLOR = Color.PINK;
     private static Charset consoleCharset;
     private ArrayList commandList = new ArrayList();
     private int commandListPosition;
@@ -2923,11 +2930,11 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
         }
     }
 
-    private class SearchKeyListener implements KeyListener {
+    private class QuickSearchKeyListener implements KeyListener {
 
         private MainFrame parent;
 
-        public SearchKeyListener(MainFrame parent) {
+        public QuickSearchKeyListener(MainFrame parent) {
             this.parent = parent;
         }
 
@@ -2951,20 +2958,50 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
                     || (m.equals(newMessageList.MESSAGE_DOWN)))) {
                 table.requestFocus();
                 table.getKeyListeners()[0].keyPressed(e);
-                return;
-            }
-            if (KeyEvent.CHAR_UNDEFINED == e.getKeyChar()) {
-                return;
-            }
-            String searchText = searchField.getText() + e.getKeyChar();
-            int position = table.getElementPositionByString(searchText);
-            if (-1 != position) {
-                table.setCurrentPosition(position);
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
+        }
+    }
+
+    class QuickSearchListener implements DocumentListener {
+
+        private MainFrame parent;
+        private final JTextField target;
+        final Color entryBg;
+
+        public QuickSearchListener(MainFrame parent, JTextField target) {
+            this.parent = parent;
+            this.target = target;
+            entryBg = target.getBackground();
+        }
+
+        public void insertUpdate(DocumentEvent e) {
+            search();
+        }
+
+        public void removeUpdate(DocumentEvent e) {
+            search();
+        }
+
+        public void changedUpdate(DocumentEvent e) {
+            search();
+        }
+
+        void search() {
+            FileTable table = parent.getActiveTable();
+            JTextField searchField = target;
+
+            String searchText = searchField.getText();
+            int position = table.getElementPositionByString(searchText);
+            if (-1 != position) {
+                table.setCurrentPosition(position);
+                searchField.setBackground(entryBg);
+            } else {
+                searchField.setBackground(QUICK_SEARCH_ERROR_COLOR);
+            }
         }
     }
 
