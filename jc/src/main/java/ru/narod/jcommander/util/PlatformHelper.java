@@ -21,19 +21,39 @@
  */
 package ru.narod.jcommander.util;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import ru.narod.jcommander.fileSystem.BaseFile;
+
 /**
+ * The PlatformHelper class provides access to the the native desktop
+ * functions.
+ * Supported operations include: launching a registered application to
+ * open.
  *
  * @author master
  */
 public class PlatformHelper {
 
-    public static final String DEFAULT_HANDLER_TEXT;
+    static Desktop desktop;
 
     static {
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            DEFAULT_HANDLER_TEXT = "rundll32 url.dll,FileProtocolHandler";
-        } else {
-            DEFAULT_HANDLER_TEXT = "";
+        if (Desktop.isDesktopSupported()) {
+            desktop = Desktop.getDesktop();
+        }
+    }
+
+    /**
+     * Launches the associated application to open the file. If the specified
+     * file is a directory, the file manager of the current platform is launched
+     * to open it.
+     *
+     * @param file - the file to be opened with associated application
+     * @throws IOException - if file can not be opened
+     */
+    public static void openFile(BaseFile file) throws IOException {
+        if (desktop != null) {
+            desktop.open(file.toFile());
         }
     }
 }

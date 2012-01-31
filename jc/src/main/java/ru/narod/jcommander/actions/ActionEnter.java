@@ -148,20 +148,15 @@ public class ActionEnter extends AbstractAction {
     }
 
     private void executeFile(BaseFile file) {
-        String command = PlatformHelper.DEFAULT_HANDLER_TEXT + " " + file;
         try {
             if (true == file.exists()) {
-                java.io.File workingDir = null;
-                if (file.getAbsoluteParent() instanceof java.io.File) {
-                    workingDir = (java.io.File) file.getAbsoluteParent();
-                }
-                Runtime.getRuntime().exec(command, null, workingDir);
+                PlatformHelper.openFile(file);
             } else {
                 throw new IllegalArgumentException();
             }
         } catch (Exception e) {
             LanguageBundle lb = LanguageBundle.getInstance();
-            WarningDialog.showMessage(parent, lb.getString("StrErrorExecute") + "\n" + command,
+            WarningDialog.showMessage(parent, lb.getString("StrErrorExecute") + "\n" + file.getFilename(),
                     lb.getString("StrJC"), WarningDialog.MESSAGE_ERROR);
         }
     }
