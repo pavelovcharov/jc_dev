@@ -341,7 +341,7 @@ public class FileTable extends JTable implements ColumnNumbers {
      * иначе
      */
     public boolean hasSelectedFiles() {
-        return selectedFilesList.isEmpty();
+        return !selectedFilesList.isEmpty();
     }
 
     /**
