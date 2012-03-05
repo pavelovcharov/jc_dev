@@ -34,6 +34,7 @@ import ru.narod.jcommander.fileSystem.utils.FileMonitor;
 import ru.narod.jcommander.gui.table.tableElements.*;
 import ru.narod.jcommander.gui.table.tableHeader.ColumnNumbers;
 import ru.narod.jcommander.gui.table.tableHeader.TableHeader;
+import ru.narod.jcommander.prefs.JCPreferenses;
 
 /**
  * Класс наследован от JTable и описывают таблицу для отображения списка файлов
@@ -45,7 +46,7 @@ import ru.narod.jcommander.gui.table.tableHeader.TableHeader;
  * @see FileSystemList
  */
 public class FileTable extends JTable implements ColumnNumbers {
-    
+
     public static final int QUICK_SEARCH_FROM_BEGINING = 0;
     public static final int QUICK_SEARCH_WHOLE_WORD = 1;
     private static final Color BK_COLOR = Color.getColor("238, 238, 238");
@@ -61,6 +62,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     private ArrayList sortingColumns = new ArrayList();
     private boolean showToolTip;
     private int quickSearchMode;
+    private JCPreferenses jcPrefs;
 
     /**
      * Создает новую таблицу. Текущим каталогом устанавливается каталог <i>f</i>
@@ -72,40 +74,41 @@ public class FileTable extends JTable implements ColumnNumbers {
         fsl = new FileSystemList();
         setCurrentDir(file);
         setShowGrid(false);
-        
+
         setFont(new Font("SansSerif", Font.BOLD, 12));
         active = false;
         currentPosition = 0;
         selectedFilesList = new ArrayList();
         setSelectionMode(0);
         setDefaultKeys();
-        
+
         setDefaultRenderer(Element.class, new ColorRenderer());
         setSelectionBackground(active ? Color.GRAY : Color.LIGHT_GRAY);
         setSelectionForeground(Color.WHITE);
-        
-        setAutoResizeMode(AUTO_RESIZE_NEXT_COLUMN);
-        
+
+        setAutoResizeMode(AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+
         setDragEnabled(true);
-        
+
         getTableHeader().addMouseListener(new TableHeaderListener(this));
         getTableHeader().setDefaultRenderer(new SortableHeaderRenderer(getTableHeader().getDefaultRenderer()));
-        
+
         getTableHeader().setPreferredSize(new Dimension(0, 15));
+        jcPrefs = JCPreferenses.getJCPreferenses();
     }
-    
+
     @Override
     public void updateUI() {
         super.updateUI();
         setBackground(BK_COLOR);
         setDefaultKeys();
     }
-    
+
     public void addMouseInputAdapter(MouseInputAdapter mouseInputAdapter) {
         addMouseMotionListener(mouseInputAdapter);
         addMouseListener(mouseInputAdapter);
     }
-    
+
     public void refreshTableIfNeeded() {
         if (currentFileMonitor.refresh(currentDir)) {
             setCurrentDir(currentDir);
@@ -120,24 +123,32 @@ public class FileTable extends JTable implements ColumnNumbers {
         fsl.setFileList(currentDir);
         model = new FileTableSorter(fsl, sortingColumns);
         setModel(model);
-        
+
         getTableHeader().setReorderingAllowed(false);
         TableColumn column;
-        
+
+        boolean[] columnVisibility = new boolean[]{
+            jcPrefs.iconColumnVisible, jcPrefs.nameColumnVisible, jcPrefs.extColumnVisible,
+            jcPrefs.sizeColumnVisible, jcPrefs.dateColumnVisible, jcPrefs.attrColumnVisible
+        };
         for (int i = 0; i < TITLE.length; i++) {
             column = getColumn(i);
-            column.setPreferredWidth(headerSizes[i]);
+            if (columnVisibility[i]) {
+                column.setPreferredWidth(headerSizes[i]);
+            } else {
+                removeColumn(column);
+            }
         }
         column = getColumn(ICON);
         column.setResizable(false);
         column.setMaxWidth(20);
         column.setPreferredWidth(20);
-        
+
         clearSelectedList();
-        
+
         setCurrentPosition(currentPosition);
     }
-    
+
     public void setDefaultKeys() {
         InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.getParent().clear();
@@ -240,7 +251,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         }
         return pos;
     }
-    
+
     public NameInterface getElementAt(int pos) {
         if (pos < 0 || pos >= getRowCount()) {
             return null;
@@ -248,7 +259,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             return (NameInterface) getValueAt(pos, NAME);
         }
     }
-    
+
     public BaseFile getFileAt(int pos) {
         return getElementAt(pos).getFile();
     }
@@ -266,7 +277,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         if (0 == getRowCount()) {
             return;
         }
-        
+
         if (index0 > index1) {
             throw new IllegalArgumentException("index0 > index1");
         }
@@ -282,12 +293,12 @@ public class FileTable extends JTable implements ColumnNumbers {
         if (index1 < 0) {
             index1 = 0;
         }
-        
+
         changeSelection(currentPosition, 0, true, true);
         super.setRowSelectionInterval(index0, index1);
-        
+
     }
-    
+
     public void jump(boolean up) {
         int rows = (int) (getVisibleRect().getHeight() / getRowHeight());
         int pos;
@@ -371,9 +382,9 @@ public class FileTable extends JTable implements ColumnNumbers {
     public BaseFile getCurrentDir() {
         return currentDir;
     }
-    
+
     public void setCurrentDir(BaseFile currentDir) {
-        currentDir = FileHelper.getAccesibleParent(currentDir);  
+        currentDir = FileHelper.getAccesibleParent(currentDir);
         this.currentDir = currentDir;
         fsl.setFileList(currentDir);
         currentFileMonitor = new FileMonitor(currentDir);
@@ -382,11 +393,11 @@ public class FileTable extends JTable implements ColumnNumbers {
     public int[] getHeaderSizes() {
         return headerSizes;
     }
-    
+
     public void setHeaderSizes(int[] sizes) {
         headerSizes = (int[]) sizes.clone();
     }
-    
+
     public void selectFileAt(int row) {
         ArrayList v = ((FileTableSorter) getModel()).getValuesAt(row);
         NameInterface name = (NameInterface) v.get(NAME);
@@ -402,17 +413,17 @@ public class FileTable extends JTable implements ColumnNumbers {
             }
         }
     }
-    
+
     public void selectAllFiles() {
         for (int i = 0; i < getRowCount(); i++) {
             selectFileAt(i);
         }
     }
-    
+
     public void selectCurrentFile() {
         selectFileAt(currentPosition);
     }
-    
+
     public BaseFile getFileAtCursor() {
         Object obj = getValueAt(currentPosition, NAME);
         if (obj instanceof NameInterface) {
@@ -421,7 +432,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             return null;
         }
     }
-    
+
     public NameInterface getElementAtCursor() {
         Object obj = getValueAt(currentPosition, NAME);
         if (obj instanceof NameInterface) {
@@ -430,7 +441,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             return null;
         }
     }
-    
+
     public void showFileSize() {
         BaseFile af = getFileAtCursor();
         if (null != af) {
@@ -440,7 +451,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             setValueAt(newSize, currentPosition, SIZE);
         }
     }
-    
+
     protected Icon getHeaderRendererIcon(int column, int size) {
         Directive d = model.getDirective(column);
         if (d.equals(FileTableSorter.NULL_DIRECTIVE)) {
@@ -448,16 +459,16 @@ public class FileTable extends JTable implements ColumnNumbers {
         }
         return new Arrow(d.getDirection() == FileTableSorter.DESCENDING, size, model.sortingColumns.indexOf(d));
     }
-    
+
     public void setSortingColumns(Directive directive) {
         sortingColumns.clear();
         sortingColumns.add(directive);
     }
-    
+
     public ArrayList getSortingColumns() {
         return sortingColumns;
     }
-    
+
     public long getSelectedFilesSize() {
         Size size;
         long result = 0;
@@ -469,7 +480,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         }
         return result;
     }
-    
+
     public void setHiddenFilesVisibility(boolean show) {
         if (show) {
             fsl.removeHiddenFilesFilter();
@@ -477,7 +488,7 @@ public class FileTable extends JTable implements ColumnNumbers {
             fsl.addHiddenFilesFilter();
         }
     }
-    
+
     public void moveCursorUp() {
         int index = currentPosition - 1;
         if (0 > index) {
@@ -487,7 +498,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         setCurrentPosition(index);
         changeSelection(index, NAME, false, false);
     }
-    
+
     public void moveCursorDown() {
         int index = currentPosition + 1;
         if (index == getRowCount()) {
@@ -497,11 +508,11 @@ public class FileTable extends JTable implements ColumnNumbers {
         setCurrentPosition(index);
         changeSelection(index, NAME, false, false);
     }
-    
+
     public void moveToFile(BaseFile file) {
         setCurrentPosition(getFilePosition(file));
     }
-    
+
     public BaseFile[] getActiveFiles() {
         BaseFile[] files = null;
         if (hasSelectedFiles()) {
@@ -516,7 +527,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         }
         return files;
     }
-    
+
     public void showToolTipAtRow(int row) {
         if (showToolTip) {
             if (0 > row || getRowCount() <= row) {
@@ -533,38 +544,38 @@ public class FileTable extends JTable implements ColumnNumbers {
             }
         }
     }
-    
+
     public TableColumn getColumn(int column) {
         return getColumnModel().getColumn(column);
     }
-    
+
     public void showToolTip(boolean show) {
         showToolTip = show;
         setToolTipText("");
     }
-    
+
     public void setQuickSearchMode(int quickSearchMode) {
         this.quickSearchMode = quickSearchMode;
     }
-    
+
     class TableHeaderListener implements MouseListener {
-        
+
         private FileTable table;
-        
+
         public TableHeaderListener(FileTable table) {
             this.table = table;
         }
-        
+
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON1) {
-                sortByColumn(e);                
-            }            
+                sortByColumn(e);
+            }
         }
-        
+
         void sortByColumn(MouseEvent e) {
             FileTableSorter model = (FileTableSorter) table.getModel();
-            
+
             JTableHeader h = (JTableHeader) e.getSource();
             TableColumnModel columnModel = h.getColumnModel();
             int viewColumn = columnModel.getColumnIndexAtX(e.getX());
@@ -591,11 +602,11 @@ public class FileTable extends JTable implements ColumnNumbers {
             table.repaint();
             h.repaint();
         }
-        
+
         @Override
         public void mousePressed(MouseEvent e) {
         }
-        
+
         @Override
         public void mouseReleased(MouseEvent e) {
             TableColumn column;
@@ -604,28 +615,28 @@ public class FileTable extends JTable implements ColumnNumbers {
                 headerSizes[i] = column.getPreferredWidth();
             }
         }
-        
+
         @Override
         public void mouseEntered(MouseEvent e) {
         }
-        
+
         @Override
         public void mouseExited(MouseEvent e) {
         }
     }
-    
+
     private static class Arrow implements Icon {
-        
+
         private boolean descending;
         private int size;
         private int priority;
-        
+
         public Arrow(boolean descending, int size, int priority) {
             this.descending = descending;
             this.size = size;
             this.priority = priority;
         }
-        
+
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             Color color = c == null ? Color.GRAY : c.getBackground();
@@ -655,30 +666,30 @@ public class FileTable extends JTable implements ColumnNumbers {
                 g.setColor(color.brighter().brighter());
             }
             g.drawLine(dx, 0, 0, 0);
-            
+
             g.setColor(color);
             g.translate(-x, -y);
         }
-        
+
         @Override
         public int getIconWidth() {
             return size;
         }
-        
+
         @Override
         public int getIconHeight() {
             return size;
         }
     }
-    
+
     private class SortableHeaderRenderer implements TableCellRenderer {
-        
+
         private TableCellRenderer tableCellRenderer;
-        
+
         public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
             this.tableCellRenderer = tableCellRenderer;
         }
-        
+
         @Override
         public Component getTableCellRendererComponent(JTable table,
                 Object value,
