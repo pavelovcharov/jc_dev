@@ -28,6 +28,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import ru.narod.jcommander.fileSystem.BaseFile;
+import ru.narod.jcommander.fileSystem.FileHelper;
 import ru.narod.jcommander.fileSystem.FileSystemList;
 import ru.narod.jcommander.fileSystem.utils.FileMonitor;
 import ru.narod.jcommander.gui.table.tableElements.*;
@@ -107,6 +108,7 @@ public class FileTable extends JTable implements ColumnNumbers {
     
     public void refreshTableIfNeeded() {
         if (currentFileMonitor.refresh(currentDir)) {
+            setCurrentDir(currentDir);
             refreshTable();
         }
     }
@@ -371,11 +373,12 @@ public class FileTable extends JTable implements ColumnNumbers {
     }
     
     public void setCurrentDir(BaseFile currentDir) {
+        currentDir = FileHelper.getAccesibleParent(currentDir);  
         this.currentDir = currentDir;
         fsl.setFileList(currentDir);
         currentFileMonitor = new FileMonitor(currentDir);
     }
-    
+
     public int[] getHeaderSizes() {
         return headerSizes;
     }

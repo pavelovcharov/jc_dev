@@ -137,4 +137,17 @@ public abstract class FileHelper {
     static public boolean isLocal(BaseFile file) {
         return file.isLocal();
     }
+    static public BaseFile getAccesibleParent(BaseFile file) {
+        if(!file.exists()) {
+            BaseFile parent = file.getAbsoluteParent();
+            while(parent!= null && !parent.exists()) {
+                parent = parent.getAbsoluteParent();
+            }
+            if(parent!=null){
+                file = parent;
+            }
+            else file= RootFileSystem.getReadableRoot();
+        }
+        return file;
+    }
 }
