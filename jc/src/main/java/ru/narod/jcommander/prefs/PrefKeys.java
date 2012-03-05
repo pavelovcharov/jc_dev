@@ -56,6 +56,12 @@ public interface PrefKeys {
     public final String PK_RIGHT_SORT = "RIGHT_SORT";
     public final String PK_LEFT_SIZE = "LEFT_SIZE";
     public final String PK_RIGHT_SIZE = "RIGHT_SIZE";
+    public final String PK_ICON_VISIBLE = "ICON_VISIBLE";
+    public final String PK_NAME_VISIBLE = "NAME_VISIBLE";
+    public final String PK_EXT_VISIBLE = "EXT_VISIBLE";
+    public final String PK_SIZE_VISIBLE = "SIZE_VISIBLE";
+    public final String PK_DATE_VISIBLE = "DATE_VISIBLE";
+    public final String PK_ATTR_VISIBLE = "ATTR_VISIBLE";
     String PK_LEFT[] = {
         "ICON_LEFT",
         "NAME_LEFT",

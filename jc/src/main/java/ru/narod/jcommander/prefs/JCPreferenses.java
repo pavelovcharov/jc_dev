@@ -60,6 +60,12 @@ public class JCPreferenses implements PrefKeys {
     public static final boolean DEFAULT_USE_SYSTEM_ICONS = true;
     public static final Directive DEFAULT_DIRECTIVE = new Directive(1, 1);
     public static final int DEFAULT_QUICK_SEARCH_MODE = FileTable.QUICK_SEARCH_FROM_BEGINING;
+    public static final boolean DEFAULT_ICON_COLUMN_VISIBLE = true;
+    public static final boolean DEFAULT_NAME_COLUMN_VISIBLE = true;
+    public static final boolean DEFAULT_EXT_COLUMN_VISIBLE = true;
+    public static final boolean DEFAULT_SIZE_COLUMN_VISIBLE = true;
+    public static final boolean DEFAULT_DATE_COLUMN_VISIBLE = true;
+    public static final boolean DEFAULT_ATTR_COLUMN_VISIBLE = true;
     private static JCPreferenses instance = new JCPreferenses();
     public static final String PRIMARY_DELIMITER = ";";
     public static final String SECONDARY_DELIMITER = ",";
@@ -90,6 +96,12 @@ public class JCPreferenses implements PrefKeys {
     public String rightSortingCompatible = "";
     public String currentLocale = "";
     public int quickSearchMode = 0;
+    public boolean iconColumnVisible = true;
+    public boolean nameColumnVisible = true;
+    public boolean extColumnVisible = true;
+    public boolean sizeColumnVisible = true;
+    public boolean dateColumnVisible = true;
+    public boolean attrColumnVisible = true;
 
     private JCPreferenses() {
     }
@@ -164,6 +176,13 @@ public class JCPreferenses implements PrefKeys {
         Locale defaultLocale = Locale.getDefault();
         currentLocale = pref.get(PK_LOCALE, defaultLocale.getLanguage() + "_" + defaultLocale.getCountry());
         quickSearchMode = pref.getInt(PK_QUICK_SEARCH_MODE, JCPreferenses.DEFAULT_QUICK_SEARCH_MODE);
+        
+        iconColumnVisible = pref.getBoolean(PK_ICON_VISIBLE, JCPreferenses.DEFAULT_ICON_COLUMN_VISIBLE);
+        nameColumnVisible = pref.getBoolean(PK_NAME_VISIBLE, JCPreferenses.DEFAULT_NAME_COLUMN_VISIBLE);
+        extColumnVisible = pref.getBoolean(PK_EXT_VISIBLE, JCPreferenses.DEFAULT_EXT_COLUMN_VISIBLE);
+        sizeColumnVisible = pref.getBoolean(PK_SIZE_VISIBLE, JCPreferenses.DEFAULT_SIZE_COLUMN_VISIBLE);
+        dateColumnVisible = pref.getBoolean(PK_DATE_VISIBLE, JCPreferenses.DEFAULT_DATE_COLUMN_VISIBLE);
+        attrColumnVisible = pref.getBoolean(PK_ATTR_VISIBLE, JCPreferenses.DEFAULT_ATTR_COLUMN_VISIBLE);
     }
 
     private void saveTablePrefs(boolean left) {
