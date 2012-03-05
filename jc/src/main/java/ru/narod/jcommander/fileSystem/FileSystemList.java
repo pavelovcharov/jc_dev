@@ -75,19 +75,7 @@ public class FileSystemList {
         BaseFile[] tempList;
         tempList = currentDir.getFiles(fileFilter);
         if (null == tempList) {
-
-            //XXX fix this
-            //XXX throw exception and catch it at MainFrame. Set parent to WarningDialog
-            LanguageBundle lb = LanguageBundle.getInstance();
-            String[] opt = {lb.getString("StrOk")};
-            WarningDialog.showMessage(lb.getString("StrNoRes"), lb.getString("StrJC"), opt, WarningDialog.MESSAGE_ERROR, 0);
-
-            if (null != currentDir.getAbsoluteParent()) {
-                setFileList(currentDir.getAbsoluteParent());
-            } else {
-                setFileList(RootFileSystem.getReadableRoot());
-            }
-            return;
+            tempList = new BaseFile[0];
         }
 
         if (currentDir.getAbsoluteParent() != null) {
