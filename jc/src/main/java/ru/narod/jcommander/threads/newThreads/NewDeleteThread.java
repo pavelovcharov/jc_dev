@@ -60,7 +60,7 @@ public class NewDeleteThread extends FileThread {
             currentProgress = 0;
             currentFileSize = file.length();
 
-            if (false == file.delete()) {
+            if (!file.delete()) {
                 if (queryError(LanguageBundle.getInstance().getString("StrFileNotAccessible") + " \n " + file.getAbsolutePath())) {
                     if (resultError.equals(ErrorAction.Retry)) { // try again
                         i++;

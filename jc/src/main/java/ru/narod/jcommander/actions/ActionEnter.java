@@ -68,20 +68,20 @@ public class ActionEnter extends AbstractAction {
             return;
         }
         int index = 0;
-        if (true == (name instanceof UpperDirectory)) {
+        if ((name instanceof UpperDirectory)) {
             BaseFile file = activeTable.getCurrentDir();
             activeTable.setCurrentDir(currentFile);
             activeTable.refreshTable();
             index = activeTable.getFilePosition(file);
         } else {
-            if (true == (name instanceof Directory)) {
+            if ((name instanceof Directory)) {
                 activeTable.setCurrentDir(currentFile);
             } else {
                 if (FileHelper.FileType.ARCHIVE == FileHelper.getFileType(currentFile)) {
                     if (currentFile instanceof ArchiveFile) {
                         currentFile = copyToTemp(currentFile);
                         currentFile = FileHelper.getRealFile((ArchiveFile) activeTable.getCurrentDir(),
-                                new LocalFile((LocalFile) currentFile.getAbsoluteParent(), ((LocalFile) currentFile).getFilename()));
+                                new LocalFile((LocalFile) currentFile.getAbsoluteParent(), currentFile.getFilename()));
                         activeTable.setCurrentDir(currentFile);
                     } else {
                         String filename = currentFile.getFilename().toLowerCase();
@@ -100,7 +100,7 @@ public class ActionEnter extends AbstractAction {
                     index = activeTable.getCurrentPosition();
                     if (currentFile instanceof ArchiveFile) {
                         currentFile = copyToTemp(currentFile);
-                        currentFile = new LocalFile((LocalFile) currentFile.getAbsoluteParent(), ((LocalFile) currentFile).getFilename());
+                        currentFile = new LocalFile((LocalFile) currentFile.getAbsoluteParent(), currentFile.getFilename());
                     }
                     executeFile(currentFile);
                 }
@@ -126,22 +126,20 @@ public class ActionEnter extends AbstractAction {
         }
         BaseFile newTarget = null;
         BaseFile[] filesToCopy = new BaseFile[]{file};
-        if (null != filesToCopy) {
-            ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, file.getAbsoluteParent(), tempDir, filesToCopy, true);
-            String targetPath = cd.getNewTargetString();
-            if (null != targetPath && !targetPath.isEmpty()) {
-                NewMoveThread nmt = new NewMoveThread(file.getAbsoluteParent(), targetPath, filesToCopy, true);
-                ProgressDialog pd = new ProgressDialog(parent, nmt, true);
-                ProgressThread pt = new ProgressThread(nmt, pd);
-                nmt.setFrameParent(pd.getDialog());
-                nmt.start();
-                pt.start();
-                pd.show();
+        ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, file.getAbsoluteParent(), tempDir, filesToCopy, true);
+        String targetPath = cd.getNewTargetString();
+        if (null != targetPath && !targetPath.isEmpty()) {
+            NewMoveThread nmt = new NewMoveThread(file.getAbsoluteParent(), targetPath, filesToCopy, true);
+            ProgressDialog pd = new ProgressDialog(parent, nmt, true);
+            ProgressThread pt = new ProgressThread(nmt, pd);
+            nmt.setFrameParent(pd.getDialog());
+            nmt.start();
+            pt.start();
+            pd.show();
 
-                newTarget = FileHelper.getRealFile(targetPath);
-                if (newTarget.isDirectory()) {
-                    newTarget = FileHelper.getRealFile(newTarget, file.getFilename());
-                }
+            newTarget = FileHelper.getRealFile(targetPath);
+            if (newTarget.isDirectory()) {
+                newTarget = FileHelper.getRealFile(newTarget, file.getFilename());
             }
         }
         return newTarget;
@@ -149,7 +147,7 @@ public class ActionEnter extends AbstractAction {
 
     private void executeFile(BaseFile file) {
         try {
-            if (true == file.exists()) {
+            if (file.exists()) {
                 PlatformHelper.openFile(file);
             } else {
                 throw new IllegalArgumentException();

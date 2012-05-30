@@ -51,7 +51,7 @@ public abstract class FileHelper {
     //XXX если файл в архиве?
     public static BaseFile getRealFile(BaseFile parent, String child) {
         if (parent instanceof NetFile) {
-            return new NetFile(((NetFile) parent).getPathWithSlash() + child);
+            return new NetFile(parent.getPathWithSlash() + child);
         }
         if (parent instanceof MyZipFile) {
             //XXX здесь была строка
@@ -114,7 +114,7 @@ public abstract class FileHelper {
 
     public enum FileType {
 
-        DIRECTORY, UNKNOWN_FILE, ARCHIVE, IMAGE,};
+        DIRECTORY, UNKNOWN_FILE, ARCHIVE, IMAGE,}
 
     static public FileType getFileType(BaseFile file) {
         if (file.isDirectory()) {

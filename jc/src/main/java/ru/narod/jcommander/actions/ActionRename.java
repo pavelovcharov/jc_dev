@@ -55,7 +55,7 @@ public class ActionRename extends AbstractAction {
         if (null == currentFile) {
             return;
         }
-        if (true == (name instanceof UpperDirectory)) {
+        if ((name instanceof UpperDirectory)) {
             return;
         }
 

@@ -47,7 +47,7 @@ public class ImageViewer extends javax.swing.JFrame implements EditorPrefs, ru.n
     protected enum Scale {
 
         SCALE_REAL, SCALE_FIT
-    };
+    }
 
     /**
      * Создать новый объект класса Editor

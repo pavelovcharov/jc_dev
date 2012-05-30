@@ -59,7 +59,7 @@ public class Date extends Element {
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Date)) {
+        if (!(o instanceof Date)) {
             return 1;
         }
         Date d = (Date) o;

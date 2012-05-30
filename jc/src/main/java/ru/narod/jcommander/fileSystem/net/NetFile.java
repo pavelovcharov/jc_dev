@@ -181,7 +181,7 @@ public class NetFile extends LocalFile implements ru.narod.jcommander.prefs.Pref
     public String getAtributeString() {
         String atr = "";
         try {
-            if (false == smbFile.canWrite()) {
+            if (!smbFile.canWrite()) {
                 atr = "ro  ";
             }
             if (smbFile.isHidden()) {

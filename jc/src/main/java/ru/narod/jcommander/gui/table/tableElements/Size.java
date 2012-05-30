@@ -61,7 +61,7 @@ public class Size extends Element {
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Size)) {
+        if (!(o instanceof Size)) {
             return 1;
         }
         Size s = (Size) o;

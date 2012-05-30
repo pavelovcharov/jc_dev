@@ -78,11 +78,7 @@ public class FileSystemList {
             tempList = new BaseFile[0];
         }
 
-        if (currentDir.getAbsoluteParent() != null) {
-            hasParent = true;
-        } else {
-            hasParent = false;
-        }
+        hasParent = currentDir.getAbsoluteParent() != null;
         setList(tempList);
     }
 

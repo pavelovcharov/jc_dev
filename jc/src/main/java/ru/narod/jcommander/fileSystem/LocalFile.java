@@ -171,7 +171,7 @@ public class LocalFile extends File implements BaseFile {
      * @return <B>true</B>если родительский каталог есть, иначе - <B>false</B>
      */
     public boolean hasParent() {
-        return (null != super.getParentFile()) ? true : false;
+        return (null != super.getParentFile());
 
     }
 
@@ -230,7 +230,6 @@ public class LocalFile extends File implements BaseFile {
      * @return строка содержащая размер файла в отформатированном виде
      */
     public String getFormatFileSize() {
-        String size;
         if (super.isDirectory()) {
             return DEFAULT_DIR_SIZE;
         }

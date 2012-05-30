@@ -22,7 +22,6 @@
  */
 package ru.narod.jcommander.actions;
 
-import java.util.ArrayList;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.FileHelper;
 import ru.narod.jcommander.fileSystem.FileSystemList;
@@ -52,36 +51,32 @@ public class ActionView extends AbstractAction {
             return;
         }
         if (currentFile instanceof MyZipFile) {
-            ArrayList list = new ArrayList();
-            list.add(currentFile);
             LocalFile tempDir = FileSystemList.getTempDir();
             if (null == tempDir) {
                 //XXX query error или использовать какой-то другой путь, напр. C:
                 return;
             }
             BaseFile[] filesToCopy = new BaseFile[]{currentFile};
-            if (null != filesToCopy) {
-                ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
-                //XXX maybe use any function
-                String targetPath = cd.getNewTargetString();
-                if (null != targetPath && !targetPath.isEmpty()) {
-                    NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, true);
-                    ProgressDialog pd = new ProgressDialog(parent, nmt, true);
-                    ProgressThread pt = new ProgressThread(nmt, pd);
-                    nmt.setFrameParent(pd.getDialog());
-                    nmt.start();
-                    pt.start();
-                    pd.show();
+            ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
+            //XXX maybe use any function
+            String targetPath = cd.getNewTargetString();
+            if (null != targetPath && !targetPath.isEmpty()) {
+                NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, true);
+                ProgressDialog pd = new ProgressDialog(parent, nmt, true);
+                ProgressThread pt = new ProgressThread(nmt, pd);
+                nmt.setFrameParent(pd.getDialog());
+                nmt.start();
+                pt.start();
+                pd.show();
 
-                    BaseFile target = FileHelper.getRealFile(targetPath);
-                    if (target.isDirectory()) {
-                        target = FileHelper.getRealFile(target, currentFile.getFilename());
-                    }
-                    currentFile = target;
-
-                } else {
-                    return;
+                BaseFile target = FileHelper.getRealFile(targetPath);
+                if (target.isDirectory()) {
+                    target = FileHelper.getRealFile(target, currentFile.getFilename());
                 }
+                currentFile = target;
+
+            } else {
+                return;
             }
         }
         //XXX image viewer

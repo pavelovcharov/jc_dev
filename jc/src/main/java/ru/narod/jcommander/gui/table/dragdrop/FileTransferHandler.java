@@ -65,10 +65,7 @@ public class FileTransferHandler extends TransferHandler {
         if (!support.isDrop()) {
             return false;
         }
-        if (!support.isDataFlavorSupported(fileFlavor)) {
-            return false;
-        }
-        return true;
+        return support.isDataFlavorSupported(fileFlavor);
     }
 
     @Override

@@ -38,7 +38,7 @@ public abstract class FileThread extends BaseThread {
     protected enum ErrorAction {
 
         Skip, SkipAll, Retry,
-    };
+    }
     protected ErrorAction resultError = ErrorAction.Skip;
     protected boolean applyToAll = false;
 

@@ -52,6 +52,6 @@ public class UpperDirectory extends Name {
 
     @Override
     public void setSelected(boolean isSelected) {
-        isSelected = false;
+//        isSelected = false;
     }
 }

@@ -78,6 +78,6 @@ public class Directory extends Name {
      */
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Directory) ? (getName().equals(((Directory) obj).getName())) : false;
+        return (obj instanceof Directory) && (getName().equals(((Directory) obj).getName()));
     }
 }

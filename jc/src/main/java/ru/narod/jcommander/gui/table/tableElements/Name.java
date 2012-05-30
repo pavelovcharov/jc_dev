@@ -87,7 +87,7 @@ abstract public class Name extends Element implements NameInterface {
     }
 
     public int compareTo(Object obj) {
-        if (false == (obj instanceof Name)) {
+        if (!(obj instanceof Name)) {
             return 1;
         }
         Name nm = (Name) obj;

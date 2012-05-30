@@ -55,7 +55,7 @@ public class ActionDelete extends AbstractAction {
             return;
         }
         if (!activeTable.hasSelectedFiles()) {
-            if (true == (name instanceof UpperDirectory)) {
+            if ((name instanceof UpperDirectory)) {
                 return;
             }
             activeTable.selectFileAt(activeTable.getCurrentPosition());

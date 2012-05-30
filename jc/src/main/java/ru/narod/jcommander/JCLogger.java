@@ -73,4 +73,15 @@ public class JCLogger {
     public static void logSevere(String message, Throwable thrown) {
         logger.log(Level.SEVERE, message, thrown);
     }
+    /**
+     * Log a message, with associated Throwable information. If the logger is currently enabled for
+     * the WARNING message level then the given message is forwarded to all the
+     * registered output Handler objects.
+     *
+     * @param message The string message (or a key in the message catalog)
+     * @param thrown Throwable associated with log message
+     */
+    public static void logWarning(String message, Throwable thrown) {
+        logger.log(Level.WARNING, message, thrown);
+    }
 }

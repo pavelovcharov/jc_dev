@@ -69,7 +69,7 @@ public class KeyShortcat {
         }
         KeyShortcat ks = (KeyShortcat) obj;
         return ((keyCode == ks.keyCode) && (altDown == ks.altDown)
-                && (ctrlDown == ks.ctrlDown) && (shiftDown == ks.shiftDown)) ? true : false;
+                && (ctrlDown == ks.ctrlDown) && (shiftDown == ks.shiftDown));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class KeyShortcat {
         }
 
         result = KeyEvent.getKeyModifiersText(modifier);
-        if (false == result.equals("")) {
+        if (!result.equals("")) {
             result += " + ";
         }
 
