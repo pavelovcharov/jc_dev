@@ -41,7 +41,7 @@ public class ActionSelectNUp extends AbstractAction {
     public void execute() {
         FileTable activeTable = parent.getActiveTable();
         NameInterface name = activeTable.getElementAtCursor();
-        if ((name instanceof UpperDirectory) == false) {
+        if (!(name instanceof UpperDirectory)) {
             BaseFile currentFile = name.getFile();
             if (null == currentFile) {
                 return;

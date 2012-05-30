@@ -56,7 +56,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
      */
     public MyZipFile(LocalFile parent) {
         super(parent);
-        if (false == exists()) {
+        if (!exists()) {
             throw new IllegalArgumentException("ArchiveFile " + parent + " doesn't exists!");
         }
         this.archive = parent;
@@ -259,7 +259,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
         if (null == entry) {
             return getFormatFileSize(archive.length());
         }
-        if (true == entry.isDirectory()) {
+        if (entry.isDirectory()) {
             return DEFAULT_DIR_SIZE;
         }
         return getFormatFileSize(entry.getSize());
@@ -334,7 +334,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
      */
     @Override
     public String toString() {
-        if (false == parent.hasParent()) {
+        if (!parent.hasParent()) {
             return parent + getFilename();
         }
         return parent + separator + getFilename();

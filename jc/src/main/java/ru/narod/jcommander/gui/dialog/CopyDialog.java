@@ -75,8 +75,7 @@ public class CopyDialog implements PrefKeys {
         } else {
             return;
         }
-        String newPath = jTextFieldPath.getText();
-        newTargetString = newPath;
+        newTargetString = jTextFieldPath.getText();
     }
     private String newTargetString;
 

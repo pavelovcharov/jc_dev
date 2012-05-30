@@ -59,10 +59,6 @@ public class DeleteDialog implements PrefKeys {
 
         Object[] options = new Object[]{lb.getString("StrOk"), lb.getString("StrCancel")};
         //XXX use Warning Dialog
-        if (0 == JOptionPane.showOptionDialog(parent, message, lb.getString("StrJC"), JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0])) {
-            return true;
-        } else {
-            return false;
-        }
+        return 0 == JOptionPane.showOptionDialog(parent, message, lb.getString("StrJC"), JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
     }
 }

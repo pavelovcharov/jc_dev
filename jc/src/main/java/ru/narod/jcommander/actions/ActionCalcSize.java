@@ -54,8 +54,8 @@ public class ActionCalcSize extends AbstractAction {
         if (null == currentFile) {
             return;
         }
-        if ((name instanceof UpperDirectory) == false) {
-            if (false == name.isSelected()) {
+        if (!(name instanceof UpperDirectory)) {
+            if (!name.isSelected()) {
                 activeTable.showFileSize();
             }
             activeTable.selectFileAt(activeTable.getCurrentPosition());

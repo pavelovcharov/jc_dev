@@ -107,7 +107,7 @@ public class NewPackThread extends BaseThread {
                 currentAction = lb.getString("StrArchiving") + " " + temp.getFilename();
                 ze = new ZipEntry(relativePath.replace(File.separatorChar, '/'));
                 zos.putNextEntry(ze);
-                if (false == temp.isDirectory()) {
+                if (!temp.isDirectory()) {
                     InputStream fis = temp.getInputStream();
 
                     currentFileSize = temp.length();

@@ -184,7 +184,7 @@ public class NewMoveThread extends FileThread {
             fos.write(buf, 0, readCount);
             currentProgress += readCount;
 
-            if (interrupt == true) {
+            if (interrupt) {
                 fis.close();
                 fos.close();
                 //удаляем недокопированный файл
@@ -217,7 +217,7 @@ public class NewMoveThread extends FileThread {
         if (!result) {
             throw new Exception();
         }
-        if (interrupt == true) {
+        if (interrupt) {
             throw new InterruptedException();
         }
         currentProgress = currentFileSize;

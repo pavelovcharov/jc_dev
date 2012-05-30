@@ -50,7 +50,7 @@ public class Attribute extends Element {
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Attribute)) {
+        if (!(o instanceof Attribute)) {
             return 1;
         }
         Attribute a = (Attribute) o;

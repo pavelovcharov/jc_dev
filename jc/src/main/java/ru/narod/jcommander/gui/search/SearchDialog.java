@@ -377,7 +377,6 @@ public class SearchDialog extends javax.swing.JDialog implements SearchStatusLis
 }//GEN-LAST:event_formComponentShown
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
-        JList sender = (JList) evt.getComponent();
         if (2 == evt.getClickCount()) {
             BaseFile af = (BaseFile) jList1.getSelectedValue();
             if (af != null) {

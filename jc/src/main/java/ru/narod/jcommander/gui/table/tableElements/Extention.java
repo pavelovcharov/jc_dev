@@ -53,7 +53,7 @@ public class Extention extends Element {
     }
 
     public int compareTo(Object o) {
-        if (false == (o instanceof Extention)) {
+        if (!(o instanceof Extention)) {
             return 1;
         }
         Extention e = (Extention) o;

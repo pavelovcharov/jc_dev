@@ -41,7 +41,7 @@ public class ActionManager {
     public void selectCurrentFile(FileTable table) {
         if (!table.hasSelectedFiles()) {
             NameInterface name = table.getElementAtCursor();
-            if (true == (name instanceof UpperDirectory)) {
+            if ((name instanceof UpperDirectory)) {
                 return;
             }
             table.selectCurrentFile();

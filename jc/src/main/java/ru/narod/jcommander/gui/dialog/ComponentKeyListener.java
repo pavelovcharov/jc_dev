@@ -38,7 +38,6 @@ class ComponentKeyListener implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
-        Component c = (Component) (e.getSource());
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ENTER: {
                 defaultButton.doClick();

@@ -50,6 +50,6 @@ public class Filename extends Name {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Filename) ? (fileName.equals(((Filename) obj).fileName)) : false;
+        return (obj instanceof Filename) && (fileName.equals(((Filename) obj).fileName));
     }
 }

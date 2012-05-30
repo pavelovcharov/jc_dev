@@ -72,7 +72,7 @@ public class HKTableListener implements KeyListener, ru.narod.jcommander.prefs.P
             table.setValueAt(null, table.getSelectedRow(), 2);
             return;
         }
-        if (false == ((Message) table.getValueAt(table.getSelectedRow(), 0)).isAction()) {
+        if (!((Message) table.getValueAt(table.getSelectedRow(), 0)).isAction()) {
             return;
         }
         oldKs = (KeyShortcat) table.getValueAt(table.getSelectedRow(), 2);

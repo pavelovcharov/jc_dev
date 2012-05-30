@@ -41,7 +41,7 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
         TitleSelection, SelectAll, SelectDown, SelectUp, SelectSpace,
         TitleTabs, AddTab, RemoveTab, NextTab, PrevTab,
         TiteMisc, CopyPath, CopyName, DecodeHex, Explorer,
-    };
+    }
     LinkedHashMap<Object, MessageDescriptor> descriptors;
     LinkedHashMap<Object, Message> messages;
     static final LinkedHashMap<Object, Integer> numbers = new LinkedHashMap<Object, Integer>();
@@ -103,7 +103,6 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
         messages = new LinkedHashMap<Object, Message>();
 
         LanguageBundle lb = LanguageBundle.getInstance();
-        LanguageBundle languageBundle = lb;
         descriptors.put(MessageType.TitleNavigation, new MessageDescriptor("MSG_TITLE_NAVIGATION", lb.getString("KeyTitleNavigation")));
         descriptors.put(MessageType.Enter, new MessageDescriptor("MSG_ENTER", lb.getString("KeyEnter")));
         descriptors.put(MessageType.Tab, new MessageDescriptor("MSG_TAB", lb.getString("KeySwitch")));
@@ -154,8 +153,6 @@ public class MessageList implements MessageID, ru.narod.jcommander.prefs.PrefKey
         descriptors.put(MessageType.Explorer, new MessageDescriptor("MSG_EXPORER", lb.getString("KeyExplorer")));
         descriptors.put(MessageType.MoveToTrash, new MessageDescriptor("MSG_MOVE_TO_TRASH", lb.getString("KeyMoveToTrash")));
 
-
-        int msgCount = 0;
         for (MessageType type : MessageType.values()) {
             messages.put(type, new Message(numbers.get(type), descriptors.get(type)));
         }

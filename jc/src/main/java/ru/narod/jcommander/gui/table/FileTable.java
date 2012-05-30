@@ -79,11 +79,11 @@ public class FileTable extends JTable implements ColumnNumbers {
         active = false;
         currentPosition = 0;
         selectedFilesList = new ArrayList();
-        setSelectionMode(0);
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setDefaultKeys();
 
         setDefaultRenderer(Element.class, new ColorRenderer());
-        setSelectionBackground(active ? Color.GRAY : Color.LIGHT_GRAY);
+        setSelectionBackground(Color.LIGHT_GRAY);
         setSelectionForeground(Color.WHITE);
 
         setAutoResizeMode(AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -216,14 +216,14 @@ public class FileTable extends JTable implements ColumnNumbers {
      * @return позиция файла в таблице: -1, если файла в таблице нет
      */
     public int getElementPosition(Object anotherObject) {
-        if ((anotherObject instanceof UpperDirectory) == true) {
+        if ((anotherObject instanceof UpperDirectory)) {
             return 0;
         }
         Object obj;
         for (int i = 0; i < getRowCount(); i++) {
             obj = getValueAt(i, FileTable.NAME);
-            if (false == (obj instanceof UpperDirectory)) {
-                if (true == ((NameInterface) obj).equals((NameInterface) anotherObject)) {
+            if (!(obj instanceof UpperDirectory)) {
+                if (((NameInterface) obj).equals((NameInterface) anotherObject)) {
                     return i;
                 }
             }
@@ -321,7 +321,7 @@ public class FileTable extends JTable implements ColumnNumbers {
         Object obj;
         for (int i = 0; i < getRowCount(); i++) {
             obj = getValueAt(i, FileTable.NAME);
-            if (false == (obj instanceof UpperDirectory)) {
+            if (!(obj instanceof UpperDirectory)) {
                 boolean fResult = quickSearchMode == QUICK_SEARCH_FROM_BEGINING
                         ? ((NameInterface) obj).getFileName().startsWith(str)
                         : ((NameInterface) obj).getFileName().contains(str);
@@ -592,7 +592,7 @@ public class FileTable extends JTable implements ColumnNumbers {
                         status = 0;
                     }
                 }
-                if (false == e.isControlDown()) {
+                if (!e.isControlDown()) {
                     model.sortingColumns.clear();
                 }
                 model.sortingColumns.add(new Directive(column, status));
