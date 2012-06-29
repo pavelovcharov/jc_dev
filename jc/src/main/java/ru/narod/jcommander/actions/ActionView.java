@@ -57,9 +57,8 @@ public class ActionView extends AbstractAction {
                 return;
             }
             BaseFile[] filesToCopy = new BaseFile[]{currentFile};
-            ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, activeTable.getCurrentDir(), tempDir, filesToCopy, true);
             //XXX maybe use any function
-            String targetPath = cd.getNewTargetString();
+            String targetPath = tempDir.getPathWithSlash();
             if (null != targetPath && !targetPath.isEmpty()) {
                 NewMoveThread nmt = new NewMoveThread(activeTable.getCurrentDir(), targetPath, filesToCopy, true);
                 ProgressDialog pd = new ProgressDialog(parent, nmt, true);
