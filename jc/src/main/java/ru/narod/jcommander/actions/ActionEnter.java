@@ -44,7 +44,6 @@ import ru.narod.jcommander.util.LanguageBundle;
 import ru.narod.jcommander.util.PlatformHelper;
 
 /**
- *
  * @author Programmer
  */
 public class ActionEnter extends AbstractAction {
@@ -106,9 +105,7 @@ public class ActionEnter extends AbstractAction {
                 }
             }
         }
-        if (activeTable.getCurrentDir() == currentFile) {
-            activeTable.setCurrentPosition(index);
-        }
+        activeTable.setCurrentPosition(index);
         activeTable.clearSelectedList();
         parent.updateActivePanel();
 
@@ -126,8 +123,8 @@ public class ActionEnter extends AbstractAction {
         }
         BaseFile newTarget = null;
         BaseFile[] filesToCopy = new BaseFile[]{file};
-        ru.narod.jcommander.gui.dialog.CopyDialog cd = new ru.narod.jcommander.gui.dialog.CopyDialog(parent, file.getAbsoluteParent(), tempDir, filesToCopy, true);
-        String targetPath = cd.getNewTargetString();
+
+        String targetPath = tempDir.getPathWithSlash();
         if (null != targetPath && !targetPath.isEmpty()) {
             NewMoveThread nmt = new NewMoveThread(file.getAbsoluteParent(), targetPath, filesToCopy, true);
             ProgressDialog pd = new ProgressDialog(parent, nmt, true);
