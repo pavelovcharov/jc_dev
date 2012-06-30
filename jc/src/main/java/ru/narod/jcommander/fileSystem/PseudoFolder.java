@@ -38,7 +38,7 @@ public class PseudoFolder implements BaseFile {
     }
 
     public String getExtention() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     public BaseFile[] getFiles() {
@@ -50,7 +50,7 @@ public class PseudoFolder implements BaseFile {
     }
 
     public BaseFile getAbsoluteParent() {
-        return null;
+        return parent;
     }
 
     public boolean isDirectory() {
@@ -70,11 +70,11 @@ public class PseudoFolder implements BaseFile {
     }
 
     public boolean hasParent() {
-        return false;
+        return parent != null;
     }
 
     public boolean exists() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return parent != null;
     }
 
     public String getAbsolutePath() {
@@ -126,11 +126,11 @@ public class PseudoFolder implements BaseFile {
     }
 
     public String getFilename() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     public long getLastModifiedTime() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return parent != null ? parent.getLastModifiedTime() : 0;
     }
 
     public boolean isHidden() {
