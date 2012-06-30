@@ -119,7 +119,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
 
         try {
             String name;
-            final ZipFile zipFile = new ZipFile(archive);
+            final ZipFile zipFile = new ZipFile(archive.getAbsolutePath());
             final Enumeration entries = zipFile.entries();
             while (entries.hasMoreElements()) {
                 final Object object = entries.nextElement();
@@ -145,8 +145,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
      *
      * @return массив имен файлов
      */
-    @Override
-    public String[] list() {
+    protected String[] list() {
         ArrayList names = new ArrayList();
         Set keys = archiveMap.keySet();
         if (keys != null) {
@@ -274,7 +273,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
         Date date = new Date();
         SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
         if (null == entry) {
-            date.setTime(((LocalFile) parent).lastModified());
+            date.setTime(parent.getLastModifiedTime());
         } else {
             date.setTime(entry.getTime());
         }
@@ -308,7 +307,7 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
         if (null == entry) {
             return parent.getInputStream();
         }
-        return new ZipFile(archive).getInputStream(entry);
+        return new ZipFile(archive.getAbsolutePath()).getInputStream(entry);
     }
 
     /**

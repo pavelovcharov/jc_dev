@@ -39,7 +39,7 @@ public interface BaseFile {
      *
      * @return имя файла
      */
-    public String getAbstractFileName();
+    public String getName();
 
     /**
      * Получить расширение файла
