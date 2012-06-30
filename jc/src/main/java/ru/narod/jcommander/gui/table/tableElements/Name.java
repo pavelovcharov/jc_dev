@@ -51,7 +51,7 @@ abstract public class Name extends Element implements NameInterface {
     public Name(BaseFile aFile, Color fontColor, Color bgColor) {
         super(fontColor, bgColor);
         this.aFile = aFile;
-        name = aFile.getAbstractFileName();
+        name = aFile.getName();
         fileName = aFile.getFilename();
         extention = aFile.getExtention();
     }

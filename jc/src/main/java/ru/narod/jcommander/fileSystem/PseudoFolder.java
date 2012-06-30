@@ -33,8 +33,8 @@ public class PseudoFolder implements BaseFile {
         this.parent = parent;
     }
 
-    public String getAbstractFileName() {
-        return parent.getAbstractFileName();
+    public String getName() {
+        return parent.getName();
     }
 
     public String getExtention() {

@@ -18,7 +18,7 @@ public class MyFtp implements BaseFile {
         
     }
 
-    public String getAbstractFileName() {
+    public String getName() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
