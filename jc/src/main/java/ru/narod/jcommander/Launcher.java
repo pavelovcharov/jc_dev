@@ -61,9 +61,7 @@ public class Launcher {
      * @see MainFrame
      */
     public static void main(String[] args) {
-	
-	Configuration
-        
+	  
 	Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 
             public void uncaughtException(Thread t, final Throwable e) {
