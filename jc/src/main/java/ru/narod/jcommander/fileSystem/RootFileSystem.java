@@ -63,7 +63,7 @@ abstract public class RootFileSystem {
      * @param file файл
      */
     public static boolean isRoot(LocalFile file) {
-        File[] roots = LocalFile.listRoots();
+        File[] roots = File.listRoots();
         for (int i = 0; i < roots.length; i++) {
             if (new LocalFile(roots[i]).equals(file)) {
                 return true;

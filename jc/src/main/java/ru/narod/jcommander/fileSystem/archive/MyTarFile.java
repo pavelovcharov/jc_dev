@@ -140,8 +140,7 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
      *
      * @return массив имен файлов
      */
-    @Override
-    public String[] list() {
+    protected String[] list() {
         ArrayList names = new ArrayList();
         Set keys = archiveMap.keySet();
         if (keys != null) {
@@ -269,7 +268,7 @@ public class MyTarFile extends LocalFile implements ArchiveFile {
         Date date = new Date();
         SimpleDateFormat sdate = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
         if (null == entry) {
-            date.setTime(((LocalFile) parent).lastModified());
+            date.setTime(parent.getLastModifiedTime());
         } else {
             date.setTime(entry.getTime());
         }

@@ -482,9 +482,7 @@ public class MainFrame extends javax.swing.JFrame {
             changeArrangement();
         }
         jCheckBoxMenuItemArrangement.setSelected(jcPrefs.arrangement);
-
         jDialogPreferencesReset();
-
         updateUI(jcPrefs.theme);
     }
 
@@ -532,7 +530,7 @@ public class MainFrame extends javax.swing.JFrame {
         jcPrefs.useSystemIcons = jCheckBoxPrefsUseSystemIcons.isSelected();
 
         LocaleWrapper l = ((LocaleWrapper) jComboBoxLang.getSelectedItem());
-        if (false == l.equals(currentLocaleWrapper)) {
+        if (!l.equals(currentLocaleWrapper)) {
             currentLocaleWrapper = l;
             savePrefs();
             setupComponents();
@@ -666,7 +664,7 @@ public class MainFrame extends javax.swing.JFrame {
         getComboBox(left).setSelectedItem(currentTable.getCurrentDir().getRoot());
         JTabbedPane jTabbedPane = getTabbedPane(left);
         if (2 <= jTabbedPane.getTabCount()) {
-            jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(), currentTable.getCurrentDir().getAbstractFileName());
+            jTabbedPane.setTitleAt(jTabbedPane.getSelectedIndex(), currentTable.getCurrentDir().getName());
         }
     }
 
@@ -1072,7 +1070,7 @@ public class MainFrame extends javax.swing.JFrame {
         newTable.addFocusListener(new TableFocusListener(this));
         FileTablePanel ftp = new FileTablePanel(newTable);
         ftp.setTransferHandler(new FileTransferHandler(this));
-        jTabbedPane.addTab(dir.getAbstractFileName(), ftp);
+        jTabbedPane.addTab(dir.getName(), ftp);
         jTabbedPane.setIconAt(jTabbedPane.getTabCount() - 1, ImageArchive.getImageFolder());
 
         onTabsChanged(left);
@@ -1095,7 +1093,7 @@ public class MainFrame extends javax.swing.JFrame {
         newTable.addMouseInputAdapter(new TableMouseListener(this));
         newTable.addKeyListener(new TableKeyListener(this));
         newTable.addFocusListener(new TableFocusListener(this));
-        jTabbedPane.addTab(currentDir.getAbstractFileName(), ftp);
+        jTabbedPane.addTab(currentDir.getName(), ftp);
         jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() - 1);
 
         setTable(left, newTable);
@@ -1105,7 +1103,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane.setIconAt(jTabbedPane.getTabCount() - 1, ImageArchive.getImageFolder());
 
-        if (false == jTabbedPane.isVisible()) {
+        if (!jTabbedPane.isVisible()) {
             jTabbedPane.setVisible(true);
             fileTablePanel.setVisible(false);
             addTab(left);
@@ -1121,7 +1119,7 @@ public class MainFrame extends javax.swing.JFrame {
         JTabbedPane jTabbedPane = getTabbedPane(left);
         FileTablePanel filePanel = getFileTablePanel(left);
         FileTable table;
-        if (false == jTabbedPane.isVisible()) {
+        if (!jTabbedPane.isVisible()) {
             return;
         }
         if (2 == jTabbedPane.getTabCount()) {
@@ -1196,7 +1194,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public boolean getActive() {
-        return currentLeftTable.isActive() ? true : false;
+        return currentLeftTable.isActive();
     }
 
     public boolean getExternEditor() {
@@ -1287,7 +1285,7 @@ public class MainFrame extends javax.swing.JFrame {
     enum WindowState {
 
         Normal, Maximized, MaximizedHorizontal, MaximizedVertical
-    };
+    }
 
     WindowState getWindowState() {
         int state = getExtendedState();
@@ -1627,7 +1625,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel14.add(jScrollPanePrefHK, java.awt.BorderLayout.CENTER);
 
         jTextAreaHotKeysHelp.setEditable(false);
-        jTextAreaHotKeysHelp.setFont(new java.awt.Font("Tahoma", 0, 10));
+        jTextAreaHotKeysHelp.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jTextAreaHotKeysHelp.setLineWrap(true);
         jTextAreaHotKeysHelp.setRows(2);
         jTextAreaHotKeysHelp.setWrapStyleWord(true);
@@ -1802,7 +1800,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel10.setLayout(new javax.swing.BoxLayout(jPanel10, javax.swing.BoxLayout.LINE_AXIS));
 
         jTextField1.setEditable(false);
-        jTextField1.setFont(new java.awt.Font("Dialog", 1, 12));
+        jTextField1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jTextField1.setText("left");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel10.add(jTextField1);
@@ -1893,7 +1891,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
 
         jTextField2.setEditable(false);
-        jTextField2.setFont(new java.awt.Font("Dialog", 1, 12));
+        jTextField2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jTextField2.setText("right");
         jTextField2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel11.add(jTextField2);
@@ -1983,7 +1981,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel7.setLayout(new java.awt.GridLayout(1, 0));
 
-        jButtonView.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonView.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonView.setFocusable(false);
         jButtonView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1992,7 +1990,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonView);
 
-        jButtonEdit.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonEdit.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonEdit.setFocusable(false);
         jButtonEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2001,7 +1999,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonEdit);
 
-        jButtonCopy.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonCopy.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonCopy.setFocusable(false);
         jButtonCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2010,7 +2008,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonCopy);
 
-        jButtonMove.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonMove.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonMove.setFocusable(false);
         jButtonMove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2019,7 +2017,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonMove);
 
-        jButtonCreateDir.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonCreateDir.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonCreateDir.setFocusable(false);
         jButtonCreateDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2028,7 +2026,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonCreateDir);
 
-        jButtonDel.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonDel.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonDel.setFocusable(false);
         jButtonDel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2037,7 +2035,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonDel);
 
-        jButtonPack.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonPack.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonPack.setFocusable(false);
         jButtonPack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2046,7 +2044,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel7.add(jButtonPack);
 
-        jButtonExit.setFont(new java.awt.Font("MS Sans Serif", 1, 9));
+        jButtonExit.setFont(new java.awt.Font("MS Sans Serif", 1, 9)); // NOI18N
         jButtonExit.setFocusable(false);
         jButtonExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2196,7 +2194,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (2 <= jTabbedPaneRight.getTabCount()) {
             FileTablePanel ftp = (FileTablePanel) (jTabbedPaneRight.getComponentAt(jTabbedPaneRight.getSelectedIndex()));
             currentRightTable = ftp.getFileTable();
-            jTabbedPaneRight.setTitleAt(jTabbedPaneRight.getSelectedIndex(), getTable(false).getCurrentDir().getAbstractFileName());
+            jTabbedPaneRight.setTitleAt(jTabbedPaneRight.getSelectedIndex(), getTable(false).getCurrentDir().getName());
             currentRightTable.requestFocus();
             currentRightTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
             currentRightTable.showToolTip(jcPrefs.showToolTips);
@@ -2209,7 +2207,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (2 <= jTabbedPaneLeft.getTabCount()) {
             FileTablePanel ftp = (FileTablePanel) (jTabbedPaneLeft.getComponentAt(jTabbedPaneLeft.getSelectedIndex()));
             currentLeftTable = ftp.getFileTable();
-            jTabbedPaneLeft.setTitleAt(jTabbedPaneLeft.getSelectedIndex(), getTable(true).getCurrentDir().getAbstractFileName());
+            jTabbedPaneLeft.setTitleAt(jTabbedPaneLeft.getSelectedIndex(), getTable(true).getCurrentDir().getName());
             currentLeftTable.requestFocus();
             currentLeftTable.setHiddenFilesVisibility(jcPrefs.showHiddenFiles);
             currentLeftTable.showToolTip(jcPrefs.showToolTips);
@@ -2406,7 +2404,7 @@ public class MainFrame extends javax.swing.JFrame {
                 }
                 LocalFile af;
                 if (cmdArguments[1].equals("..")) {
-                    if (false == getActiveTable().getCurrentDir().hasParent()) {
+                    if (!getActiveTable().getCurrentDir().hasParent()) {
                         return;
                     }
                     af = new LocalFile(getActiveTable().getCurrentDir().getAbsoluteParent());
@@ -2417,10 +2415,10 @@ public class MainFrame extends javax.swing.JFrame {
                         af = new LocalFile(cmdArguments[1]);
                     }
                 }
-                if (false == af.isAbsolute()) {
+                if (!af.isAbsolute()) {
                     af = (LocalFile) FileHelper.getRealFile(getActiveTable().getCurrentDir(), cmdArguments[1]);
                 }
-                if (false == af.exists()) {
+                if (!af.exists()) {
                     return;
                 }
                 try {
@@ -2435,17 +2433,17 @@ public class MainFrame extends javax.swing.JFrame {
                     jTextArea1.append(command);
                     jTextArea1.append(lineSeparator);
                     LocalFile executingFile = new LocalFile(cmdArguments[0]);
-                    if (false == executingFile.exists()) {
-                        if (false == executingFile.isAbsolute()) {
+                    if (!executingFile.exists()) {
+                        if (!executingFile.isAbsolute()) {
                             executingFile = (LocalFile) FileHelper.getRealFile(
                                     getActiveTable().getCurrentDir(), cmdArguments[0]);
-                            if (true == executingFile.exists()) {
+                            if (executingFile.exists()) {
                                 cmdArguments[0] = executingFile.getAbsolutePath();
                             }
                         }
                     }
                     cmdProcess = Runtime.getRuntime().exec(cmdArguments, null,
-                            (LocalFile) getActiveTable().getCurrentDir());
+                            getActiveTable().getCurrentDir().toFile());
                     ProcessStreamer ps = new ProcessStreamer(cmdProcess);
                     ps.start();
                 } catch (java.io.IOException e) {
@@ -2597,8 +2595,8 @@ private void jComboBoxRightPopupMenuWillBecomeInvisible(javax.swing.event.PopupM
         return;
     }
     BaseFile root = FileHelper.getRealFile(jComboBoxRight.getSelectedItem().toString());
-    if (false == root.exists()) {
-        if ((false == root.canRead())) {
+    if (!root.exists()) {
+        if ((!root.canRead())) {
             WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
             updatePanel(false);
             requestFocus();
@@ -2636,8 +2634,8 @@ private void jComboBoxLeftPopupMenuWillBecomeInvisible(javax.swing.event.PopupMe
         return;
     }
     BaseFile root = FileHelper.getRealFile(jComboBoxLeft.getSelectedItem().toString());
-    if (false == root.exists()) {
-        if ((false == root.canRead())) {
+    if (!root.exists()) {
+        if ((!root.canRead())) {
             WarningDialog.showMessage(this, lb.getString("StrNoRes"), lb.getString("StrError"), WarningDialog.MESSAGE_ERROR);
             updatePanel(true);
             requestFocus();
@@ -2945,7 +2943,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
         @Override
         public void keyPressed(KeyEvent e) {
             FileTable table = parent.getActiveTable();
-            JTextField searchField = parent.getActiveSearchLabel();
             if (KeyEvent.VK_ESCAPE == e.getKeyChar()) {
                 parent.setSearchVisible(false);
                 return;
@@ -3112,7 +3109,6 @@ private void jComboBoxLeftPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt
             for (StringTokenizer stringTokenizer = new StringTokenizer(headerSize, JCPreferenses.PRIMARY_DELIMITER); stringTokenizer.hasMoreTokens();) {
                 String token = stringTokenizer.nextToken();
                 StringTokenizer st2 = new StringTokenizer(token, JCPreferenses.SECONDARY_DELIMITER);
-                int tokenCount = 0;
                 int[] sizes = new int[TableHeader.TITLE.length];
                 for (int i = 0; i < sizes.length; i++) {
                     sizes[i] = st2.hasMoreTokens() ? parseInt(st2.nextToken(), defaultSize) : defaultSize;
