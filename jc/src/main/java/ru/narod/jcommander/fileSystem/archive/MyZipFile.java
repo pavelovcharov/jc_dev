@@ -34,7 +34,6 @@ import java.util.zip.ZipFile;
 import ru.narod.jcommander.fileSystem.BaseFile;
 import ru.narod.jcommander.fileSystem.LocalFile;
 
-//XXX посмотреть как это работает
 /**
  * Класс задает файл в zip или jar-архиве. Позволяет просматривать содержимое
  * архивов, как обычные папки на диске
@@ -315,9 +314,9 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     /**
      * Получить поток для записи в файл
      *
+     * @return поток для записи в файл
      * @throws java.lang.Exception вызывается, если при создании потока
      * произошла ошибка
-     * @return поток для записи в файл
      */
     @Override
     public java.io.OutputStream getOutputStream() throws java.io.IOException {
@@ -362,5 +361,10 @@ public class MyZipFile extends LocalFile implements ArchiveFile {
     public String getPathWithSlash() {
         String path = getAbsolutePath();
         return (super.getAbsolutePath().endsWith(separator)) ? path : path + separator;
+    }
+
+    @Override
+    public boolean exists() {
+        return super.exists() || archive != null;
     }
 }
