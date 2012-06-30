@@ -61,7 +61,7 @@ public class PackDialog implements PrefKeys {
             }
         } else {
             messageText += " " + filesToPack[0].getFilename();
-            archiveName = filesToPack[0].getAbstractFileName();
+            archiveName = filesToPack[0].getName();
         }
         jTextFieldPath.setText(targerDir.getPathWithSlash() + archiveName + "." + DEFAULT_EXTENTION);
 
