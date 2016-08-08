@@ -1,0 +1,6 @@
+{
+  "name": "Jc dev",
+  "tagline": "a java-based file manager for Windows and Linux",
+  "body": "# jc_dev\r\n\r\njc stands for Java Commander - it's a java-based file manager for Windows and Linux\r\n\r\nFeatures\r\n\r\nworks in any operating system with Java virtual machine\r\n\r\ncomfortable file system navigation\r\n\r\nfile operations: execution, copy, move, delete, search\r\n\r\ninternal unpacker (zip/jar/tar/tar.gz/tgz)\r\n\r\ninternal zip-packer\r\n\r\ninternal image viewer (jpg, gif, png, bmp)\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
