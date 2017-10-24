@@ -3,32 +3,56 @@
   body { margin: 0px;
     }
 
-  .style1 { background: rgb(0, 102, 0) url(img/header.png) repeat-x scroll 0%;
-    -moz-background-clip: initial;
-    -moz-background-origin: initial;
-    -moz-background-inline-policy: initial;
-    height: 200px;
-    top: 0px;
-    left: 0px;
+  .style1 { 
+
     }
 
-  .style2 { background-image: url(img/logo_small.png);
+  .style2 { 
+  background:rgb(0,0,0);
+  /*background-image: url(img/logo_small.png);*/
     background-repeat: no-repeat;
-    height: 200px;
+    height: 100px;
     top: 0px;
     left: 0px;
     color: rgb(255, 255, 255);
-    padding-top: 10px;
-    padding-left: 200px;
+    padding-top: 25px;
+    padding-left: 100px;
     }
 
-  a {
+
+	a {
     text-decoration: none;
     }
 
+	a:hover, a:focus {text-decoration: underline;}	
+/*
   a:hover { font-weight: bold;
     text-decoration: none;
     color: rgb(0, 102, 0);
-    }
+    }*/
 
+#forkme_banner {
+  display: block;
+  position: absolute;
+  top:0;
+  left: 100px;
+  z-index: 10;
+  padding: 10px 10px 10px 10px;
+  color: #fff;
+  background: /*url('../images/blacktocat.png') */#0090ff no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
 
+body {
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.inner_header {
+  position: absolute;
+  left:20px  
+}
